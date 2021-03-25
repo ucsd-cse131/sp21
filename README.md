@@ -1,14 +1,14 @@
-# 131-web
+# CSE 131 Spring 2021
 
-Public course materials for [UCSD CSE 131](https://ucsd-progsys.github.io/131-web)
+Public course materials for [UCSD CSE 131](https://ucsd-cse131.github.io/sp21) 
 
 ## Install
 
 You too, can build this webpage locally, like so:
 
 ```bash
-git clone https://github.com/ucsd-progsys/131-web.git
-cd 131-web
+git clone https://github.com/ucsd-cse131/sp21.git
+cd sp21
 make
 ```
 
