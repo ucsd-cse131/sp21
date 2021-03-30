@@ -42,6 +42,8 @@ siteCtx =
     constField "google_username"    "rjhala@eng.ucsd.edu"       `mappend`
     constField "google_userid"      "u/0/106612421534244742464" `mappend`
     constField "piazza_classid"     "ucsd/spring2021/cse131/home" `mappend`
+    constField "canvas_id"          "FIXME" `mappend`
+    constField "discord_id"         "826242480529211414/826242480957292557" `mappend`
     defaultContext
 
 tops =
@@ -50,6 +52,6 @@ tops =
   , "lectures.md"
   , "links.md"
   , "assignments.md"
-  , "calendar.md"
+  -- , "calendar.md"
   , "contact.md"
   ]
