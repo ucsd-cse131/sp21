@@ -57,6 +57,9 @@ git push origin master
 - [ ] assignments.md
 - [ ] vscode issues (https://piazza.com/class/kjivoxdgfuc1w2?cid=128)
 
+- [ ] CANVAS setup
+- [ ] ASSIGNMENT setup on ieng
+
 ## ieng6 Setup
 
 1. Set the `stack-root`

@@ -1,7 +1,7 @@
 ---
 title: Hello, world! 
 headerImg: Eiffel.png
-date: 2018-09-28
+date: 2021-03-30
 ---
 
 
@@ -132,38 +132,37 @@ We will
 
 **TAs:** 
 
-* Marc Andrysco
-* Gary Soeller
-* Anish Tondwalkar
+* Nico Lehmann
+
+### Hybrid Course Logistics 
+
+**Lectures** 
+
+- live in person 
+- also streamed on *zoom* and *canvas*
+
+**Exams** 
+
+- will be synchronous at announced time slot 
+- but *not* in person
 
 ### How will we *grade*?
 
-**(30%) Assignments**
+**(35%) Assignments**
 
-+ 7 assignments, [first one is up, due 10/5](https://classroom.github.com/a/OjQrcTj6)
++ 6-7 assignments, [first one is up, due Wed 4/7](https://classroom.github.com/a/JfYspsS3)
 + All programming
-+ Groups of upto 2
++ Groups of up to 2
 
 
-**(30%) Midterm (11/2)**
+**(30%) Midterm Tuesday May 4th, from 9:30 – 10:50am**
 
 + In-class  
-+ 2-sided printed "cheat sheet"
++ Open everything except humans 
 
+**(35%) Final  Tuesday June 8th, from 8:00 – 11:00am**
 
-**(35%) Final (12/14)**
-
-+ 2-sided printed "cheat sheet"
-
-**(05%) Clickers**
-
-+ *Attempting to answer* > 75% questions
-+ Starting from _next week_ 
-
-**(05%) Piazza Extra Credit**
-
-+ To top-20 best participants
-
++ Open everything except humans 
 
 ## Course Outline
 
@@ -246,7 +245,3 @@ Here are some links to get you started:
 [soap-fortran-assembly]: http://worrydream.com/dbx/
 
 
-
-["cat", "dog", "horse"]   -- :: [String]  -- words 
-                                String    -- separator
-"cat;dog;horse"           -- :: String    -- "crunche words with separator"

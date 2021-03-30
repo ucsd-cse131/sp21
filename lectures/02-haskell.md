@@ -1,6 +1,6 @@
 ---
 title: A crash course in Haskell
-date: 2016-09-26
+date: 2021-03-30
 headerImg: books.jpg
 ---
 
