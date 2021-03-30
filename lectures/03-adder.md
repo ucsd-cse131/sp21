@@ -4,7 +4,7 @@ date: 2016-09-30
 headerImg: adder.jpg
 ---
 
-## Lets Write a Compiler!
+# Lets Write a Compiler!
 
 Our goal is to write a compiler which is a function:
 
@@ -13,6 +13,20 @@ compiler :: SourceProgram -> TargetProgram
 ```
 
 In 131 `TargetProgram` is going to be a binary executable.
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ## Lets write our first Compilers
 
@@ -30,7 +44,21 @@ In 131 `TargetProgram` is going to be a binary executable.
 4. Numbers + Increment + Decrement + Local Variables
   * e.g. `let x = add1(7), y = add1(x) in add1(y)`
 
-### Recall: What does a Compiler *look like*?
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Recall: What does a Compiler *look like*?
 
 ![Compiler Pipeline](/static/img/compiler-pipeline.png)
 
@@ -43,7 +71,21 @@ An input source program is converted to an executable binary in many stages:
 * **Generated** into assembly `x86`
 * **Linked** against a run-time (usually written in C)
 
-### Simplified Pipeline
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Simplified Pipeline
 
 **Goal:** Compile _source_ into _executable_ that,
 when run, **prints** the result of evaluating the source.
@@ -57,6 +99,20 @@ when run, **prints** the result of evaluating the source.
 
 Next, lets see how to do (1) and (2) using our
 sequence of `adder` languages.
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 # Adder-1
 
@@ -88,9 +144,22 @@ int main(int argc, char** argv) {
   * With the desired _return_ value stored in register `EAX`
   * per, the `C` [calling convention][evans-x86-guide]  
 
-### Test Systems in Isolation
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-**Key idea in SW-Engg:**
+## Test Systems in Isolation
+
+**Key idea in (Software) Engineering:**
 
 > Decouple systems so you can test one component
 > without (even implementing) another.
@@ -123,11 +192,11 @@ For now, lets just
 * _linking_ works
 
 ```bash
-$ nasm -f aout -o forty_two.o forty_two.s
-$ clang -g -m32 -o forty_two.run forty_two.o main.c
+$ nasm -f macho64 -o forty_two.o forty_two.s
+$ clang -g -m64 -o forty_two.run c-bits/main.c forty_two.o
 ```
 
-On a Mac use `-f macho` instead of `-f aout`
+On Linux use `-f aout` instead of `-f macho64`
 
 We can now run it:
 

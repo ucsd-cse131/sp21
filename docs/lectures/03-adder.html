@@ -231,10 +231,11 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-			<h2 id="lets-write-a-compiler">Lets Write a Compiler!</h2>
+			<h1 id="lets-write-a-compiler">Lets Write a Compiler!</h1>
 <p>Our goal is to write a compiler which is a function:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="ot">compiler ::</span> <span class="dt">SourceProgram</span> <span class="ot">-&gt;</span> <span class="dt">TargetProgram</span></span></code></pre></div>
 <p>In 131 <code>TargetProgram</code> is going to be a binary executable.</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="lets-write-our-first-compilers">Lets write our first Compilers</h2>
 <p><code>SourceProgram</code> will be a sequence of four <em>tiny</em> “languages”</p>
 <ol type="1">
@@ -261,7 +262,8 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <ul>
 <li>e.g. <code>let x = add1(7), y = add1(x) in add1(y)</code></li>
 </ul>
-<h3 id="recall-what-does-a-compiler-look-like">Recall: What does a Compiler <em>look like</em>?</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="recall-what-does-a-compiler-look-like">Recall: What does a Compiler <em>look like</em>?</h2>
 <figure>
 <img src="../static/img/compiler-pipeline.png" alt /><figcaption>Compiler Pipeline</figcaption>
 </figure>
@@ -274,7 +276,8 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <li><strong>Generated</strong> into assembly <code>x86</code></li>
 <li><strong>Linked</strong> against a run-time (usually written in C)</li>
 </ul>
-<h3 id="simplified-pipeline">Simplified Pipeline</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="simplified-pipeline">Simplified Pipeline</h2>
 <p><strong>Goal:</strong> Compile <em>source</em> into <em>executable</em> that, when run, <strong>prints</strong> the result of evaluating the source.</p>
 <p><strong>Approach:</strong> Lets figure out how to write</p>
 <ol type="1">
@@ -285,6 +288,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <img src="../static/img/compiler-pipeline-1-2.png" alt /><figcaption>Simplified Compiler Pipeline with Runtime</figcaption>
 </figure>
 <p>Next, lets see how to do (1) and (2) using our sequence of <code>adder</code> languages.</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h1 id="adder-1">Adder-1</h1>
 <ol type="1">
 <li>Numbers</li>
@@ -313,8 +317,9 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <li>per, the <code>C</code> <a href="http://www.cs.virginia.edu/~evans/cs216/guides/x86.html">calling convention</a></li>
 </ul></li>
 </ul>
-<h3 id="test-systems-in-isolation">Test Systems in Isolation</h3>
-<p><strong>Key idea in SW-Engg:</strong></p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="test-systems-in-isolation">Test Systems in Isolation</h2>
+<p><strong>Key idea in (Software) Engineering:</strong></p>
 <blockquote>
 <p>Decouple systems so you can test one component without (even implementing) another.</p>
 </blockquote>
@@ -334,9 +339,9 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <li><em>object-generation</em> and then</li>
 <li><em>linking</em> works</li>
 </ul>
-<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>$ <span class="fu">nasm</span> -f aout -o forty_two.o forty_two.s</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>$ <span class="fu">clang</span> -g -m32 -o forty_two.run forty_two.o main.c</span></code></pre></div>
-<p>On a Mac use <code>-f macho</code> instead of <code>-f aout</code></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>$ <span class="fu">nasm</span> -f macho64 -o forty_two.o forty_two.s</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>$ <span class="fu">clang</span> -g -m64 -o forty_two.run c-bits/main.c forty_two.o</span></code></pre></div>
+<p>On Linux use <code>-f aout</code> instead of <code>-f macho64</code></p>
 <p>We can now run it:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>$ <span class="ex">forty_two.run</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="ex">42</span></span></code></pre></div>
