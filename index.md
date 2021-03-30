@@ -16,7 +16,7 @@ According to the venerable [Wikipedia](https://en.wikipedia.org/wiki/Compiler)
 
 In the course of the next ten weeks, we will look at
 how to convert programs written in a high-level language
-think ML from [CSE 130](http://ucsd-progsys.github.io/cse130/),
+think Nano-ML from [CSE 130](http://ucsd-cse130.github.io/wi21/),
 all the way down to bare metal, i.e. x86 assembly.
 While doing so, we will *also* learn important lessons about
 Software Engineering and Testing. As an added bonus, CSE 131

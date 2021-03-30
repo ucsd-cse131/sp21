@@ -5,7 +5,9 @@ headerImg: books.jpg
 
 | Date       | Topic                         | Notes                  |  Notes      |  Code          |
 |:----------:|:------------------------------|:----------------------:|:-----------:|:--------------:|
-| 9/28       | Introduction                  | [html][lec1] [md][md1] |             |                |
+| 3/30       | Introduction                  | [html][lec1] [md][md1] |             |                |
+
+<!-- 
 | 10/1       | Crash course in Haskell       | [html][lec2] [md][md2] |             | [code][cod2]   |
 | 10/8       | Numbers, UnaryOps, Variables  | [html][lec3] [md][md3] |             | [code][cod3]   |
 | 10/15      | Branches and Binary Operators | [html][lec4] [md][md4] |             | [code][cod4]   |
@@ -13,16 +15,17 @@ headerImg: books.jpg
 | 11/5       | Functions                     | [html][lec6] [md][md6] |             | [code][cod6]   |
 | 11/19      | Heap Data                     | [html][lec7] [md][md7] |             | [code][cod7]   |
 | 11/28      | Garbage Collection            | [html][lec8] [md][md8] | [pdf][pdf8] | [code][cod8]   |
+-->
 
 [lec1]: lectures/01-introduction.html
-[md1]: http://github.com/ucsd-progsys/131-web/blob/master/lectures/01-introduction.md
+[md1]: http://github.com/ucsd-cse131/sp21/blob/main/lectures/01-introduction.md
 
 [lec2]: lectures/02-haskell.html
-[md2]: http://github.com/ucsd-progsys/131-web/blob/master/lectures/02-haskell.md
+[md2]: http://github.com/ucsd-cse131/sp21/blob/main/lectures/02-haskell.md
 [cod2]: static/hs/CrashCourse.hs
 
 [lec3]: lectures/03-adder.html
-[md3]: http://github.com/ucsd-progsys/131-web/blob/master/lectures/03-adder.md
+[md3]: http://github.com/ucsd-cse131/sp21/blob/main/lectures/03-adder.md
 [cod3]: https://github.com/ucsd-cse131-fa18/01-adder
 [pdf3]: static/img/adder-notes.pdf
 

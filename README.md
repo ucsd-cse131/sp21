@@ -14,7 +14,7 @@ make
 
 The website will live in `_site/`.
 
-## Customize 
+## Customize
 
 By editing the parameters in `siteCtx` in `Site.hs`
 
@@ -37,11 +37,52 @@ make upload
 or, if you prefer
 
 ```bash
-make 
+make
 cp -r _site/* docs/
 git commit -a -m "update webpage"
 git push origin master
 ```
+## New Class Checklist
+
+- [x] site.hs
+- [x] index.md
+- [x] links.md
+- [x] contact.md
+- [x] lectures.md
+- [-] calendar.md
+- [-] groups
+- [-] seating chart
+
+- [x] grades.md
+- [ ] assignments.md
+- [ ] vscode issues (https://piazza.com/class/kjivoxdgfuc1w2?cid=128)
+
+## ieng6 Setup
+
+1. Set the `stack-root`
+
+```
+stack setup --stack-root=/software/CSE/cse130/.stack
+```
+
+2. Create a shell script
+
+```
+cat > fixpaths.sh
+
+cd ~/../public/bin && chmod -R a+rx *
+cd /software/CSE/cse130/.stack && chmod -R a+rx *
+```
+
+3. For each assignment,
+
+	- `git clone` it to download assignment as instructor
+	- `stack test` it to get the relevant libs added to the stack-path
+	- `./fixpaths.sh` to allow everyone else to read the libraries
+
+4. For each assignment,
+	- login as student to make sure that you can `git clone` and then run `stack test`
+
 
 ## Credits
 

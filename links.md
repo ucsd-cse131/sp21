@@ -37,12 +37,24 @@ important.
 
 ## Books on Haskell
 
+- [Haskell-Lang](http://haskell-lang.org)
+- [Getting started with Haskell](https://haskell-lang.org/get-started)
+- [What I Wish I Knew When Learning Haskell](http://dev.stephendiehl.com/hask/)
+- [Haskell Cheat Sheet](http://cheatsheet.codeslower.com/CheatSheet.pdf)
+- [Haskell Pitfalls](http://users.jyu.fi/~sapekiis/haskell-pitfalls/)
+- A Simple editor-independent [mini-ide](https://github.com/ndmitchell/ghcid#readme)
+- API Search Engines:
+  [Hoogle](http://haskell.org/hoogle)
+  [Hayoo](http://holumbus.fh-wedel.de/hayoo/hayoo.html)
 - [Haskell Programming from First Principles](http://haskellbook.com) by Christopher Allen and Julie Moronuki
 - [Programming in Haskell](http://www.cs.nott.ac.uk/~gmh/book.html) by Graham Hutton
-- [Real World Haskell](http://www.realworldhaskell.org) by Bryan O' Sullivan, John Goerzen, and Don Stewart
-- [The Haskell School of Expression](http://haskell.cs.yale.edu/soe) by Paul Hudak
 - [Learn You a Haskell](http://learnyouahaskell.com/) by Miran Lipovača
 - [Haskell Wiki Book](http://en.wikibooks.org/wiki/Haskell)
+
+### IDE Support
+
+- I recommend [VSCode](https://github.com/haskell/haskell-language-server#visual-studio-code)
+- Other editors [Emacs, Vim etc.](https://github.com/haskell/haskell-language-server#configuring-your-editor)
 
 ## Miscellaneous
 
