@@ -4,6 +4,11 @@ headerImg: Eiffel.png
 date: 2021-03-30
 ---
 
+(A) I know OCAML 
+(B) I know HASKELL
+
+
+
 
 ## What *is* a Compiler?
 
