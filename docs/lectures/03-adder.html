@@ -681,12 +681,14 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <img src="../static/img/stack-layout.png" alt /><figcaption>Stack Layout</figcaption>
 </figure>
 <p>The stack <strong>grows downward</strong> (i.e. to <strong>smaller</strong> addresses)</p>
-<p>We have lots of 4-byte slots on the stack at offsets from the “stack pointer” at addresses:</p>
+<p>We have <em>lots</em> of 4-byte slots on the stack at offsets from the “stack pointer” at addresses:</p>
 <ul>
-<li><code>[EBP - 4 * 1]</code>, <code>[EBP - 4 * 2]</code>, …,</li>
+<li><code>[RBP - 4 * 1]</code>, <code>[RBP - 4 * 2]</code>, <code>[RBP - 4 * 3]</code> …,</li>
 </ul>
+<p><strong>Note:</strong> On 32-bit machines the “base” is the <code>EBP</code> register (not <code>RBP</code>).</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="how-to-compute-mapping-from-variables-to-slots">How to compute mapping from <em>variables</em> to <em>slots</em> ?</h3>
-<p>The <code>i</code>-th <em>stack-variable</em> lives at address <code>[EBP - 4 * i]</code></p>
+<p>The <code>i</code>-th <em>stack-variable</em> lives at address <code>[RBP - 4 * i]</code></p>
 <p><strong>Required</strong> A mapping</p>
 <ul>
 <li>From <em>source variables</em> (<code>x</code>, <code>y</code>, <code>z</code> …)</li>
@@ -695,59 +697,73 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <p><strong>Solution</strong> The structure of the <code>let</code>s is stack-like too…</p>
 <ul>
 <li>Maintain an <code>Env</code> that maps <code>Id |-&gt; StackPosition</code></li>
-<li><code>let x = e1 in e2</code> adds <code>x |-&gt; i</code> to <code>Env</code>
-<ul>
-<li>where <code>i</code> is current height of stack.</li>
-</ul></li>
 </ul>
-<h3 id="example-let-bindings-and-stacks">Example: Let-bindings and Stacks</h3>
-<div class="sourceCode" id="cb34"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true"></a><span class="kw">let</span> x <span class="ot">=</span> <span class="dv">1</span>           <span class="co">-- []</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true"></a><span class="kw">in</span>                  <span class="co">-- [ x |-&gt; 1 ]</span></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true"></a>    x</span></code></pre></div>
-<div class="sourceCode" id="cb35"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true"></a><span class="kw">let</span> x <span class="ot">=</span> <span class="dv">1</span>           <span class="co">-- []</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true"></a>  , y <span class="ot">=</span> add1(x)     <span class="co">-- [x |-&gt; 1]</span></span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true"></a>  , z <span class="ot">=</span> add1(y)     <span class="co">-- [y |-&gt; 2, x |-&gt; 1]</span></span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true"></a><span class="kw">in</span></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true"></a>    add1(z)         <span class="co">-- [z |- 3, y |-&gt; 2, x |-&gt; 1]</span></span></code></pre></div>
+<p><code>let x = e1 in e2</code> adds <code>x |-&gt; i</code> to <code>Env</code></p>
+<ul>
+<li>where <code>i</code> is ``current’’ size of stack.</li>
+</ul>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h3 id="let-bindings-and-stacks-example-1">Let-bindings and Stacks: Example-1</h3>
+<div class="sourceCode" id="cb34"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true"></a>                    <span class="co">-- []</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true"></a><span class="kw">let</span> x <span class="ot">=</span> <span class="dv">1</span> </span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true"></a><span class="kw">in</span>                  <span class="co">-- [ x |-&gt; 1 ]</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true"></a>    x</span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h3 id="let-bindings-and-stacks-example-2">Let-bindings and Stacks: Example-2</h3>
+<div class="sourceCode" id="cb35"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true"></a>                          <span class="co">-- []</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true"></a><span class="kw">let</span> x <span class="ot">=</span> <span class="dv">1</span>           </span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true"></a>                          <span class="co">-- [x |-&gt; 1]</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true"></a>  , y <span class="ot">=</span> add1(x)     </span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true"></a>                          <span class="co">-- [y |-&gt; 2, x |-&gt; 1]</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true"></a>  , z <span class="ot">=</span> add1(y)     </span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true"></a><span class="kw">in</span>                        <span class="co">-- [z |- 3, y |-&gt; 2, x |-&gt; 1]</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true"></a>    add1(z)              </span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="quiz">QUIZ</h3>
 <p>At what position on the stack do we store variable <code>c</code> ?</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true"></a>                          <span class="co">-- []</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true"></a><span class="kw">let</span> a <span class="ot">=</span> <span class="dv">1</span>                 <span class="co">-- [a |-&gt; 1]</span></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true"></a>  , c <span class="ot">=</span>                   <span class="co">-- [a |-&gt; 1]</span></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true"></a>        <span class="kw">let</span> b <span class="ot">=</span> add1(a)   <span class="co">--     [b |-&gt; 2, a |-&gt; 1]</span></span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true"></a>        <span class="kw">in</span> add1(b)        <span class="co">-- [a |-&gt; 1]</span></span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true"></a>                          <span class="co">-- [c |-&gt; 2, a |-&gt; 1]</span></span>
-<span id="cb36-7"><a href="#cb36-7" aria-hidden="true"></a><span class="kw">in</span></span>
-<span id="cb36-8"><a href="#cb36-8" aria-hidden="true"></a>    add1(c)</span></code></pre></div>
-<p>A. 1 B. 2 C. 3 D. 4 E. not on stack!</p>
-<p><code>haskell                   "ENVIRONMENT"                           -- [] let a = 1                 -- [a |-&gt; 1]   , b = 2                 -- [b |-&gt; 2, a |-&gt; 1]   , c =                   --         let b  = add1(a)  -- [b |-&gt; 3, b -&gt; 2, a |-&gt; 1]         in add1(b)        --                           -- [b |-&gt; 2, a |-&gt; 1] in     add1(b)</code></p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true"></a>              <span class="co">-- ENV(n)</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true"></a><span class="kw">let</span> x <span class="ot">=</span> <span class="dt">STUFF</span> </span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true"></a>              <span class="co">-- [x |-&gt; n+1, ENV(n)]</span></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true"></a><span class="kw">in</span> <span class="dt">OTHERSTUFF</span> </span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true"></a>              <span class="co">-- ENV(n)</span></span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true"></a><span class="kw">let</span> a <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true"></a>  , c <span class="ot">=</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true"></a>        <span class="kw">let</span> b <span class="ot">=</span> add1(a)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true"></a>        <span class="kw">in</span> add1(b)</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true"></a><span class="kw">in</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true"></a>    add1(c)</span></code></pre></div>
+<p><strong>A.</strong> 1</p>
+<p><strong>B.</strong> 2</p>
+<p><strong>C.</strong> 3</p>
+<p><strong>D.</strong> 4</p>
+<p><strong>E.</strong> not on stack!</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="strategy">Strategy</h3>
+<div class="sourceCode" id="cb37"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true"></a>              <span class="co">-- ENV(n)</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true"></a><span class="kw">let</span> x <span class="ot">=</span> <span class="dt">E1</span> </span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true"></a><span class="kw">in</span>            <span class="co">-- [x |-&gt; n+1, ENV(n)]</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true"></a>   <span class="dt">E2</span> </span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true"></a>              <span class="co">-- ENV(n)</span></span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h3 id="strategy-variable-definition">Strategy: Variable Definition</h3>
 <p>At each point, we have <code>env</code> that maps (previously defined) <code>Id</code> to <code>StackPosition</code></p>
-<p><strong>Variable Use</strong></p>
-<p>To compile <code>x</code> given <code>env</code></p>
-<ol type="1">
-<li>Move <code>[ebp - 4 * i]</code> into <code>eax</code></li>
-</ol>
-<p>(where <code>env</code> maps <code>x |-&gt; i</code>)</p>
-<p><strong>Variable Definition</strong></p>
 <p>To compile <code>let x = e1 in e2</code> we</p>
 <ol type="1">
 <li>Compile <code>e1</code> using <code>env</code> (i.e. resulting value will be stored in <code>eax</code>)</li>
-<li>Move <code>eax</code> into <code>[ebp - 4 * i]</code></li>
+<li>Move <code>eax</code> into <code>[RBP - 4 * i]</code></li>
 <li>Compile <code>e2</code> using <code>env'</code></li>
 </ol>
 <p>(where <code>env'</code> be <code>env</code> with <code>x |-&gt; i</code> i.e. push <code>x</code> onto <code>env</code> at position <code>i</code>)</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h3 id="strategy-variable-use">Strategy: Variable Use</h3>
+<p>To compile <code>x</code> given <code>env</code></p>
+<ol type="1">
+<li>Move <code>[RBP - 4 * i]</code> into <code>eax</code></li>
+</ol>
+<p>(where <code>env</code> maps <code>x |-&gt; i</code>)</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="example-let-bindings-to-asm">Example: Let-bindings to <code>Asm</code></h3>
 <p>Lets see how our strategy works by example:</p>
 <h3 id="example-let1-1">Example: let1</h3>
 <figure>
 <img src="../static/img/let-1-to-asm.png" alt /><figcaption>Convert let1 to Assembly</figcaption>
 </figure>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="quiz-let2">QUIZ: let2</h3>
 <p>When we compile</p>
 <div class="sourceCode" id="cb38"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true"></a><span class="kw">let</span> x <span class="ot">=</span> <span class="dv">10</span> </span>
@@ -756,24 +772,25 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <span id="cb38-4"><a href="#cb38-4" aria-hidden="true"></a>  add1(y)</span></code></pre></div>
 <p>The assembly looks like</p>
 <div class="sourceCode" id="cb39"><pre class="sourceCode asm"><code class="sourceCode fasm"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true"></a><span class="bu">mov</span> <span class="kw">eax</span>, <span class="dv">10</span>                <span class="co">; LHS of let x = 10</span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true"></a><span class="bu">mov</span> [<span class="kw">ebp</span> - <span class="dv">4</span>*<span class="dv">1</span>], <span class="kw">eax</span>       <span class="co">; save x on the stack </span></span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true"></a><span class="bu">mov</span> <span class="kw">eax</span>, [<span class="kw">ebp</span> - <span class="dv">4</span>*<span class="dv">1</span>]       <span class="co">; LHS of   , y = add1(x) </span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true"></a><span class="bu">mov</span> [<span class="kw">RBP</span> - <span class="dv">4</span>*<span class="dv">1</span>], <span class="kw">eax</span>       <span class="co">; save x on the stack </span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true"></a><span class="bu">mov</span> <span class="kw">eax</span>, [<span class="kw">RBP</span> - <span class="dv">4</span>*<span class="dv">1</span>]       <span class="co">; LHS of   , y = add1(x) </span></span>
 <span id="cb39-4"><a href="#cb39-4" aria-hidden="true"></a><span class="bu">add</span> <span class="kw">eax</span>, <span class="dv">1</span>                 <span class="co">; &quot;&quot; </span></span>
 <span id="cb39-5"><a href="#cb39-5" aria-hidden="true"></a>???</span>
 <span id="cb39-6"><a href="#cb39-6" aria-hidden="true"></a><span class="bu">add</span> <span class="kw">eax</span>, <span class="dv">1</span></span></code></pre></div>
 <p>What .asm instructions shall we fill in for <code>???</code></p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode asm"><code class="sourceCode fasm"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true"></a><span class="bu">mov</span> [<span class="kw">ebp</span> - <span class="dv">4</span> * <span class="dv">1</span>], <span class="kw">eax</span>    <span class="co">; A  </span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true"></a><span class="bu">mov</span> <span class="kw">eax</span>, [<span class="kw">ebp</span> - <span class="dv">4</span> * <span class="dv">1</span>]</span>
+<div class="sourceCode" id="cb40"><pre class="sourceCode asm"><code class="sourceCode fasm"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true"></a><span class="bu">mov</span> [<span class="kw">RBP</span> - <span class="dv">4</span> * <span class="dv">1</span>], <span class="kw">eax</span>    <span class="co">; A  </span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true"></a><span class="bu">mov</span> <span class="kw">eax</span>, [<span class="kw">RBP</span> - <span class="dv">4</span> * <span class="dv">1</span>]</span>
 <span id="cb40-3"><a href="#cb40-3" aria-hidden="true"></a></span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true"></a><span class="bu">mov</span> [<span class="kw">ebp</span> - <span class="dv">4</span> * <span class="dv">1</span>], <span class="kw">eax</span>    <span class="co">; B  </span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true"></a><span class="bu">mov</span> [<span class="kw">RBP</span> - <span class="dv">4</span> * <span class="dv">1</span>], <span class="kw">eax</span>    <span class="co">; B  </span></span>
 <span id="cb40-5"><a href="#cb40-5" aria-hidden="true"></a></span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true"></a><span class="bu">mov</span> [<span class="kw">ebp</span> - <span class="dv">4</span> * <span class="dv">2</span>], <span class="kw">eax</span>    <span class="co">; C  </span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true"></a><span class="bu">mov</span> [<span class="kw">RBP</span> - <span class="dv">4</span> * <span class="dv">2</span>], <span class="kw">eax</span>    <span class="co">; C  </span></span>
 <span id="cb40-7"><a href="#cb40-7" aria-hidden="true"></a></span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true"></a><span class="bu">mov</span> [<span class="kw">ebp</span> - <span class="dv">4</span> * <span class="dv">2</span>], <span class="kw">eax</span>    <span class="co">; D  </span></span>
-<span id="cb40-9"><a href="#cb40-9" aria-hidden="true"></a><span class="bu">mov</span> <span class="kw">eax</span>, [<span class="kw">ebp</span> - <span class="dv">4</span> * <span class="dv">2</span>]</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true"></a><span class="bu">mov</span> [<span class="kw">RBP</span> - <span class="dv">4</span> * <span class="dv">2</span>], <span class="kw">eax</span>    <span class="co">; D  </span></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true"></a><span class="bu">mov</span> <span class="kw">eax</span>, [<span class="kw">RBP</span> - <span class="dv">4</span> * <span class="dv">2</span>]</span>
 <span id="cb40-10"><a href="#cb40-10" aria-hidden="true"></a></span>
 <span id="cb40-11"><a href="#cb40-11" aria-hidden="true"></a>                          <span class="co">; E  (empty! no instructions)</span></span></code></pre></div>
 <!-- ![Convert let2 to Assembly](/static/img/let-2-to-asm.png) -->
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="example-let3-1">Example: let3</h3>
 <p>Lets compile</p>
 <div class="sourceCode" id="cb41"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true"></a><span class="kw">let</span> a <span class="ot">=</span> <span class="dv">10</span> </span>
@@ -784,83 +801,58 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <span id="cb41-6"><a href="#cb41-6" aria-hidden="true"></a>    add1(c)</span></code></pre></div>
 <p>Lets figure out what the assembly looks like!</p>
 <div class="sourceCode" id="cb42"><pre class="sourceCode asm"><code class="sourceCode fasm"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true"></a><span class="bu">mov</span> <span class="kw">eax</span>, <span class="dv">10</span>                <span class="co">; LHS of let a = 10</span></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true"></a><span class="bu">mov</span> [<span class="kw">ebp</span> - <span class="dv">4</span>*<span class="dv">1</span>], <span class="kw">eax</span>       <span class="co">; save a on the stack </span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true"></a><span class="bu">mov</span> [<span class="kw">RBP</span> - <span class="dv">4</span>*<span class="dv">1</span>], <span class="kw">eax</span>       <span class="co">; save a on the stack </span></span>
 <span id="cb42-3"><a href="#cb42-3" aria-hidden="true"></a>??? </span></code></pre></div>
 <!-- ![Convert let3 to Assembly](/static/img/let-3-to-asm.png) -->
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="step-2-types">Step 2: Types</h2>
 <p>Now, we’re ready to move to the implementation!</p>
-<p>Lets extend the types for <em>Source Expressions</em></p>
+<p><strong>Source Expressions</strong></p>
 <div class="sourceCode" id="cb43"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">Id</span>   <span class="ot">=</span> <span class="dt">Text</span></span>
 <span id="cb43-2"><a href="#cb43-2" aria-hidden="true"></a></span>
 <span id="cb43-3"><a href="#cb43-3" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Expr</span> <span class="ot">=</span> <span class="op">...</span></span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true"></a>          <span class="op">|</span> <span class="dt">Let</span> <span class="dt">Id</span> <span class="dt">Expr</span> <span class="dt">Expr</span>    <span class="co">-- `let x = e1 in e2` modeled as is `Let x e1 e2`</span></span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true"></a>          <span class="op">|</span> <span class="dt">Var</span> <span class="dt">Id</span>             </span></code></pre></div>
-<p>Lets enrich the <code>Instruction</code> to include the register-offset <code>[ebp - 4*i]</code></p>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true"></a>          <span class="op">|</span> <span class="dt">Let</span> <span class="dt">Id</span> <span class="dt">Expr</span> <span class="dt">Expr</span>    <span class="co">-- `let x = e1 in e2` represented as `Let x e1 e2`</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true"></a>          <span class="op">|</span> <span class="dt">Var</span> <span class="dt">Id</span>              <span class="co">-- `x` represented as `Var x` </span></span></code></pre></div>
+<p><strong>Assembly Instructions</strong></p>
+<p>Lets enrich the <code>Instruction</code> to include the register-offset <code>[RBP - 4*i]</code></p>
 <div class="sourceCode" id="cb44"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Arg</span> <span class="ot">=</span> <span class="op">...</span></span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true"></a>         <span class="op">|</span> <span class="dt">RegOffset</span> <span class="dt">Reg</span> <span class="dt">Int</span>    <span class="co">-- `[ebp - 4*i]` modeled as `RegOffset EBP i`</span></span></code></pre></div>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true"></a>         <span class="op">|</span> <span class="dt">RegOffset</span> <span class="dt">Reg</span> <span class="dt">Int</span>    <span class="co">-- `[RBP - 4*i]` modeled as `RegOffset RBP i`</span></span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="environments">Environments</h3>
-<p>Lets create a new <code>Env</code> type to track stack-positions of variables</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Env</span> <span class="ot">=</span> [(<span class="dt">Id</span>, <span class="dt">Int</span>)]</span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true"></a></span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Maybe</span> a <span class="ot">=</span> <span class="dt">Nothing</span> <span class="op">|</span> <span class="dt">Just</span> a</span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true"></a></span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true"></a><span class="ot">lookupEnv ::</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> <span class="dt">Id</span> <span class="ot">-&gt;</span> <span class="dt">Maybe</span> <span class="dt">Int</span></span>
-<span id="cb45-6"><a href="#cb45-6" aria-hidden="true"></a>lookupEnv [] x              <span class="ot">=</span> <span class="dt">Nothing</span> </span>
-<span id="cb45-7"><a href="#cb45-7" aria-hidden="true"></a>lookupEnv ((y, n) <span class="op">:</span> rest) x <span class="ot">=</span> <span class="kw">if</span> x <span class="op">==</span> y </span>
-<span id="cb45-8"><a href="#cb45-8" aria-hidden="true"></a>                                <span class="kw">then</span> <span class="dt">Just</span> n </span>
-<span id="cb45-9"><a href="#cb45-9" aria-hidden="true"></a>                                <span class="kw">else</span> lookupEnv rest x </span>
-<span id="cb45-10"><a href="#cb45-10" aria-hidden="true"></a></span>
-<span id="cb45-11"><a href="#cb45-11" aria-hidden="true"></a><span class="ot">pushEnv   ::</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> <span class="dt">Id</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Env</span>)</span>
-<span id="cb45-12"><a href="#cb45-12" aria-hidden="true"></a>pushEnv env x <span class="ot">=</span> (xn , env')</span>
-<span id="cb45-13"><a href="#cb45-13" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb45-14"><a href="#cb45-14" aria-hidden="true"></a>    env'      <span class="ot">=</span> (x, xn) <span class="op">:</span> env</span>
-<span id="cb45-15"><a href="#cb45-15" aria-hidden="true"></a>    xn        <span class="ot">=</span> <span class="dv">1</span> <span class="op">+</span> <span class="fu">length</span> env</span>
-<span id="cb45-16"><a href="#cb45-16" aria-hidden="true"></a></span>
-<span id="cb45-17"><a href="#cb45-17" aria-hidden="true"></a>compile env (<span class="dt">Let</span> x e1 e2) <span class="ot">=</span> </span>
-<span id="cb45-18"><a href="#cb45-18" aria-hidden="true"></a>  compile env e1</span>
-<span id="cb45-19"><a href="#cb45-19" aria-hidden="true"></a>  <span class="op">++</span> <span class="co">-- EAX hold the value of &quot;x&quot;</span></span>
-<span id="cb45-20"><a href="#cb45-20" aria-hidden="true"></a>  [<span class="dt">IMov</span> (<span class="dt">RegOffset</span> <span class="dt">EBP</span> xn) <span class="dt">EAX</span> ]</span>
-<span id="cb45-21"><a href="#cb45-21" aria-hidden="true"></a>  <span class="op">++</span></span>
-<span id="cb45-22"><a href="#cb45-22" aria-hidden="true"></a>  compile env' e2</span>
-<span id="cb45-23"><a href="#cb45-23" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb45-24"><a href="#cb45-24" aria-hidden="true"></a>    (xn, env') <span class="ot">=</span> pushEnv env x</span>
-<span id="cb45-25"><a href="#cb45-25" aria-hidden="true"></a></span>
-<span id="cb45-26"><a href="#cb45-26" aria-hidden="true"></a>compile env (<span class="dt">Var</span> x) <span class="ot">=</span> [<span class="dt">IMov</span> <span class="dt">EAX</span> (<span class="dt">RegOffset</span> <span class="dt">EBP</span> xn)]</span>
-<span id="cb45-27"><a href="#cb45-27" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb45-28"><a href="#cb45-28" aria-hidden="true"></a>    xn              <span class="ot">=</span> <span class="kw">case</span> lookupEnv env x <span class="kw">of</span></span>
-<span id="cb45-29"><a href="#cb45-29" aria-hidden="true"></a>                         <span class="dt">Just</span> n <span class="ot">-&gt;</span> n</span>
-<span id="cb45-30"><a href="#cb45-30" aria-hidden="true"></a>                         <span class="dt">Nothing</span> <span class="ot">-&gt;</span> <span class="fu">error</span> <span class="st">&quot;variable out of scope&quot;</span></span></code></pre></div>
-<p>API:</p>
+<p>An <code>Env</code> type to track <em>stack-positions</em> of variables with <strong>API</strong></p>
 <ul>
-<li><strong>Push</strong> variable onto <code>Env</code> (returning its position),</li>
-<li><strong>Lookup</strong> variable’s position in <code>Env</code></li>
+<li><code>push</code> variable onto <code>Env</code> (returning its position),</li>
+<li><code>lookup</code> a variable’s position in <code>Env</code></li>
 </ul>
-<div class="sourceCode" id="cb46"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true"></a><span class="ot">push ::</span> <span class="dt">Id</span> <span class="ot">-&gt;</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Env</span>)</span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true"></a>push x env <span class="ot">=</span> (i, (x, i) <span class="op">:</span> env)</span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb46-4"><a href="#cb46-4" aria-hidden="true"></a>    i         <span class="ot">=</span> <span class="dv">1</span> <span class="op">+</span> <span class="fu">length</span> env</span>
-<span id="cb46-5"><a href="#cb46-5" aria-hidden="true"></a></span>
-<span id="cb46-6"><a href="#cb46-6" aria-hidden="true"></a><span class="fu">lookup</span><span class="ot"> ::</span> <span class="dt">Id</span> <span class="ot">-&gt;</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> <span class="dt">Maybe</span> <span class="dt">Int</span></span>
-<span id="cb46-7"><a href="#cb46-7" aria-hidden="true"></a><span class="fu">lookup</span> x []             <span class="ot">=</span> <span class="dt">Nothing</span></span>
-<span id="cb46-8"><a href="#cb46-8" aria-hidden="true"></a><span class="fu">lookup</span> x ((y, i) <span class="op">:</span> env)</span>
-<span id="cb46-9"><a href="#cb46-9" aria-hidden="true"></a>  <span class="op">|</span> x <span class="op">==</span> y              <span class="ot">=</span> <span class="dt">Just</span> i</span>
-<span id="cb46-10"><a href="#cb46-10" aria-hidden="true"></a>  <span class="op">|</span> <span class="fu">otherwise</span>           <span class="ot">=</span> <span class="fu">lookup</span> x env   </span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true"></a><span class="ot">push ::</span> <span class="dt">Id</span> <span class="ot">-&gt;</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Env</span>)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true"></a>push x env <span class="ot">=</span> (i, (x, i) <span class="op">:</span> env)</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true"></a>    i      <span class="ot">=</span> <span class="dv">1</span> <span class="op">+</span> <span class="fu">length</span> env</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true"></a></span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true"></a><span class="fu">lookup</span><span class="ot"> ::</span> <span class="dt">Id</span> <span class="ot">-&gt;</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> <span class="dt">Maybe</span> <span class="dt">Int</span></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true"></a><span class="fu">lookup</span> x ((y, i) <span class="op">:</span> env)</span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true"></a>  <span class="op">|</span> x <span class="op">==</span> y              <span class="ot">=</span> <span class="dt">Just</span> i</span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true"></a>  <span class="op">|</span> <span class="fu">otherwise</span>           <span class="ot">=</span> <span class="fu">lookup</span> x env   </span>
+<span id="cb45-10"><a href="#cb45-10" aria-hidden="true"></a><span class="fu">lookup</span> x []             <span class="ot">=</span> <span class="dt">Nothing</span></span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="step-3-transforms">Step 3: Transforms</h2>
-<p>Ok, now we’re almost done. Just add the code formalizing the <a href="#strategy">above strategy</a></p>
-<h3 id="code">Code</h3>
-<p><strong>Variable Use</strong></p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true"></a>compileEnv env (<span class="dt">Var</span> x) <span class="ot">=</span> [ <span class="dt">IMov</span> (<span class="dt">Reg</span> <span class="dt">EAX</span>) (<span class="dt">RegOffset</span> <span class="dt">EBP</span> i) ]</span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true"></a>    i                  <span class="ot">=</span> fromMaybe err (<span class="fu">lookup</span> x env)</span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true"></a>    err                <span class="ot">=</span> <span class="fu">error</span> (printf <span class="st">&quot;Error: Variable '%s' is unbound&quot;</span> x)</span></code></pre></div>
-<p><strong>Variable Definition</strong></p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true"></a>compileEnv env (<span class="dt">Let</span> x e1 e2 l)  <span class="ot">=</span> compileEnv env  e1  </span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true"></a>                               <span class="op">++</span> <span class="dt">IMov</span> (<span class="dt">RegOffset</span> <span class="dt">EBP</span> i) (<span class="dt">Reg</span> <span class="dt">EAX</span>)</span>
-<span id="cb48-3"><a href="#cb48-3" aria-hidden="true"></a>                                <span class="op">:</span> compileEnv env' e2</span>
-<span id="cb48-4"><a href="#cb48-4" aria-hidden="true"></a>      <span class="kw">where</span></span>
-<span id="cb48-5"><a href="#cb48-5" aria-hidden="true"></a>        (i, env')               <span class="ot">=</span> pushEnv x env</span></code></pre></div>
+<p>Almost done: just write code formalizing the <a href="#strategy">above strategy</a></p>
+<h3 id="code-variable-use">Code: Variable Use</h3>
+<div class="sourceCode" id="cb46"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true"></a>compileEnv env (<span class="dt">Var</span> x) <span class="ot">=</span> [ <span class="dt">IMov</span> (<span class="dt">Reg</span> <span class="dt">EAX</span>) (<span class="dt">RegOffset</span> <span class="dt">RBP</span> i) ]</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true"></a>    i                  <span class="ot">=</span> fromMaybe err (<span class="fu">lookup</span> x env)</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true"></a>    err                <span class="ot">=</span> <span class="fu">error</span> (printf <span class="st">&quot;Error: Variable '%s' is unbound&quot;</span> x)</span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h3 id="code-variable-definition">Code: Variable Definition</h3>
+<div class="sourceCode" id="cb47"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true"></a>compileEnv env (<span class="dt">Let</span> x e1 e2 l)  <span class="ot">=</span> compileEnv env  e1  </span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true"></a>                               <span class="op">++</span> <span class="dt">IMov</span> (<span class="dt">RegOffset</span> <span class="dt">RBP</span> i) (<span class="dt">Reg</span> <span class="dt">EAX</span>)</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true"></a>                                <span class="op">:</span> compileEnv env' e2</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true"></a>      <span class="kw">where</span></span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true"></a>        (i, env')               <span class="ot">=</span> pushEnv x env</span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="step-4-tests">Step 4: Tests</h2>
 <p>Lets take our <code>adder</code> compiler out for a spin!</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="recap-we-just-wrote-our-first-compilers">Recap: We just wrote our first Compilers</h2>
 <p><code>SourceProgram</code> will be a sequence of four <em>tiny</em> “languages”</p>
 <ol type="1">
@@ -887,6 +879,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <ul>
 <li>e.g. <code>let x = add1(7), y = add1(x) in add1(y)</code></li>
 </ul>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="using-a-recipe">Using a Recipe</h3>
 <ol type="1">
 <li>Build intuition with <strong>examples</strong>,</li>

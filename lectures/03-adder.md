@@ -959,13 +959,31 @@ Lets zoom into the stack region, which when we start looks like this:
 
 The stack **grows downward** (i.e. to **smaller** addresses)
 
-We have lots of 4-byte slots on the stack at offsets from the "stack pointer" at addresses:
+We have *lots* of 4-byte slots on the stack at offsets from the "stack pointer" at addresses:
 
-* `[EBP - 4 * 1]`, `[EBP - 4 * 2]`, ...,
+* `[RBP - 4 * 1]`, `[RBP - 4 * 2]`, `[RBP - 4 * 3]` ...,
+
+**Note:** On 32-bit machines the "base" is the `EBP` register (not `RBP`).
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
 
 ### How to compute mapping from _variables_ to _slots_ ?
 
-The `i`-th _stack-variable_ lives at address `[EBP - 4 * i]`
+The `i`-th _stack-variable_ lives at address `[RBP - 4 * i]`
 
 **Required** A mapping
 
@@ -975,91 +993,193 @@ The `i`-th _stack-variable_ lives at address `[EBP - 4 * i]`
 **Solution** The structure of the `let`s is stack-like too...
 
 * Maintain an `Env` that maps `Id |-> StackPosition`
-* `let x = e1 in e2` adds `x |-> i` to `Env`
-  * where `i` is current height of stack.
 
-### Example: Let-bindings and Stacks
+`let x = e1 in e2` adds `x |-> i` to `Env`
+
+* where `i` is ``current'' size of stack.
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+### Let-bindings and Stacks: Example-1
 
 ```haskell
-let x = 1           -- []
+                    -- []
+let x = 1 
 in                  -- [ x |-> 1 ]
     x
 ```
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
+### Let-bindings and Stacks: Example-2
+
 ```haskell
-let x = 1           -- []
-  , y = add1(x)     -- [x |-> 1]
-  , z = add1(y)     -- [y |-> 2, x |-> 1]
-in
-    add1(z)         -- [z |- 3, y |-> 2, x |-> 1]
+                          -- []
+let x = 1           
+                          -- [x |-> 1]
+  , y = add1(x)     
+                          -- [y |-> 2, x |-> 1]
+  , z = add1(y)     
+in                        -- [z |- 3, y |-> 2, x |-> 1]
+    add1(z)              
 ```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 
 ### QUIZ
 
 At what position on the stack do we store variable `c` ?
 
 ```haskell
-                          -- []
-let a = 1                 -- [a |-> 1]
-  , c =                   -- [a |-> 1]
-        let b = add1(a)   --     [b |-> 2, a |-> 1]
-        in add1(b)        -- [a |-> 1]
-                          -- [c |-> 2, a |-> 1]
+let a = 1
+  , c =
+        let b = add1(a)
+        in add1(b)
 in
     add1(c)
 ```
 
-A. 1
-B. 2
-C. 3
-D. 4
-E. not on stack!
+**A.** 1
 
+**B.** 2
 
-```haskell                   "ENVIRONMENT"
-                          -- []
-let a = 1                 -- [a |-> 1]
-  , b = 2                 -- [b |-> 2, a |-> 1]
-  , c =                   --
-        let b  = add1(a)  -- [b |-> 3, b -> 2, a |-> 1]
-        in add1(b)        --
-                          -- [b |-> 2, a |-> 1]
-in
-    add1(b)
-```
+**C.** 3
 
-```haskell
-              -- ENV(n)
-let x = STUFF 
-              -- [x |-> n+1, ENV(n)]
-in OTHERSTUFF 
-              -- ENV(n)
-```
+**D.** 4
 
+**E.** not on stack!
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 
 ### Strategy
 
+
+```haskell
+              -- ENV(n)
+let x = E1 
+in            -- [x |-> n+1, ENV(n)]
+   E2 
+              -- ENV(n)
+```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
+
+### Strategy: Variable Definition
+
 At each point, we have `env` that maps (previously defined) `Id` to `StackPosition`
-
-**Variable Use**
-
-To compile `x` given `env`
-
-1. Move `[ebp - 4 * i]` into `eax`
-
-(where `env` maps `x |-> i`)
-
-**Variable Definition**
 
 To compile `let x = e1 in e2` we
 
 1. Compile `e1` using `env` (i.e. resulting value will be stored in `eax`)
-2. Move `eax` into `[ebp - 4 * i]`
+2. Move `eax` into `[RBP - 4 * i]`
 3. Compile `e2` using `env'`
 
 (where `env'` be `env` with `x |-> i` i.e. push `x` onto `env` at position `i`)
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+### Strategy: Variable Use
+
+To compile `x` given `env`
+
+1. Move `[RBP - 4 * i]` into `eax`
+
+(where `env` maps `x |-> i`)
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 
 ### Example: Let-bindings to `Asm`
 
@@ -1068,6 +1188,20 @@ Lets see how our strategy works by example:
 ### Example: let1
 
 ![Convert let1 to Assembly](/static/img/let-1-to-asm.png)
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ### QUIZ: let2
 
@@ -1084,8 +1218,8 @@ The assembly looks like
 
 ```asm
 mov eax, 10                ; LHS of let x = 10
-mov [ebp - 4*1], eax       ; save x on the stack 
-mov eax, [ebp - 4*1]       ; LHS of   , y = add1(x) 
+mov [RBP - 4*1], eax       ; save x on the stack 
+mov eax, [RBP - 4*1]       ; LHS of   , y = add1(x) 
 add eax, 1                 ; "" 
 ???
 add eax, 1
@@ -1094,20 +1228,34 @@ add eax, 1
 What .asm instructions shall we fill in for `???` 
 
 ```asm
-mov [ebp - 4 * 1], eax    ; A  
-mov eax, [ebp - 4 * 1]
+mov [RBP - 4 * 1], eax    ; A  
+mov eax, [RBP - 4 * 1]
 
-mov [ebp - 4 * 1], eax    ; B  
+mov [RBP - 4 * 1], eax    ; B  
 
-mov [ebp - 4 * 2], eax    ; C  
+mov [RBP - 4 * 2], eax    ; C  
 
-mov [ebp - 4 * 2], eax    ; D  
-mov eax, [ebp - 4 * 2]
+mov [RBP - 4 * 2], eax    ; D  
+mov eax, [RBP - 4 * 2]
 
                           ; E  (empty! no instructions)
 ```
 
 <!-- ![Convert let2 to Assembly](/static/img/let-2-to-asm.png) -->
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ### Example: let3
 
@@ -1126,119 +1274,164 @@ Lets figure out what the assembly looks like!
 
 ```asm
 mov eax, 10                ; LHS of let a = 10
-mov [ebp - 4*1], eax       ; save a on the stack 
+mov [RBP - 4*1], eax       ; save a on the stack 
 ??? 
 ```
 <!-- ![Convert let3 to Assembly](/static/img/let-3-to-asm.png) --> 
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ## Step 2: Types
 
 Now, we're ready to move to the implementation!
 
-Lets extend the types for _Source Expressions_
+**Source Expressions**
 
 ```haskell
 type Id   = Text
 
 data Expr = ...
-          | Let Id Expr Expr    -- `let x = e1 in e2` modeled as is `Let x e1 e2`
-          | Var Id             
+          | Let Id Expr Expr    -- `let x = e1 in e2` represented as `Let x e1 e2`
+          | Var Id              -- `x` represented as `Var x` 
 ```
 
-Lets enrich the `Instruction` to include the register-offset `[ebp - 4*i]`
+**Assembly Instructions**
+
+Lets enrich the `Instruction` to include the register-offset `[RBP - 4*i]`
 
 ```haskell
 data Arg = ...
-         | RegOffset Reg Int    -- `[ebp - 4*i]` modeled as `RegOffset EBP i`
+         | RegOffset Reg Int    -- `[RBP - 4*i]` modeled as `RegOffset RBP i`
 ```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ### Environments
 
-Lets create a new `Env` type to track stack-positions of variables
+An `Env` type to track *stack-positions* of variables with **API**
 
-
-
-```haskell
-data Env = [(Id, Int)]
-
-data Maybe a = Nothing | Just a
-
-lookupEnv :: Env -> Id -> Maybe Int
-lookupEnv [] x              = Nothing 
-lookupEnv ((y, n) : rest) x = if x == y 
-                                then Just n 
-                                else lookupEnv rest x 
-
-pushEnv   :: Env -> Id -> (Int, Env)
-pushEnv env x = (xn , env')
-  where
-    env'      = (x, xn) : env
-    xn        = 1 + length env
-
-compile env (Let x e1 e2) = 
-  compile env e1
-  ++ -- EAX hold the value of "x"
-  [IMov (RegOffset EBP xn) EAX ]
-  ++
-  compile env' e2
-  where
-    (xn, env') = pushEnv env x
-
-compile env (Var x) = [IMov EAX (RegOffset EBP xn)]
-  where
-    xn              = case lookupEnv env x of
-                         Just n -> n
-                         Nothing -> error "variable out of scope"
-```
-
-API:
-
-* **Push** variable onto `Env` (returning its position),
-* **Lookup** variable's position in `Env`
+* `push` variable onto `Env` (returning its position),
+* `lookup` a variable's position in `Env`
 
 ```haskell
 push :: Id -> Env -> (Int, Env)
 push x env = (i, (x, i) : env)
   where
-    i         = 1 + length env
+    i      = 1 + length env
 
 lookup :: Id -> Env -> Maybe Int
-lookup x []             = Nothing
 lookup x ((y, i) : env)
   | x == y              = Just i
   | otherwise           = lookup x env   
+lookup x []             = Nothing
 ```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ## Step 3: Transforms
 
-Ok, now we're almost done. Just add the code formalizing the [above strategy](#strategy)
+Almost done: just write code formalizing the [above strategy](#strategy)
 
-### Code
-
-**Variable Use**
+### Code: Variable Use
 
 ```haskell
-compileEnv env (Var x) = [ IMov (Reg EAX) (RegOffset EBP i) ]
+compileEnv env (Var x) = [ IMov (Reg EAX) (RegOffset RBP i) ]
   where
     i                  = fromMaybe err (lookup x env)
     err                = error (printf "Error: Variable '%s' is unbound" x)
 ```
 
-**Variable Definition**
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+### Code: Variable Definition
 
 ```haskell
 compileEnv env (Let x e1 e2 l)  = compileEnv env  e1  
-                               ++ IMov (RegOffset EBP i) (Reg EAX)
+                               ++ IMov (RegOffset RBP i) (Reg EAX)
                                 : compileEnv env' e2
       where
         (i, env')               = pushEnv x env
 ```
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 ## Step 4: Tests
 
 Lets take our `adder` compiler out for a spin!
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ## Recap: We just wrote our first Compilers
 
@@ -1255,6 +1448,20 @@ Lets take our `adder` compiler out for a spin!
 
 4. Numbers + Increment + Decrement + Local Variables
   * e.g. `let x = add1(7), y = add1(x) in add1(y)`
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ### Using a Recipe
 
