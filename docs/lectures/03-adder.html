@@ -346,9 +346,10 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>$ <span class="ex">forty_two.run</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="ex">42</span></span></code></pre></div>
 <p>Hooray!</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="the-compiler">The “Compiler”</h2>
 <p>Recall, that compilers were invented to <a href="01-introduction.md/#a-bit-of-history">avoid writing assembly by hand</a></p>
-<h3 id="first-step-types">First Step: Types</h3>
+<h2 id="first-step-types">First Step: Types</h2>
 <p>To go from source to assembly, we must do:</p>
 <figure>
 <img src="../static/img/simplified-pipeline-short.png" alt /><figcaption>Simplified Pipeline</figcaption>
@@ -363,7 +364,8 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <li><code>Expr</code> for the AST</li>
 <li><code>Asm</code> for the output x86 assembly</li>
 </ul>
-<h3 id="defining-the-types-text">Defining the Types: <code>Text</code></h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="defining-the-types-text">Defining the Types: <code>Text</code></h2>
 <p><code>Text</code> is raw strings, i.e. sequences of characters</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="ot">texts ::</span> [<span class="dt">Text</span>]</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a>texts <span class="ot">=</span>  </span>
@@ -371,11 +373,13 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a>  , <span class="st">&quot;I wanna hold your hand...&quot;</span></span>
 <span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a>  , <span class="st">&quot;12&quot;</span></span>
 <span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a>  ]</span></code></pre></div>
-<h3 id="defining-the-types-expr">Defining the Types: <code>Expr</code></h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="defining-the-types-expr">Defining the Types: <code>Expr</code></h2>
 <p>We convert the <code>Text</code> into a tree-structure defined by the datatype</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Expr</span> <span class="ot">=</span> <span class="dt">Number</span> <span class="dt">Int</span></span></code></pre></div>
 <p><strong>Note:</strong> As we add features to our language, we will keep adding cases to <code>Expr</code>.</p>
-<h3 id="defining-the-types-asm">Defining the Types: <code>Asm</code></h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="defining-the-types-asm">Defining the Types: <code>Asm</code></h2>
 <p>Lets also do this <em>gradually</em> as <a href="http://www.felixcloutier.com/x86/">the x86 instruction set is HUGE!</a></p>
 <p>Recall, we need to represent</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode asm"><code class="sourceCode fasm"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="bu">section</span> .text</span>
@@ -402,7 +406,8 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Arg</span></span>
 <span id="cb11-5"><a href="#cb11-5" aria-hidden="true"></a>  <span class="ot">=</span> <span class="dt">Const</span> <span class="dt">Int</span>       <span class="co">-- a fixed number</span></span>
 <span id="cb11-6"><a href="#cb11-6" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">Reg</span>   <span class="dt">Register</span>  <span class="co">-- a register</span></span></code></pre></div>
-<h3 id="second-step-transforms">Second Step: Transforms</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="second-step-transforms">Second Step: Transforms</h2>
 <p>Ok, now we just need to write the functions:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a><span class="ot">parse   ::</span> <span class="dt">Text</span> <span class="ot">-&gt;</span> <span class="dt">Expr</span>     <span class="co">-- 1. Transform source-string into AST</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a><span class="ot">compile ::</span> <span class="dt">Expr</span> <span class="ot">-&gt;</span> <span class="dt">Asm</span>      <span class="co">-- 2. Transform AST into assembly</span></span>
@@ -431,6 +436,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true"></a></span>
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true"></a><span class="ot">reg ::</span> <span class="dt">Register</span> <span class="ot">-&gt;</span> <span class="dt">Text</span></span>
 <span id="cb14-9"><a href="#cb14-9" aria-hidden="true"></a>reg <span class="dt">EAX</span> <span class="ot">=</span> <span class="st">&quot;eax&quot;</span></span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="brief-digression-typeclasses">Brief digression: Typeclasses</h3>
 <p>Note that above we have <em>four</em> separate functions that crunch different types to the <code>Text</code> representation of x86 assembly:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a><span class="ot">asm   ::</span> <span class="dt">Asm</span> <span class="ot">-&gt;</span> <span class="dt">Text</span></span>
@@ -456,6 +462,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <span id="cb17-11"><a href="#cb17-11" aria-hidden="true"></a><span class="kw">instance</span> <span class="dt">ToX86</span> <span class="dt">Register</span> <span class="kw">where</span></span>
 <span id="cb17-12"><a href="#cb17-12" aria-hidden="true"></a>  asm <span class="dt">EAX</span> <span class="ot">=</span> <span class="st">&quot;eax&quot;</span></span></code></pre></div>
 <p><strong>Note</strong> in each case above, the compiler figures out the <em>correct</em> implementation, from the types…</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h1 id="adder-2">Adder-2</h1>
 <p>Well that was easy! Lets beef up the language!</p>
 <ol start="2" type="1">
@@ -464,6 +471,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <ul>
 <li>e.g. <code>add1(7)</code>, <code>add1(add1(12))</code>, …</li>
 </ul>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="repeat-our-recipe">Repeat our Recipe</h2>
 <ol type="1">
 <li>Build intuition with <strong>examples</strong>,</li>
@@ -471,9 +479,10 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <li>Implement compiler via <strong>type-transforming-functions</strong>,</li>
 <li>Validate compiler via <strong>tests</strong>.</li>
 </ol>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="examples">1. Examples</h2>
 <p>First, lets look at some examples.</p>
-<h3 id="example-1">Example 1</h3>
+<h2 id="example-1">Example 1</h2>
 <p>How should we compile?</p>
 <pre><code>add1(7)</code></pre>
 <p>In English</p>
@@ -485,7 +494,8 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <div class="sourceCode" id="cb19"><pre class="sourceCode asm"><code class="sourceCode fasm"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true"></a><span class="bu">mov</span> <span class="kw">eax</span>, <span class="dv">7</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true"></a><span class="bu">add</span> <span class="kw">eax</span>, <span class="dv">1</span>    </span></code></pre></div>
 <p>Aha, note that <code>add</code> is a new kind of <code>Instruction</code></p>
-<h3 id="example-2">Example 2</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="example-2">Example 2</h2>
 <p>How should we compile</p>
 <pre><code>add1(add1(12))</code></pre>
 <p>In English</p>
@@ -498,7 +508,8 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <div class="sourceCode" id="cb21"><pre class="sourceCode asm"><code class="sourceCode fasm"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true"></a><span class="bu">mov</span> <span class="kw">eax</span>, <span class="dv">12</span></span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true"></a><span class="bu">add</span> <span class="kw">eax</span>, <span class="dv">1</span></span>
 <span id="cb21-3"><a href="#cb21-3" aria-hidden="true"></a><span class="bu">add</span> <span class="kw">eax</span>, <span class="dv">1</span></span></code></pre></div>
-<h3 id="compositional-code-generation">Compositional Code Generation</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="compositional-code-generation">Compositional Code Generation</h2>
 <p>Note correspondence between sub-expressions of <em>source</em> and <em>assembly</em></p>
 <figure>
 <img src="../static/img/compositional-compilation.png" alt /><figcaption>Compositional Compilation</figcaption>
@@ -508,17 +519,20 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <li>Generating <code>Asm</code> for each <em>sub-expression</em> (AST subtree) independently,</li>
 <li>Generating <code>Asm</code> for <em>super-expression</em>, assuming the value of sub-expression is in <code>EAX</code></li>
 </ul>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="types">2. Types</h2>
 <p>Next, lets extend the types to incorporate new language features</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="extend-type-for-source-and-assembly">Extend Type for Source and Assembly</h3>
-<p>Source Expressions</p>
+<p><strong>Source Expressions</strong></p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Expr</span> <span class="ot">=</span> <span class="op">...</span></span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true"></a>          <span class="op">|</span> <span class="dt">Add1</span>   <span class="dt">Expr</span></span></code></pre></div>
-<p>Assembly Instructions</p>
+<p><strong>Assembly Instructions</strong></p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Instruction</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true"></a>  <span class="ot">=</span> <span class="op">...</span></span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">IAdd</span>  <span class="dt">Arg</span> <span class="dt">Arg</span></span></code></pre></div>
-<h3 id="examples-revisited">Examples Revisited</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h3 id="example-1-revisited">Example-1 Revisited</h3>
 <div class="sourceCode" id="cb24"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true"></a>src1 <span class="ot">=</span> <span class="st">&quot;add1(7)&quot;</span></span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true"></a></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true"></a>exp1 <span class="ot">=</span> <span class="dt">Add1</span> (<span class="dt">Number</span> <span class="dv">7</span>)</span>
@@ -526,6 +540,8 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <span id="cb24-5"><a href="#cb24-5" aria-hidden="true"></a>asm1 <span class="ot">=</span> [ <span class="dt">IMov</span> (<span class="dt">Reg</span> <span class="dt">EAX</span>) (<span class="dt">Const</span> <span class="dv">7</span>)</span>
 <span id="cb24-6"><a href="#cb24-6" aria-hidden="true"></a>       , <span class="dt">IAdd</span> (<span class="dt">Reg</span> <span class="dt">EAX</span>) (<span class="dt">Const</span> <span class="dv">1</span>)</span>
 <span id="cb24-7"><a href="#cb24-7" aria-hidden="true"></a>       ]</span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h3 id="example-2-revisited">Example-2 Revisited</h3>
 <div class="sourceCode" id="cb25"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true"></a>src2 <span class="ot">=</span> <span class="st">&quot;add1(add1(12))&quot;</span></span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true"></a></span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true"></a>exp2 <span class="ot">=</span> <span class="dt">Add1</span> (<span class="dt">Add1</span> (<span class="dt">Number</span> <span class="dv">12</span>))</span>
@@ -534,6 +550,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <span id="cb25-6"><a href="#cb25-6" aria-hidden="true"></a>       , <span class="dt">IAdd</span> (<span class="dt">Reg</span> <span class="dt">EAX</span>) (<span class="dt">Const</span> <span class="dv">1</span>)</span>
 <span id="cb25-7"><a href="#cb25-7" aria-hidden="true"></a>       , <span class="dt">IAdd</span> (<span class="dt">Reg</span> <span class="dt">EAX</span>) (<span class="dt">Const</span> <span class="dv">1</span>)</span>
 <span id="cb25-8"><a href="#cb25-8" aria-hidden="true"></a>       ]</span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="transforms">3. Transforms</h2>
 <p>Now lets go back and suitably extend the transforms:</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true"></a><span class="ot">parse   ::</span> <span class="dt">Text</span> <span class="ot">-&gt;</span> <span class="dt">Expr</span>     <span class="co">-- 1. Transform source-string into AST</span></span>
@@ -542,7 +559,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <p>Lets do the easy bits first, namely <code>parse</code> and <code>asm</code></p>
 <h3 id="parse">Parse</h3>
 <div class="sourceCode" id="cb27"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true"></a><span class="ot">parse ::</span> <span class="dt">Text</span> <span class="ot">-&gt;</span> <span class="dt">Expr</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true"></a>parse    <span class="ot">=</span> parseWith expr</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true"></a>parse <span class="ot">=</span> parseWith expr</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true"></a></span>
 <span id="cb27-4"><a href="#cb27-4" aria-hidden="true"></a><span class="ot">expr ::</span> <span class="dt">Parser</span> <span class="dt">Expr</span></span>
 <span id="cb27-5"><a href="#cb27-5" aria-hidden="true"></a>expr <span class="ot">=</span>  try primExpr</span>
@@ -550,6 +567,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <span id="cb27-7"><a href="#cb27-7" aria-hidden="true"></a></span>
 <span id="cb27-8"><a href="#cb27-8" aria-hidden="true"></a><span class="ot">primExpr ::</span> <span class="dt">Parser</span> <span class="dt">Expr</span></span>
 <span id="cb27-9"><a href="#cb27-9" aria-hidden="true"></a>primExpr <span class="ot">=</span> <span class="dt">Add1</span> <span class="op">&lt;$&gt;</span> rWord <span class="st">&quot;add1&quot;</span> <span class="op">*&gt;</span> parens expr</span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="asm">Asm</h3>
 <p>To update <code>asm</code> just need to handle case for <code>IAdd</code></p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true"></a><span class="kw">instance</span> <span class="dt">ToX86</span> <span class="dt">Instruction</span> <span class="kw">where</span></span>
@@ -560,6 +578,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <li>GHC will <em>tell</em> you exactly which functions need to be extended (Types, FTW!)</li>
 <li>We will not discuss <code>parse</code> and <code>asm</code> any more…</li>
 </ol>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="compile">Compile</h3>
 <p>Finally, the key step is</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true"></a><span class="ot">compile ::</span> <span class="dt">Expr</span> <span class="ot">-&gt;</span> <span class="dt">Asm</span></span>
@@ -570,22 +589,22 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <span id="cb29-6"><a href="#cb29-6" aria-hidden="true"></a>compile (<span class="dt">Add1</span> e)</span>
 <span id="cb29-7"><a href="#cb29-7" aria-hidden="true"></a>  <span class="ot">=</span> compile e                    <span class="co">-- EAX holds value of result of `e` ...</span></span>
 <span id="cb29-8"><a href="#cb29-8" aria-hidden="true"></a> <span class="op">++</span> [ <span class="dt">IAdd</span> (<span class="dt">Reg</span> <span class="dt">EAX</span>) (<span class="dt">Const</span> <span class="dv">1</span>) ] <span class="co">-- ... so just increment it.</span></span></code></pre></div>
-<h3 id="examples-revisited-1">Examples Revisited</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h3 id="examples-revisited">Examples Revisited</h3>
 <p>Lets check that compile behaves as desired:</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true"></a></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true"></a>ghci<span class="op">&gt;</span> (compile (<span class="dt">Number</span> <span class="dv">12</span>)</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true"></a>[ <span class="dt">IMov</span> (<span class="dt">Reg</span> <span class="dt">EAX</span>) (<span class="dt">Const</span> <span class="dv">12</span>) ]</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true"></a></span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true"></a>ghci<span class="op">&gt;</span> compile (<span class="dt">Add1</span> (<span class="dt">Number</span> <span class="dv">12</span>))</span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true"></a>[ <span class="dt">IMov</span> (<span class="dt">Reg</span> <span class="dt">EAX</span>) (<span class="dt">Const</span> <span class="dv">12</span>)</span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true"></a>, <span class="dt">IAdd</span> (<span class="dt">Reg</span> <span class="dt">EAX</span>) (<span class="dt">Const</span> <span class="dv">1</span>)</span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true"></a>]</span>
-<span id="cb30-9"><a href="#cb30-9" aria-hidden="true"></a></span>
-<span id="cb30-10"><a href="#cb30-10" aria-hidden="true"></a>ghci<span class="op">&gt;</span> compile (<span class="dt">Add1</span> (<span class="dt">Add1</span> (<span class="dt">Number</span> <span class="dv">12</span>)))</span>
-<span id="cb30-11"><a href="#cb30-11" aria-hidden="true"></a>[ <span class="dt">IMov</span> (<span class="dt">Reg</span> <span class="dt">EAX</span>) (<span class="dt">Const</span> <span class="dv">12</span>)</span>
+<div class="sourceCode" id="cb30"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> (compile (<span class="dt">Number</span> <span class="dv">12</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true"></a>[ <span class="dt">IMov</span> (<span class="dt">Reg</span> <span class="dt">EAX</span>) (<span class="dt">Const</span> <span class="dv">12</span>) ]</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> compile (<span class="dt">Add1</span> (<span class="dt">Number</span> <span class="dv">12</span>))</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true"></a>[ <span class="dt">IMov</span> (<span class="dt">Reg</span> <span class="dt">EAX</span>) (<span class="dt">Const</span> <span class="dv">12</span>)</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true"></a>, <span class="dt">IAdd</span> (<span class="dt">Reg</span> <span class="dt">EAX</span>) (<span class="dt">Const</span> <span class="dv">1</span>)</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true"></a>]</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true"></a></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> compile (<span class="dt">Add1</span> (<span class="dt">Add1</span> (<span class="dt">Number</span> <span class="dv">12</span>)))</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true"></a>[ <span class="dt">IMov</span> (<span class="dt">Reg</span> <span class="dt">EAX</span>) (<span class="dt">Const</span> <span class="dv">12</span>)</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true"></a>, <span class="dt">IAdd</span> (<span class="dt">Reg</span> <span class="dt">EAX</span>) (<span class="dt">Const</span> <span class="dv">1</span>)</span>
 <span id="cb30-12"><a href="#cb30-12" aria-hidden="true"></a>, <span class="dt">IAdd</span> (<span class="dt">Reg</span> <span class="dt">EAX</span>) (<span class="dt">Const</span> <span class="dv">1</span>)</span>
-<span id="cb30-13"><a href="#cb30-13" aria-hidden="true"></a>, <span class="dt">IAdd</span> (<span class="dt">Reg</span> <span class="dt">EAX</span>) (<span class="dt">Const</span> <span class="dv">1</span>)</span>
-<span id="cb30-14"><a href="#cb30-14" aria-hidden="true"></a>]</span></code></pre></div>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true"></a>]</span></code></pre></div>
 <h1 id="adder-3">Adder-3</h1>
 <p>You do it!</p>
 <ol start="3" type="1">
@@ -601,8 +620,8 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <ul>
 <li>e.g. <code>let x = add1(7), y = add1(x) in add1(y)</code></li>
 </ul>
-<h2 id="local-variables">Local Variables</h2>
-<p>Local variables make things more interesting</p>
+<p>Can you think why <strong>local variables</strong> make things more interesting?</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="repeat-our-recipe-1">Repeat our Recipe</h2>
 <ol type="1">
 <li>Build intuition with <strong>examples</strong>,</li>
@@ -610,6 +629,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <li>Implement compiler via <strong>type-transforming-functions</strong>,</li>
 <li>Validate compiler via <strong>tests</strong>.</li>
 </ol>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="step-1-examples">Step 1: Examples</h2>
 <p>Lets look at some examples</p>
 <h3 id="example-let1">Example: let1</h3>
@@ -617,13 +637,15 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true"></a><span class="kw">in</span></span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true"></a>    x</span></code></pre></div>
 <p>Need to store 1 variable – <code>x</code></p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="example-let2">Example: let2</h3>
 <div class="sourceCode" id="cb32"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true"></a><span class="kw">let</span> x <span class="ot">=</span> <span class="dv">10</span>         <span class="co">-- x = 10</span></span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true"></a>  , y <span class="ot">=</span> add1(x)    <span class="co">-- y = 11</span></span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true"></a>  , z <span class="ot">=</span> add1(y)    <span class="co">-- z = 12</span></span>
 <span id="cb32-4"><a href="#cb32-4" aria-hidden="true"></a><span class="kw">in</span></span>
 <span id="cb32-5"><a href="#cb32-5" aria-hidden="true"></a>    add1(z)        <span class="co">-- 13</span></span></code></pre></div>
-<p>Need to store 3 variable – <code>x, y, z</code></p>
+<p>Need to store 3 variables– <code>x, y, z</code></p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="example-let3">Example: let3</h3>
 <div class="sourceCode" id="cb33"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true"></a><span class="kw">let</span> a <span class="ot">=</span> <span class="dv">10</span></span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true"></a>  , c <span class="ot">=</span> <span class="kw">let</span> b <span class="ot">=</span> add1(a)</span>
@@ -631,26 +653,28 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <span id="cb33-4"><a href="#cb33-4" aria-hidden="true"></a>           add1(b)</span>
 <span id="cb33-5"><a href="#cb33-5" aria-hidden="true"></a><span class="kw">in</span></span>
 <span id="cb33-6"><a href="#cb33-6" aria-hidden="true"></a>    add1(c)</span></code></pre></div>
-<p>Need to store 3 variables – <code>a</code>, <code>b</code>, <code>c</code> – but at most 2 at a time</p>
+<p>Need to store 3 variables – <code>a</code>, <code>b</code>, <code>c</code> – but <strong>at most 2 at a time</strong></p>
 <ul>
 <li>First <code>a, b</code>, then <code>a, c</code></li>
 <li>Don’t need <code>b</code> and <code>c</code> simultaneously</li>
 </ul>
-<h3 id="registers-are-not-enough">Registers are Not Enough</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h3 id="problem-registers-are-not-enough">Problem: Registers are Not Enough</h3>
 <p>A single register <code>eax</code> is useless:</p>
 <ul>
 <li>May need 2 or 3 or 4 or 5 … values.</li>
 </ul>
-<p>There is only a <em>fixed</em> number (say, <code>N</code>) of registers:</p>
+<p>There is only a <em>fixed</em> number (say, <code>N</code>) of registers</p>
 <ul>
 <li>And our programs may need to store more than <code>N</code> values, so</li>
-<li>Need to dig for more storage space!</li>
 </ul>
+<p>Need to dig for more storage space!</p>
 <h3 id="memory-code-globals-heap-and-stack">Memory: Code, Globals, Heap and Stack</h3>
 <p>Here’s what the memory – i.e. storage – looks like:</p>
 <figure>
 <img src="../static/img/memory-layout.png" alt /><figcaption>Memory Layout</figcaption>
 </figure>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="focusing-on-the-stack">Focusing on “The Stack”</h3>
 <p>Lets zoom into the stack region, which when we start looks like this:</p>
 <figure>

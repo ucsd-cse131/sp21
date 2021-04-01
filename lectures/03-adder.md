@@ -207,12 +207,26 @@ $ forty_two.run
 
 Hooray!
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ## The "Compiler"
 
+
 Recall, that compilers were invented to [avoid writing assembly by hand](01-introduction.md/#a-bit-of-history)
 
-### First Step: Types
+## First Step: Types
 
 To go from source to assembly, we must do:
 
@@ -228,7 +242,21 @@ Lets create types that represent each intermediate value:
 * `Expr` for the AST
 * `Asm`  for the output x86 assembly
 
-### Defining the Types: `Text`
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Defining the Types: `Text`
 
 `Text` is raw strings, i.e. sequences of characters
 
@@ -241,7 +269,21 @@ texts =
   ]
 ```
 
-### Defining the Types: `Expr`
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Defining the Types: `Expr`
 
 We convert the `Text` into a tree-structure defined by the datatype
 
@@ -251,7 +293,18 @@ data Expr = Number Int
 
 **Note:** As we add features to our language, we will keep adding cases to `Expr`.
 
-### Defining the Types: `Asm`
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Defining the Types: `Asm`
 
 Lets also do this _gradually_ as [the x86 instruction set is HUGE!][x86-full]
 
@@ -291,7 +344,18 @@ data Arg
   | Reg   Register  -- a register
 ```
 
-### Second Step: Transforms
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Second Step: Transforms
 
 Ok, now we just need to write the functions:
 
@@ -332,6 +396,17 @@ arg (Reg r)   = reg r
 reg :: Register -> Text
 reg EAX = "eax"
 ```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ### Brief digression: Typeclasses
 
@@ -380,6 +455,16 @@ instance ToX86 Register where
 **Note** in each case above, the compiler figures out the _correct_ implementation,
 from the types...
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 # Adder-2
 
@@ -388,6 +473,17 @@ Well that was easy! Lets beef up the language!
 2. Numbers + Increment
   * e.g. `add1(7)`, `add1(add1(12))`, ...
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 ## Repeat our Recipe
 
 1. Build intuition with **examples**,
@@ -395,12 +491,22 @@ Well that was easy! Lets beef up the language!
 3. Implement compiler via **type-transforming-functions**,
 4. Validate compiler via **tests**.
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ## 1. Examples
 
 First, lets look at some examples.
 
-### Example 1
+## Example 1
 
 How should we compile?
 
@@ -422,7 +528,20 @@ add eax, 1
 
 Aha, note that `add` is a new kind of `Instruction`
 
-### Example 2
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
+## Example 2
 
 How should we compile
 
@@ -444,7 +563,21 @@ add eax, 1
 add eax, 1
 ```
 
-### Compositional Code Generation
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
+
+## Compositional Code Generation
 
 Note correspondence between sub-expressions of _source_ and _assembly_
 
@@ -455,20 +588,46 @@ We will write compiler in **compositional** manner
 * Generating `Asm` for each _sub-expression_ (AST subtree) independently,
 * Generating `Asm` for _super-expression_, assuming the value of sub-expression is in `EAX`
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
+
 ## 2. Types
 
 Next, lets extend the types to incorporate new language features
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
 ### Extend Type for Source and Assembly
 
-Source Expressions
+**Source Expressions**
 
 ```haskell
 data Expr = ...
           | Add1   Expr
 ```
 
-Assembly Instructions
+**Assembly Instructions**
 
 ```haskell
 data Instruction
@@ -476,7 +635,19 @@ data Instruction
   | IAdd  Arg Arg
 ```
 
-### Examples Revisited
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+### Example-1 Revisited
 
 ```haskell
 src1 = "add1(7)"
@@ -488,6 +659,19 @@ asm1 = [ IMov (Reg EAX) (Const 7)
        ]
 ```
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+### Example-2 Revisited
+
 ```haskell
 src2 = "add1(add1(12))"
 
@@ -498,6 +682,17 @@ asm2 = [ IMov (Reg EAX) (Const 12)
        , IAdd (Reg EAX) (Const 1)
        ]
 ```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ## 3. Transforms
 
@@ -515,7 +710,7 @@ Lets do the easy bits first, namely `parse` and `asm`
 
 ```haskell
 parse :: Text -> Expr
-parse    = parseWith expr
+parse = parseWith expr
 
 expr :: Parser Expr
 expr =  try primExpr
@@ -524,6 +719,17 @@ expr =  try primExpr
 primExpr :: Parser Expr
 primExpr = Add1 <$> rWord "add1" *> parens expr
 ```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>  
 
 ### Asm
 
@@ -540,6 +746,17 @@ instance ToX86 Instruction where
 1. GHC will _tell_ you exactly which functions need to be extended (Types, FTW!)
 2. We will not discuss `parse` and `asm` any more...
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 ### Compile
 
 Finally, the key step is
@@ -555,21 +772,31 @@ compile (Add1 e)
  ++ [ IAdd (Reg EAX) (Const 1) ] -- ... so just increment it.
 ```
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 ### Examples Revisited
 
 Lets check that compile behaves as desired:
 
 ```haskell
-
-ghci> (compile (Number 12)
+>>> (compile (Number 12)
 [ IMov (Reg EAX) (Const 12) ]
 
-ghci> compile (Add1 (Number 12))
+>>> compile (Add1 (Number 12))
 [ IMov (Reg EAX) (Const 12)
 , IAdd (Reg EAX) (Const 1)
 ]
 
-ghci> compile (Add1 (Add1 (Number 12)))
+>>> compile (Add1 (Add1 (Number 12)))
 [ IMov (Reg EAX) (Const 12)
 , IAdd (Reg EAX) (Const 1)
 , IAdd (Reg EAX) (Const 1)
@@ -588,9 +815,18 @@ You do it!
 4. Numbers + Increment + Decrement + Local Variables
   * e.g. `let x = add1(7), y = add1(x) in add1(y)`
 
-## Local Variables
+Can you think why **local variables** make things more interesting?
 
-Local variables make things more interesting
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ## Repeat our Recipe
 
@@ -598,6 +834,17 @@ Local variables make things more interesting
 2. Model problem with **types**,
 3. Implement compiler via **type-transforming-functions**,
 4. Validate compiler via **tests**.
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ## Step 1: Examples
 
@@ -613,6 +860,17 @@ in
 
 Need to store 1 variable -- `x`
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 ### Example: let2
 
 ```haskell
@@ -623,7 +881,18 @@ in
     add1(z)        -- 13
 ```
 
-Need to store 3 variable -- `x, y, z`
+Need to store 3 variables-- `x, y, z`
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ### Example: let3
 
@@ -636,27 +905,51 @@ in
     add1(c)
 ```
 
-Need to store 3 variables -- `a`, `b`, `c` -- but at most 2 at a time
+Need to store 3 variables -- `a`, `b`, `c` -- but **at most 2 at a time**
 
 * First `a, b`, then `a, c`
 * Don't need `b` and `c` simultaneously
 
-### Registers are Not Enough
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+### Problem: Registers are Not Enough
 
 A single register `eax` is useless:
 
   * May need 2 or 3 or 4 or 5 ... values.
 
-There is only a _fixed_ number (say, `N`) of registers:
+There is only a _fixed_ number (say, `N`) of registers
 
   * And our programs may need to store more than `N` values, so
-  * Need to dig for more storage space!
+
+Need to dig for more storage space!
 
 ### Memory: Code, Globals, Heap and Stack
 
 Here's what the memory -- i.e. storage -- looks like:
 
 ![Memory Layout](/static/img/memory-layout.png)
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ### Focusing on "The Stack"
 
