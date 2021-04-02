@@ -191,12 +191,19 @@ For now, lets just
 * _object-generation_ and then
 * _linking_ works
 
+(On MacOS)
+
 ```bash
 $ nasm -f macho64 -o forty_two.o forty_two.s
 $ clang -g -m64 -o forty_two.run c-bits/main.c forty_two.o
 ```
 
-On Linux use `-f aout` instead of `-f macho64`
+(On Linux)
+
+```bash
+$ nasm -f elf64 -o forty_two.o forty_two.s
+$ clang -g -m64 -o forty_two.run c-bits/main.c forty_two.o
+```
 
 We can now run it:
 

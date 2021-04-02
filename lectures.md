@@ -7,7 +7,7 @@ headerImg: books.jpg
 |:----------:|:------------------------------|:----------------------:|:-----------:|:--------------:|
 | 3/30       | Introduction                  | [html][lec1] [md][md1] |             |                |
 |            | Crash course in Haskell       | [html][lec2] [md][md2] |             | [code][cod2]   |
-|            | Numbers, UnaryOps, Variables  | [html][lec3] [md][md3] |             | [code][cod3]   |
+|            | Numbers, UnaryOps, Variables  | [html][lec3] [md][md3] | [pdf][pdf3] | [code][cod3]   |
 
 <!-- 
 | 10/15      | Branches and Binary Operators | [html][lec4] [md][md4] |             | [code][cod4]   |
@@ -27,7 +27,7 @@ headerImg: books.jpg
 [lec3]: lectures/03-adder.html
 [md3]: http://github.com/ucsd-cse131/sp21/blob/main/lectures/03-adder.md
 [cod3]: https://github.com/ucsd-cse131/01-adder
-[pdf3]: static/img/adder-notes.pdf
+[pdf3]: static/img/03-adder-A.pdf
 
 [lec4]: lectures/04-boa.html
 [md4]:  http://github.com/ucsd-progsys/131-web/blob/master/lectures/04-boa.md
