@@ -8,6 +8,7 @@ headerImg: books.jpg
 | 3/30       | Introduction                  | [html][lec1] [md][md1] |             |                |
 |            | Crash course in Haskell       | [html][lec2] [md][md2] |             | [code][cod2]   |
 |            | Numbers, UnaryOps, Variables  | [html][lec3] [md][md3] | [pdf][pdf3] | [code][cod3]   |
+| 4/6        | Branches and Binary Operators | [html][lec4] [md][md4] |             | [code][cod4]   |
 
 <!-- 
 | 10/15      | Branches and Binary Operators | [html][lec4] [md][md4] |             | [code][cod4]   |
@@ -30,8 +31,8 @@ headerImg: books.jpg
 [pdf3]: static/img/03-adder-A.pdf
 
 [lec4]: lectures/04-boa.html
-[md4]:  http://github.com/ucsd-progsys/131-web/blob/master/lectures/04-boa.md
-[cod4]: https://github.com/ucsd-cse131-fa18/02-boa
+[md4]:  http://github.com/ucsd-cse131/sp21/blob/main/lectures/04-boa.md
+[cod4]: https://github.com/ucsd-cse131/02-boa
 [pdf4]: static/img/boa-notes.pdf
 
 [lec5]: lectures/05-cobra.html
