@@ -1,10 +1,10 @@
 ---
 title: Branches and Binary Operators
-date: 2016-10-07
+date: 2021-4-06
 headerImg: boa.jpg
 ---
 
-## BOA: Branches and Binary Operators
+# BOA: Branches and Binary Operators
 
 Next, lets add
 
@@ -15,6 +15,21 @@ In the process of doing so, we will learn about
 
 * **Intermediate Forms**
 * **Normalization**
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ## Branches
 
@@ -27,19 +42,38 @@ We will stick to our recipe of:
 3. Implement with **type-transforming-functions**,
 4. Validate with **tests**.
 
-```haskell
-data Expr = ENum                  -- 12 
-          | EPrim1 Op1  Expr      -- add1(e)
-          | EVar   Id             -- x
-          | ELet   Id   Expr Expr -- let x = e1 in e2
-          | EIf    Expr Expr Expr
-```
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-### Examples
+
+## Examples
 
 First, lets look at some examples of what we mean by branches.
 
 * For now, lets treat `0` as "false" and non-zero as "true"
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
 
 ### Example: `If1`
 
@@ -52,6 +86,17 @@ else:
 
 * Since `10` is _not_ `0` we evaluate the "then" case to get `22`
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
 ### Example: `If2`
 
 ```haskell
@@ -61,10 +106,20 @@ else:
   sub1(0)
 ```
 
-
-
-
 * Since `sub(1)` _is_ `0` we evaluate the "else" case to get `-1`
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
+
 
 ### QUIZ: `If3`
 
@@ -90,35 +145,75 @@ in
 * **D.** `1000`
 * **E.** `-1`
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 <!-- 
   * `x` is bound to `-1`...
   * ... which is _non-zero_ so we evaluate `add1(x)` yielding `0`
 -->
 
-### Control Flow in Assembly
+## Control Flow in Assembly
 
-To compile branches, we will use:
+To compile branches, we will use **labels**, **comparisons** and **jumps**
 
-* **labels** of the form
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+### Labels 
 
 ```asm
 our_code_label:
   ...
 ```
 
-are _"landmarks"_ from which execution (control-flow)
-can be started, or to which it can be diverted,
+Labels are _"landmarks"_ 
+- from which execution (control-flow) can be _started_, or 
+- to which it can be _diverted_
 
-* **comparisons** of the form
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
+### Comparisons
 
 ```asm
 cmp a1, a2
 ```
 
-* Perform a (numeric) **comparison** between the values `a1` and `a2`, and 
-* Store the result in a special **processor flag**,
+- Perform a (numeric) **comparison** between the values `a1` and `a2`, and 
+- Store the result in a special **processor flag**
 
-* **Jump** operations of the form
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+### Jumps
 
 ```asm
 jmp LABEL     # jump unconditionally (i.e. always)
@@ -126,10 +221,22 @@ je  LABEL     # jump if previous comparison result was EQUAL
 jne LABEL     # jump if previous comparison result was NOT-EQUAL  
 ```
 
-* Use the result of the **flag** set by the most recent `cmp` 
+Use the result of the **flag** set by the most recent `cmp` 
 * To _continue execution_ from the given `LABEL`
 
-### QUIZ
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
+
+## QUIZ
 
 Which of the following is a valid x86 encoding of
 
@@ -142,8 +249,17 @@ else
 
 ![QUIZ: Compiling if-else](/static/img/quiz-if-asm.png)
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-### Strategy
+
+## Strategy
 
 To compile an expression of the form
 
@@ -164,17 +280,58 @@ We will:
 4. (Otherwise) continue to evaluate `eTrue`
     * And then jump (unconditionally) to the `"IfExit"` label.
 
-### Example: If-Expressions to `Asm`
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
+## Example: If-Expressions to `Asm`
 
 Lets see how our strategy works by example:
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ### Example: if1
 
 ![Example: if1](/static/img/if-1-to-asm.png)
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
 ### Example: if2
 
 ![Example: if2](/static/img/if-2-to-asm.png)
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
 
 ### Example: if3
 
@@ -192,9 +349,19 @@ Oops, need **distinct labels** for each branch!
 
 ![Example: if3 tagged](/static/img/if-3-to-asm-tag.png)
 
-### Types: Source
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-Lets modify the _Source Expression_
+
+## Types: Source
+
+Lets modify the _Source Expression_ to add `if-else` expressions
 
 ```haskell
 data Expr a
@@ -206,10 +373,10 @@ data Expr a
   | If     (Expr a) (Expr a) (Expr a) a
 ```
 
-* Add `if-else` expressions and
-* Add **tags** of type `a` for each sub-expression
-  * Tags are polymorphic `a` so we can have _different types_ of tags
-  * e.g. Source-Position information for error messages
+**Polymorphic tags** of type `a` for each sub-expression
+
+* We can have _different types_ of tags
+* e.g. Source-Position information for error messages
 
 Lets define a name for `Tag` (just integers).
 
@@ -224,7 +391,18 @@ type BareE = Expr ()     -- AST after parsing
 type TagE  = Expr Tag    -- AST with distinct tags
 ```
 
-### Types: Assembly
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
+## Types: Assembly
 
 Now, lets extend the _Assembly_ with labels, comparisons and jumps:
 
@@ -242,13 +420,34 @@ data Instruction
   | IJne   Label      -- Jump if not-equal
 ```
 
-### Transforms
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+## Transforms
 
 We can't expect _programmer_ to put in tags (yuck.)
 
 * Lets squeeze in a `tagging` transform into our pipeline
 
 ![Adding Tagging to the Compiler Pipeline](/static/img/compiler-pipeline-tag.png)
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ### Transforms: Parse
 
@@ -266,12 +465,34 @@ If (Number 1 ()) (Number 22 ()) (Number 33 ()) ()
 If (Number 1 ((),0)) (Number 22 ((),1)) (Number 33 ((),2)) ((),3)
 ```
 
-### Transforms: Tag
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+## Transforms: Tag
 
 The key work is done by `doTag i e`
 
 1. Recursively walk over the `BareE` named `e` starting tagging at counter `i`
-2. Return a pair `(i', e')` of _updated counter_ `i'` and  tagged expr `e'`
+2. Return a pair `(i', e')` of _updated counter_ `i'` and  tagged expression `e'`
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 
 **QUIZ**
 
@@ -303,6 +524,18 @@ What expressions shall we fill in for `_1` and `_2` ?
 {- E -}   _1 = i2
           _2 = i1 + 1
 ```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 
 <!--
 
@@ -343,25 +576,49 @@ tag :: BareE -> TagE
 tag e = e'  where  (_, e') = doTag 0 e
 ```
 
-### Transforms: CodeGen
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+## Transforms: Code Generation
 
 Now that we have the tags we lets implement our [compilation strategy](#strategy)
 
 ```haskell
 compile env (If eCond eTrue eFalse i)
-  =   compile env eCond ++              -- compile `eCond`
-    [ ICmp (Reg EAX) (Const 0)          -- compare result to 0
-    , IJe (BranchFalse i)               -- if-zero then jump to 'False'-block
+  =   compile env eCond ++          -- compile `eCond`
+    [ ICmp (Reg EAX) (Const 0)      -- compare result to 0
+    , IJe (BranchFalse i)           -- if-zero then jump to 'False'-block
     ]
-   ++ compile env eTrue  ++             -- code for `True`-block
-    [ IJmp   lExit      ]               -- jump to exit (don't execute `False`-block!)
+   ++ compile env eTrue  ++         -- code for `True`-block
+    [ IJmp   lExit      ]           -- jump to exit (skip `False`-block!)
    ++
-      ILabel (BranchFalse i)            -- start of `False`-block
-   : compile env eFalse ++              -- code for `False`-block
-    [ ILabel (BranchExit i) ]           -- exit
+      ILabel (BranchFalse i)        -- start of `False`-block
+   : compile env eFalse ++          -- code for `False`-block
+    [ ILabel (BranchExit i) ]       -- exit
 ```
 
-### Recap: Branches
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+## Recap: Branches
 
 * `Tag` each sub-expression,
 * Use tag to generate control-flow labels implementing branch.
@@ -369,6 +626,22 @@ compile env (If eCond eTrue eFalse i)
 **Lesson:** Tagged program representation simplifies compilation...
 
 * Next: another example of how intermediate representations help.
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 
 ## Binary Operations
 
@@ -379,22 +652,41 @@ You know the drill.
 3. Implement with **type-transforming-functions**,
 4. Validate with **tests**.
 
-### Compiling Binary Operations
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Compiling Binary Operations
 
 Lets look at some expressions and figure out how they would get compiled.
 
 * Recall: We want the result to be in `eax` after the instructions finish.
 
-#### QUIZ
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+## QUIZ
 
 What is the assembly corresponding to `33 - 10` ?
 
 ```nasm
 ?1 eax, ?2
 ?3 eax, ?4
-
-mov eax, 33
-sub eax, 10
 ```
 
 
@@ -406,16 +698,17 @@ sub eax, 10
 
 * **D.** `?1 = mov`, `?2 = 10`, `?3 = sub`, `?4 = 33`
 
-How to compile `n1 * n2` 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-```nasm
-mov eax, n1
-mul eax, n2
-```
-
-
-
-#### Example: Bin1
+## Example: Bin1
 
 Lets start with some easy ones. The source:
 
@@ -426,53 +719,17 @@ Lets start with some easy ones. The source:
 * Move `n1` into `eax`,
 * Add `n2` to `eax`.
 
-#### Example: Bin2
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-```haskell
-let x = 10        -- position 1 on stack
-  , y = 20        -- position 2 on stack
-  , z = 30        -- position 3 on stack
-in
-   x + (y * z)
-```
-
-```haskell
-let x = 10        -- position 1 on stack
-  , y = 20        -- position 2 on stack
-  , z = 30        -- position 3 on stack
-  , tmp = y * z
-in
-   x + tmp
-```
-
-
-
-
-
-
-```nasm
-mov eax, 10
-mov [ebp - 4*1], eax    ; put x on stack
-mov eax, 20
-mov [ebp - 4*2], eax    ; put y on stack
-mov eax, 30
-mov [ebp - 4*3], eax    ; put z on stack
-
-mov eax, [ebp - 4*2]    ; grab y 
-mul eax, [ebp - 4*3]    ; mul by z 
-mov [ebp - 4*4], eax    ; put tmp on stack
-
-mov eax, [ebp - 4*1]    ; grab x
-add eax, [ebp - 4*4]
-
-```
-
-
-
-
-
-
-
+## Example: Bin2
 
 What if the first operand is a variable?
 
@@ -485,8 +742,25 @@ Simple, just copy the variable off the stack into `eax`
 * Move `x` (from stack) into `eax`,
 * Add `n` to `eax`.
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-#### Example: Bin3
+
+
+
+
+
+
+
+
+## Example: Bin3
 
 Same thing works if the second operand is a variable.
 
@@ -497,7 +771,18 @@ Strategy: Given `x + n`
 * Move `x` (from stack) into `eax`,
 * Add `n` to `eax`.
 
-### QUIZ
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+## QUIZ
 
 What is the assembly corresponding to `(10 + 20) * 30` ?
 
@@ -515,7 +800,17 @@ mov eax, 10
 
 * **D.** `?1 = mul`, `?2 = 20`, `?3 = add`, `?4 = 30`
 
-### Second Operand is Constant
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Second Operand is Constant
 
 In general, to compile `e + n` we can do
 
@@ -525,7 +820,17 @@ In general, to compile `e + n` we can do
      [add eax, n]
 ```
 
-### Example: Bin4
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Example: Bin4
 
 But what if we have _nested_ expressions
 
@@ -538,27 +843,74 @@ But what if we have _nested_ expressions
 
 Need to **save** `1 + 2` somewhere!
 
-**Idea** How about use _another_ register for `3 + 4`?
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-* But then what about `(1 + 2) * (3 + 4) * (5 + 6)` ?
+## Idea: How about use _another_ register for `3 + 4`?
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
+But then what about `(1 + 2) * (3 + 4) * (5 + 6)` ?
 * In general, may need to _save_ more sub-expressions than we have registers.
 
-### Idea: Immediate Expressions
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Idea: Immediate Expressions
 
 Why were `1 + 2` and `x + y` so easy to compile but `(1 + 2) * (3 + 4)` not?
 
-Because `1` and `x` are **immediate expressions**
-
-Their values don't require any computation!
+As `1` and `x` are **immediate expressions**: their values don't require any computation!
 
 * Either a **constant**, or,
 * **variable** whose value is on the stack.
 
-### Idea: Administrative Normal Form (ANF)
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+## Idea: Administrative Normal Form (ANF)
 
 An expression is in **Administrative Normal Form (ANF)**
 
-> if **all primitive operations** have **immediate** arguments.
+> if all **primitive operations** have **immediate** arguments.
 
 **Primitive Operations:** Those whose values we _need_ for computation to proceed.
 
@@ -566,8 +918,18 @@ An expression is in **Administrative Normal Form (ANF)**
 * `v1 - v2`
 * `v1 * v2`
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-### QUIZ
+
+## QUIZ
 
 Is the following expression in ANF?
 
@@ -576,35 +938,26 @@ Is the following expression in ANF?
 ```
 
 **A.** Yes, its ANF.
+
 **B.** Nope, its not, because of `+`
+
 **C.** Nope, its not, because of `*`
+
 **D.** Nope, its not, because of `-`
+
 **E.** Huh,  WTF is ANF?
 
 
-
-
-
-
-
-```haskell
-isImm :: Expr -> Bool
-isImm (Number {}) = True
-isImm (Id {})     = True
-isImm _           = False
-
-isANF :: Expr -> Bool
-isANF (Number {})       = True
-isANF (Id {})           = True
-isANF (Prim1 _ e1 _)    = isANF e1 -- no need to be `isImm e1`!
-
-isANF (Prim2 _ e1 e2 _) = isImm e1 && isImm e2
-isANF (Let _ e1 e2 _)   = isANF e1 && isANF e2
-isANF (If e1 e2 e3 _)   = ???   && isANF e2 && isANF e3
-```
-
-**A.** _must be_ isImm
-**B.** _meh_ ANF is fine!
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 
 
@@ -615,24 +968,13 @@ isANF (If e1 e2 e3 _)   = ???   && isANF e2 && isANF e3
 
 
 
+## Conversion to ANF
 
-
-
-
-<!-- 
-### Compound Expressions
-
-Unfortunately, the below is _not_ in ANF
+So, the below is _not_ in ANF as `*` has _non-immediate_ arguments
 
 ```haskell
 (1 + 2) * (3 + 4)
 ```
-
-* As the `*` has _non-immediate_ arguments.
-
--->
-
-### Conversion to ANF
 
 However, note the following variant _is_ in ANF
 
@@ -649,7 +991,19 @@ How can we compile the above code?
 ; TODO in class
 ```
 
-### Binary Operations: Strategy
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Binary Operations: Strategy
 
 We can convert _any_ expression to ANF
 
@@ -660,7 +1014,18 @@ We can convert _any_ expression to ANF
 * **Step 1:** Compiling ANF into Assembly
 * **Step 2:** Converting Expressions into ANF
 
-### Types: Source
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Types: Source
 
 Lets add binary primitive operators
 
@@ -683,7 +1048,18 @@ So, for example, `2 + 3` would be parsed as:
 Prim2 Plus (Number 2 ()) (Number 3 ()) ()
 ```
 
-### Types: Assembly
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Types: Assembly
 
 Need to add X86 instructions for primitive arithmetic:
 
@@ -695,7 +1071,22 @@ data Instruction
   | IMul Arg Arg
 ```
 
-### Types: ANF
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+## Types: ANF
+
+
+**FIXME-HEREHEREHERE**
 
 We _can_ define a separate type for ANF (try it!)
 
@@ -1195,3 +1586,41 @@ Specifically,
 ![Compiler Pipeline with ANF](/static/img/compiler-pipeline-anf-types.png)
 
 [monad-230]: https://cseweb.ucsd.edu/classes/wi12/cse230-a/lectures/monads.html
+
+<!--
+```haskell
+let x = 10        -- position 1 on stack
+  , y = 20        -- position 2 on stack
+  , z = 30        -- position 3 on stack
+in
+   x + (y * z)
+```
+
+```haskell
+let x = 10        -- position 1 on stack
+  , y = 20        -- position 2 on stack
+  , z = 30        -- position 3 on stack
+  , tmp = y * z
+in
+   x + tmp
+```
+
+
+
+```nasm
+mov eax, 10
+mov [ebp - 4*1], eax    ; put x on stack
+mov eax, 20
+mov [ebp - 4*2], eax    ; put y on stack
+mov eax, 30
+mov [ebp - 4*3], eax    ; put z on stack
+
+mov eax, [ebp - 4*2]    ; grab y 
+mul eax, [ebp - 4*3]    ; mul by z 
+mov [ebp - 4*4], eax    ; put tmp on stack
+
+mov eax, [ebp - 4*1]    ; grab x
+add eax, [ebp - 4*4]
+```
+
+-->

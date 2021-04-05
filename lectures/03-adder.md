@@ -142,7 +142,7 @@ int main(int argc, char** argv) {
 * `our_code` is (to be) implemented in assembly,
   * Starting at **label** `our_code_label`,
   * With the desired _return_ value stored in register `EAX`
-  * per, the `C` [calling convention][evans-x86-guide]  
+  * per, the `C` [calling convention][x86-64-guide]  
 
 <br>
 <br>
@@ -1479,5 +1479,6 @@ Lets take our `adder` compiler out for a spin!
 
 Will iterate on this till we have a pretty kick-ass language.
 
+[x86-64-guide]: https://web.stanford.edu/class/cs107/guide/x86-64.html
 [evans-x86-guide]: http://www.cs.virginia.edu/~evans/cs216/guides/x86.html
 [x86-full]: http://www.felixcloutier.com/x86/

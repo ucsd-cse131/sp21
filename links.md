@@ -20,11 +20,14 @@ important.
 
 ## X86
 
+* [Compiler Explorer](https://godbolt.org/z/asvq7sfGY)
 * [x86 interpreter](http://carlosrafaelgn.com.br/Asm86/)
-* [UVa x86 Assembly Guide](http://www.cs.virginia.edu/~evans/cs216/guides/x86.html)
-* [Mac Os Stack Alignment](http://www.fabiensanglard.net/macosxassembly/index.php)
-* [C Calling Convention](http://www.cs.virginia.edu/~evans/cs216/guides/x86.html#calling)
+* [UVa x86 Guide](http://www.cs.virginia.edu/~evans/cs216/guides/x86.html)
+* [Stanford x86-64 Guide](https://web.stanford.edu/class/cs107/guide/x86-64.html)
+* [Mac OS Stack Alignment](http://www.fabiensanglard.net/macosxassembly/index.php)
 * [Wikibooks X86 Assembly](https://en.wikibooks.org/wiki/X86_Assembly/Logic)
+* [x64 C Calling Convention](https://aaronbloomfield.github.io/pdr/book/x86-64bit-ccc-chapter.pdf)
+
 
 ## Getting Started with Haskell
 
