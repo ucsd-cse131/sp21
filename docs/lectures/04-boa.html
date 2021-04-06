@@ -233,7 +233,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-			<h2 id="boa-branches-and-binary-operators">BOA: Branches and Binary Operators</h2>
+			<h1 id="boa-branches-and-binary-operators">BOA: Branches and Binary Operators</h1>
 <p>Next, lets add</p>
 <ul>
 <li>Branches (<code>if</code>-expressions)</li>
@@ -244,6 +244,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <li><strong>Intermediate Forms</strong></li>
 <li><strong>Normalization</strong></li>
 </ul>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="branches">Branches</h2>
 <p>Lets start first with branches (conditionals).</p>
 <p>We will stick to our recipe of:</p>
@@ -253,44 +254,43 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <li>Implement with <strong>type-transforming-functions</strong>,</li>
 <li>Validate with <strong>tests</strong>.</li>
 </ol>
-<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Expr</span> <span class="ot">=</span> <span class="dt">ENum</span>                  <span class="co">-- 12 </span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>          <span class="op">|</span> <span class="dt">EPrim1</span> <span class="dt">Op1</span>  <span class="dt">Expr</span>      <span class="co">-- add1(e)</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a>          <span class="op">|</span> <span class="dt">EVar</span>   <span class="dt">Id</span>             <span class="co">-- x</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>          <span class="op">|</span> <span class="dt">ELet</span>   <span class="dt">Id</span>   <span class="dt">Expr</span> <span class="dt">Expr</span> <span class="co">-- let x = e1 in e2</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>          <span class="op">|</span> <span class="dt">EIf</span>    <span class="dt">Expr</span> <span class="dt">Expr</span> <span class="dt">Expr</span></span></code></pre></div>
-<h3 id="examples">Examples</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="examples">Examples</h2>
 <p>First, lets look at some examples of what we mean by branches.</p>
 <ul>
 <li>For now, lets treat <code>0</code> as “false” and non-zero as “true”</li>
 </ul>
+<p><br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="example-if1">Example: <code>If1</code></h3>
-<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">if</span> <span class="dv">10</span><span class="op">:</span></span>
+<div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">if</span> <span class="dv">10</span><span class="op">:</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>  <span class="dv">22</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="kw">else</span><span class="op">:</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>  sub1(<span class="dv">0</span>)</span></code></pre></div>
+<ul>
+<li>Since <code>10</code> is <em>not</em> <code>0</code> we evaluate the “then” case to get <code>22</code></li>
+</ul>
+<p><br> <br> <br> <br> <br> <br> <br> <br></p>
+<h3 id="example-if2">Example: <code>If2</code></h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">if</span> sub(<span class="dv">1</span>)<span class="op">:</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>  <span class="dv">22</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="kw">else</span><span class="op">:</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a>  sub1(<span class="dv">0</span>)</span></code></pre></div>
 <ul>
-<li>Since <code>10</code> is <em>not</em> <code>0</code> we evaluate the “then” case to get <code>22</code></li>
-</ul>
-<h3 id="example-if2">Example: <code>If2</code></h3>
-<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">if</span> sub(<span class="dv">1</span>)<span class="op">:</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>  <span class="dv">22</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="kw">else</span><span class="op">:</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>  sub1(<span class="dv">0</span>)</span></code></pre></div>
-<ul>
 <li>Since <code>sub(1)</code> <em>is</em> <code>0</code> we evaluate the “else” case to get <code>-1</code></li>
 </ul>
+<p><br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="quiz-if3">QUIZ: <code>If3</code></h3>
 <p><code>if-else</code> is also an <em>expression</em> so we can nest them:</p>
 <p>What should the following evaluate to?</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="kw">let</span> x <span class="ot">=</span> <span class="kw">if</span> sub(<span class="dv">1</span>)<span class="op">:</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>          <span class="dv">22</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a>        <span class="kw">else</span><span class="op">:</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>          sub1(<span class="dv">0</span>)</span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="kw">in</span></span>
-<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a>  <span class="kw">if</span> x<span class="op">:</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a>    add1(x)</span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a>  <span class="kw">else</span><span class="op">:</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a>    <span class="dv">999</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">let</span> x <span class="ot">=</span> <span class="kw">if</span> sub(<span class="dv">1</span>)<span class="op">:</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>          <span class="dv">22</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a>        <span class="kw">else</span><span class="op">:</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a>          sub1(<span class="dv">0</span>)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a><span class="kw">in</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a>  <span class="kw">if</span> x<span class="op">:</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a>    add1(x)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a>  <span class="kw">else</span><span class="op">:</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true"></a>    <span class="dv">999</span></span></code></pre></div>
 <ul>
 <li><strong>A.</strong> <code>999</code></li>
 <li><strong>B.</strong> <code>0</code></li>
@@ -298,49 +298,48 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <li><strong>D.</strong> <code>1000</code></li>
 <li><strong>E.</strong> <code>-1</code></li>
 </ul>
+<p><br> <br> <br> <br> <br> <br> <br> <br></p>
 <!-- 
   * `x` is bound to `-1`...
   * ... which is _non-zero_ so we evaluate `add1(x)` yielding `0`
 -->
-<h3 id="control-flow-in-assembly">Control Flow in Assembly</h3>
-<p>To compile branches, we will use:</p>
+<h2 id="control-flow-in-assembly">Control Flow in Assembly</h2>
+<p>To compile branches, we will use <strong>labels</strong>, <strong>comparisons</strong> and <strong>jumps</strong></p>
+<p><br> <br> <br> <br> <br> <br> <br> <br></p>
+<h3 id="labels">Labels</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode asm"><code class="sourceCode fasm"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="fu">our_code_label:</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>  ...</span></code></pre></div>
+<p>Labels are <em>“landmarks”</em> - from which execution (control-flow) can be <em>started</em>, or - to which it can be <em>diverted</em></p>
+<p><br> <br> <br> <br> <br> <br> <br> <br></p>
+<h3 id="comparisons">Comparisons</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode asm"><code class="sourceCode fasm"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="bu">cmp</span> a1, a2</span></code></pre></div>
 <ul>
-<li><strong>labels</strong> of the form</li>
+<li>Perform a (numeric) <strong>comparison</strong> between the values <code>a1</code> and <code>a2</code>, and</li>
+<li>Store the result in a special <strong>processor flag</strong></li>
 </ul>
-<div class="sourceCode" id="cb5"><pre class="sourceCode asm"><code class="sourceCode fasm"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="fu">our_code_label:</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>  ...</span></code></pre></div>
-<p>are <em>“landmarks”</em> from which execution (control-flow) can be started, or to which it can be diverted,</p>
-<ul>
-<li><strong>comparisons</strong> of the form</li>
-</ul>
-<div class="sourceCode" id="cb6"><pre class="sourceCode asm"><code class="sourceCode fasm"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="bu">cmp</span> a1, a2</span></code></pre></div>
-<ul>
-<li><p>Perform a (numeric) <strong>comparison</strong> between the values <code>a1</code> and <code>a2</code>, and</p></li>
-<li><p>Store the result in a special <strong>processor flag</strong>,</p></li>
-<li><p><strong>Jump</strong> operations of the form</p></li>
-</ul>
-<div class="sourceCode" id="cb7"><pre class="sourceCode asm"><code class="sourceCode fasm"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="bu">jmp</span> <span class="pp">LABEL</span>     # jump unconditionally (i.e. always)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a><span class="bu">je</span>  <span class="pp">LABEL</span>     # jump <span class="pp">if</span> previous comparison result was EQUAL  </span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a><span class="bu">jne</span> <span class="pp">LABEL</span>     # jump <span class="pp">if</span> previous comparison result was <span class="bu">NOT</span>-EQUAL  </span></code></pre></div>
-<ul>
-<li>Use the result of the <strong>flag</strong> set by the most recent <code>cmp</code></li>
-<li>To <em>continue execution</em> from the given <code>LABEL</code></li>
-</ul>
-<h3 id="quiz">QUIZ</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br></p>
+<h3 id="jumps">Jumps</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode asm"><code class="sourceCode fasm"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="bu">jmp</span> <span class="pp">LABEL</span>     # jump unconditionally (i.e. always)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="bu">je</span>  <span class="pp">LABEL</span>     # jump <span class="pp">if</span> previous comparison result was EQUAL  </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a><span class="bu">jne</span> <span class="pp">LABEL</span>     # jump <span class="pp">if</span> previous comparison result was <span class="bu">NOT</span>-EQUAL  </span></code></pre></div>
+<p>Use the result of the <strong>flag</strong> set by the most recent <code>cmp</code> * To <em>continue execution</em> from the given <code>LABEL</code></p>
+<p><br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="quiz">QUIZ</h2>
 <p>Which of the following is a valid x86 encoding of</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="cf">if</span> <span class="dv">10</span>:</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a>  <span class="dv">22</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a><span class="cf">else</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true"></a>  <span class="dv">33</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="cf">if</span> <span class="dv">10</span>:</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a>  <span class="dv">22</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a><span class="cf">else</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a>  <span class="dv">33</span></span></code></pre></div>
 <figure>
 <img src="../static/img/quiz-if-asm.png" alt /><figcaption>QUIZ: Compiling if-else</figcaption>
 </figure>
-<h3 id="strategy">Strategy</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="strategy">Strategy</h2>
 <p>To compile an expression of the form</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="kw">if</span> eCond<span class="op">:</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a>  eThen</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a><span class="kw">else</span><span class="op">:</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a>  eElse</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="kw">if</span> eCond<span class="op">:</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a>  eThen</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a><span class="kw">else</span><span class="op">:</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true"></a>  eElse</span></code></pre></div>
 <p>We will:</p>
 <ol type="1">
 <li>Compile <code>eCond</code></li>
@@ -355,16 +354,20 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <li>And then jump (unconditionally) to the <code>"IfExit"</code> label.</li>
 </ul></li>
 </ol>
-<h3 id="example-if-expressions-to-asm">Example: If-Expressions to <code>Asm</code></h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="example-if-expressions-to-asm">Example: If-Expressions to <code>Asm</code></h2>
 <p>Lets see how our strategy works by example:</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="example-if1-1">Example: if1</h3>
 <figure>
 <img src="../static/img/if-1-to-asm.png" alt /><figcaption>Example: if1</figcaption>
 </figure>
+<p><br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="example-if2-1">Example: if2</h3>
 <figure>
 <img src="../static/img/if-2-to-asm.png" alt /><figcaption>Example: if2</figcaption>
 </figure>
+<p><br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="example-if3">Example: if3</h3>
 <figure>
 <img src="../static/img/if-3-to-asm.png" alt /><figcaption>Example: if3</figcaption>
@@ -383,42 +386,42 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <figure>
 <img src="../static/img/if-3-to-asm-tag.png" alt /><figcaption>Example: if3 tagged</figcaption>
 </figure>
-<h3 id="types-source">Types: Source</h3>
-<p>Lets modify the <em>Source Expression</em></p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Expr</span> a</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a>  <span class="ot">=</span> <span class="dt">Number</span> <span class="dt">Int</span>                        a</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">Add1</span>   (<span class="dt">Expr</span> a)                   a</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">Sub1</span>   (<span class="dt">Expr</span> a)                   a</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">Let</span>    <span class="dt">Id</span> (<span class="dt">Expr</span> a) (<span class="dt">Expr</span> a)       a</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">Var</span>    <span class="dt">Id</span>                         a</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">If</span>     (<span class="dt">Expr</span> a) (<span class="dt">Expr</span> a) (<span class="dt">Expr</span> a) a</span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="types-source">Types: Source</h2>
+<p>Lets modify the <em>Source Expression</em> to add <code>if-else</code> expressions</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Expr</span> a</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a>  <span class="ot">=</span> <span class="dt">Number</span> <span class="dt">Int</span>                        a</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">Add1</span>   (<span class="dt">Expr</span> a)                   a</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">Sub1</span>   (<span class="dt">Expr</span> a)                   a</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">Let</span>    <span class="dt">Id</span> (<span class="dt">Expr</span> a) (<span class="dt">Expr</span> a)       a</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">Var</span>    <span class="dt">Id</span>                         a</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">If</span>     (<span class="dt">Expr</span> a) (<span class="dt">Expr</span> a) (<span class="dt">Expr</span> a) a</span></code></pre></div>
+<p><strong>Polymorphic tags</strong> of type <code>a</code> for each sub-expression</p>
 <ul>
-<li>Add <code>if-else</code> expressions and</li>
-<li>Add <strong>tags</strong> of type <code>a</code> for each sub-expression
-<ul>
-<li>Tags are polymorphic <code>a</code> so we can have <em>different types</em> of tags</li>
+<li>We can have <em>different types</em> of tags</li>
 <li>e.g. Source-Position information for error messages</li>
-</ul></li>
 </ul>
 <p>Lets define a name for <code>Tag</code> (just integers).</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">Tag</span>   <span class="ot">=</span> <span class="dt">Int</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">Tag</span>   <span class="ot">=</span> <span class="dt">Int</span></span></code></pre></div>
 <p>We will now use:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">BareE</span> <span class="ot">=</span> <span class="dt">Expr</span> ()     <span class="co">-- AST after parsing</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">TagE</span>  <span class="ot">=</span> <span class="dt">Expr</span> <span class="dt">Tag</span>    <span class="co">-- AST with distinct tags</span></span></code></pre></div>
-<h3 id="types-assembly">Types: Assembly</h3>
+<div class="sourceCode" id="cb11"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">BareE</span> <span class="ot">=</span> <span class="dt">Expr</span> ()     <span class="co">-- AST after parsing</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">TagE</span>  <span class="ot">=</span> <span class="dt">Expr</span> <span class="dt">Tag</span>    <span class="co">-- AST with distinct tags</span></span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="types-assembly">Types: Assembly</h2>
 <p>Now, lets extend the <em>Assembly</em> with labels, comparisons and jumps:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Label</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a>  <span class="ot">=</span> <span class="dt">BranchFalse</span> <span class="dt">Tag</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">BranchExit</span>  <span class="dt">Tag</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true"></a></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Instruction</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true"></a>  <span class="ot">=</span> <span class="op">...</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">ICmp</span>   <span class="dt">Arg</span>   <span class="dt">Arg</span>  <span class="co">-- Compare two arguments</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">ILabel</span> <span class="dt">Label</span>      <span class="co">-- Create a label</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">IJmp</span>   <span class="dt">Label</span>      <span class="co">-- Jump always</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">IJe</span>    <span class="dt">Label</span>      <span class="co">-- Jump if equal  </span></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">IJne</span>   <span class="dt">Label</span>      <span class="co">-- Jump if not-equal</span></span></code></pre></div>
-<h3 id="transforms">Transforms</h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Label</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a>  <span class="ot">=</span> <span class="dt">BranchFalse</span> <span class="dt">Tag</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">BranchExit</span>  <span class="dt">Tag</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Instruction</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true"></a>  <span class="ot">=</span> <span class="op">...</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">ICmp</span>   <span class="dt">Arg</span>   <span class="dt">Arg</span>  <span class="co">-- Compare two arguments</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">ILabel</span> <span class="dt">Label</span>      <span class="co">-- Create a label</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">IJmp</span>   <span class="dt">Label</span>      <span class="co">-- Jump always</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">IJe</span>    <span class="dt">Label</span>      <span class="co">-- Jump if equal  </span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">IJne</span>   <span class="dt">Label</span>      <span class="co">-- Jump if not-equal</span></span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="transforms">Transforms</h2>
 <p>We can’t expect <em>programmer</em> to put in tags (yuck.)</p>
 <ul>
 <li>Lets squeeze in a <code>tagging</code> transform into our pipeline</li>
@@ -426,46 +429,50 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <figure>
 <img src="../static/img/compiler-pipeline-tag.png" alt /><figcaption>Adding Tagging to the Compiler Pipeline</figcaption>
 </figure>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="transforms-parse">Transforms: Parse</h3>
 <p>Just as before, but now puts a dummy <code>()</code> into each position</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a>λ<span class="op">&gt;</span> <span class="kw">let</span> parseStr s <span class="ot">=</span> <span class="fu">fmap</span> (<span class="fu">const</span> ()) (parse <span class="st">&quot;&quot;</span> s)</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true"></a></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true"></a>λ<span class="op">&gt;</span> <span class="kw">let</span> e <span class="ot">=</span> parseStr <span class="st">&quot;if 1: 22 else: 33&quot;</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true"></a></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true"></a>λ<span class="op">&gt;</span> e</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true"></a><span class="dt">If</span> (<span class="dt">Number</span> <span class="dv">1</span> ()) (<span class="dt">Number</span> <span class="dv">22</span> ()) (<span class="dt">Number</span> <span class="dv">33</span> ()) ()</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true"></a></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true"></a>λ<span class="op">&gt;</span> label e</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true"></a><span class="dt">If</span> (<span class="dt">Number</span> <span class="dv">1</span> ((),<span class="dv">0</span>)) (<span class="dt">Number</span> <span class="dv">22</span> ((),<span class="dv">1</span>)) (<span class="dt">Number</span> <span class="dv">33</span> ((),<span class="dv">2</span>)) ((),<span class="dv">3</span>)</span></code></pre></div>
-<h3 id="transforms-tag">Transforms: Tag</h3>
+<div class="sourceCode" id="cb13"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a>λ<span class="op">&gt;</span> <span class="kw">let</span> parseStr s <span class="ot">=</span> <span class="fu">fmap</span> (<span class="fu">const</span> ()) (parse <span class="st">&quot;&quot;</span> s)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a>λ<span class="op">&gt;</span> <span class="kw">let</span> e <span class="ot">=</span> parseStr <span class="st">&quot;if 1: 22 else: 33&quot;</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true"></a>λ<span class="op">&gt;</span> e</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true"></a><span class="dt">If</span> (<span class="dt">Number</span> <span class="dv">1</span> ()) (<span class="dt">Number</span> <span class="dv">22</span> ()) (<span class="dt">Number</span> <span class="dv">33</span> ()) ()</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true"></a>λ<span class="op">&gt;</span> label e</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true"></a><span class="dt">If</span> (<span class="dt">Number</span> <span class="dv">1</span> ((),<span class="dv">0</span>)) (<span class="dt">Number</span> <span class="dv">22</span> ((),<span class="dv">1</span>)) (<span class="dt">Number</span> <span class="dv">33</span> ((),<span class="dv">2</span>)) ((),<span class="dv">3</span>)</span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="transforms-tag">Transforms: Tag</h2>
 <p>The key work is done by <code>doTag i e</code></p>
 <ol type="1">
 <li>Recursively walk over the <code>BareE</code> named <code>e</code> starting tagging at counter <code>i</code></li>
-<li>Return a pair <code>(i', e')</code> of <em>updated counter</em> <code>i'</code> and tagged expr <code>e'</code></li>
+<li>Return a pair <code>(i', e')</code> of <em>updated counter</em> <code>i'</code> and tagged expression <code>e'</code></li>
 </ol>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <p><strong>QUIZ</strong></p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a><span class="ot">doTag ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">BareE</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">TagE</span>)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true"></a>doTag i (<span class="dt">Number</span> n _)    <span class="ot">=</span> (i <span class="op">+</span> <span class="dv">1</span> , <span class="dt">Number</span> n i)</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true"></a>doTag i (<span class="dt">Var</span>    x _)    <span class="ot">=</span> (i <span class="op">+</span> <span class="dv">1</span> , <span class="dt">Var</span>     x i)</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true"></a>doTag i (<span class="dt">Let</span> x e1 e2 _) <span class="ot">=</span> (_2    , <span class="dt">Let</span> x e1' e2' i2)</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true"></a>    (i1, e1')           <span class="ot">=</span> doTag i  e1</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true"></a>    (i2, e2')           <span class="ot">=</span> doTag _1 e2</span></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a><span class="ot">doTag ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">BareE</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">TagE</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true"></a>doTag i (<span class="dt">Number</span> n _)    <span class="ot">=</span> (i <span class="op">+</span> <span class="dv">1</span> , <span class="dt">Number</span> n i)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true"></a>doTag i (<span class="dt">Var</span>    x _)    <span class="ot">=</span> (i <span class="op">+</span> <span class="dv">1</span> , <span class="dt">Var</span>     x i)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true"></a>doTag i (<span class="dt">Let</span> x e1 e2 _) <span class="ot">=</span> (_2    , <span class="dt">Let</span> x e1' e2' i2)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true"></a>    (i1, e1')           <span class="ot">=</span> doTag i  e1</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true"></a>    (i2, e2')           <span class="ot">=</span> doTag _1 e2</span></code></pre></div>
 <p>What expressions shall we fill in for <code>_1</code> and <code>_2</code> ?</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true"></a><span class="co">{- A -}</span>   _1 <span class="ot">=</span> i</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true"></a>          _2 <span class="ot">=</span> i <span class="op">+</span> <span class="dv">1</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true"></a></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true"></a><span class="co">{- B -}</span>   _1 <span class="ot">=</span> i</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true"></a>          _2 <span class="ot">=</span> i1 <span class="op">+</span> <span class="dv">1</span></span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true"></a></span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true"></a><span class="co">{- C -}</span>   _1 <span class="ot">=</span> i</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true"></a>          _2 <span class="ot">=</span> i2 <span class="op">+</span> <span class="dv">1</span></span>
-<span id="cb16-9"><a href="#cb16-9" aria-hidden="true"></a></span>
-<span id="cb16-10"><a href="#cb16-10" aria-hidden="true"></a><span class="co">{- D -}</span>   _1 <span class="ot">=</span> i1</span>
-<span id="cb16-11"><a href="#cb16-11" aria-hidden="true"></a>          _2 <span class="ot">=</span> i2 <span class="op">+</span> <span class="dv">1</span></span>
-<span id="cb16-12"><a href="#cb16-12" aria-hidden="true"></a></span>
-<span id="cb16-13"><a href="#cb16-13" aria-hidden="true"></a><span class="co">{- E -}</span>   _1 <span class="ot">=</span> i2</span>
-<span id="cb16-14"><a href="#cb16-14" aria-hidden="true"></a>          _2 <span class="ot">=</span> i1 <span class="op">+</span> <span class="dv">1</span></span></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a><span class="co">{- A -}</span>   _1 <span class="ot">=</span> i</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true"></a>          _2 <span class="ot">=</span> i <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true"></a><span class="co">{- B -}</span>   _1 <span class="ot">=</span> i</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true"></a>          _2 <span class="ot">=</span> i1 <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true"></a><span class="co">{- C -}</span>   _1 <span class="ot">=</span> i</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true"></a>          _2 <span class="ot">=</span> i2 <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true"></a><span class="co">{- D -}</span>   _1 <span class="ot">=</span> i1</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true"></a>          _2 <span class="ot">=</span> i2 <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true"></a></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true"></a><span class="co">{- E -}</span>   _1 <span class="ot">=</span> i2</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true"></a>          _2 <span class="ot">=</span> i1 <span class="op">+</span> <span class="dv">1</span></span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <!--
 
 We can now fill in the complete version:
@@ -497,22 +504,24 @@ doTag i (If e1 e2 e3 _) = (i3 + 1, If e1' e2' e3' i3)
 <li><p>Calling <code>doTag</code> with the initial counter (e.g. <code>0</code>),</p></li>
 <li><p>Throwing away the final counter.</p></li>
 </ul>
-<div class="sourceCode" id="cb17"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true"></a><span class="ot">tag ::</span> <span class="dt">BareE</span> <span class="ot">-&gt;</span> <span class="dt">TagE</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true"></a>tag e <span class="ot">=</span> e'  <span class="kw">where</span>  (_, e') <span class="ot">=</span> doTag <span class="dv">0</span> e</span></code></pre></div>
-<h3 id="transforms-codegen">Transforms: CodeGen</h3>
+<div class="sourceCode" id="cb16"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true"></a><span class="ot">tag ::</span> <span class="dt">BareE</span> <span class="ot">-&gt;</span> <span class="dt">TagE</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true"></a>tag e <span class="ot">=</span> e'  <span class="kw">where</span>  (_, e') <span class="ot">=</span> doTag <span class="dv">0</span> e</span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="transforms-code-generation">Transforms: Code Generation</h2>
 <p>Now that we have the tags we lets implement our <a href="#strategy">compilation strategy</a></p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true"></a>compile env (<span class="dt">If</span> eCond eTrue eFalse i)</span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true"></a>  <span class="ot">=</span>   compile env eCond <span class="op">++</span>              <span class="co">-- compile `eCond`</span></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true"></a>    [ <span class="dt">ICmp</span> (<span class="dt">Reg</span> <span class="dt">EAX</span>) (<span class="dt">Const</span> <span class="dv">0</span>)          <span class="co">-- compare result to 0</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true"></a>    , <span class="dt">IJe</span> (<span class="dt">BranchFalse</span> i)               <span class="co">-- if-zero then jump to 'False'-block</span></span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true"></a>    ]</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true"></a>   <span class="op">++</span> compile env eTrue  <span class="op">++</span>             <span class="co">-- code for `True`-block</span></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true"></a>    [ <span class="dt">IJmp</span>   lExit      ]               <span class="co">-- jump to exit (don't execute `False`-block!)</span></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true"></a>   <span class="op">++</span></span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true"></a>      <span class="dt">ILabel</span> (<span class="dt">BranchFalse</span> i)            <span class="co">-- start of `False`-block</span></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true"></a>   <span class="op">:</span> compile env eFalse <span class="op">++</span>              <span class="co">-- code for `False`-block</span></span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true"></a>    [ <span class="dt">ILabel</span> (<span class="dt">BranchExit</span> i) ]           <span class="co">-- exit</span></span></code></pre></div>
-<h3 id="recap-branches">Recap: Branches</h3>
+<div class="sourceCode" id="cb17"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true"></a>compile env (<span class="dt">If</span> eCond eTrue eFalse i)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true"></a>  <span class="ot">=</span>   compile env eCond <span class="op">++</span>          <span class="co">-- compile `eCond`</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true"></a>    [ <span class="dt">ICmp</span> (<span class="dt">Reg</span> <span class="dt">EAX</span>) (<span class="dt">Const</span> <span class="dv">0</span>)      <span class="co">-- compare result to 0</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true"></a>    , <span class="dt">IJe</span> (<span class="dt">BranchFalse</span> i)           <span class="co">-- if-zero then jump to 'False'-block</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true"></a>    ]</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true"></a>   <span class="op">++</span> compile env eTrue  <span class="op">++</span>         <span class="co">-- code for `True`-block</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true"></a>    [ <span class="dt">IJmp</span>   lExit      ]           <span class="co">-- jump to exit (skip `False`-block!)</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true"></a>   <span class="op">++</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true"></a>      <span class="dt">ILabel</span> (<span class="dt">BranchFalse</span> i)        <span class="co">-- start of `False`-block</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true"></a>   <span class="op">:</span> compile env eFalse <span class="op">++</span>          <span class="co">-- code for `False`-block</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true"></a>    [ <span class="dt">ILabel</span> (<span class="dt">BranchExit</span> i) ]       <span class="co">-- exit</span></span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="recap-branches">Recap: Branches</h2>
 <ul>
 <li><code>Tag</code> each sub-expression,</li>
 <li>Use tag to generate control-flow labels implementing branch.</li>
@@ -521,6 +530,7 @@ doTag i (If e1 e2 e3 _) = (i3 + 1, If e1' e2' e3' i3)
 <ul>
 <li>Next: another example of how intermediate representations help.</li>
 </ul>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="binary-operations">Binary Operations</h2>
 <p>You know the drill.</p>
 <ol type="1">
@@ -529,28 +539,25 @@ doTag i (If e1 e2 e3 _) = (i3 + 1, If e1' e2' e3' i3)
 <li>Implement with <strong>type-transforming-functions</strong>,</li>
 <li>Validate with <strong>tests</strong>.</li>
 </ol>
-<h3 id="compiling-binary-operations">Compiling Binary Operations</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="compiling-binary-operations">Compiling Binary Operations</h2>
 <p>Lets look at some expressions and figure out how they would get compiled.</p>
 <ul>
 <li>Recall: We want the result to be in <code>eax</code> after the instructions finish.</li>
 </ul>
-<h4 id="quiz-1">QUIZ</h4>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="quiz-1">QUIZ</h2>
 <p>What is the assembly corresponding to <code>33 - 10</code> ?</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true"></a>?<span class="dv">1</span> <span class="kw">eax</span>, ?<span class="dv">2</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true"></a>?<span class="dv">3</span> <span class="kw">eax</span>, ?<span class="dv">4</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true"></a></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true"></a><span class="kw">mov</span> <span class="kw">eax</span>, <span class="dv">33</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true"></a><span class="kw">sub</span> <span class="kw">eax</span>, <span class="dv">10</span></span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true"></a>?<span class="dv">1</span> <span class="kw">eax</span>, ?<span class="dv">2</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true"></a>?<span class="dv">3</span> <span class="kw">eax</span>, ?<span class="dv">4</span></span></code></pre></div>
 <ul>
 <li><p><strong>A.</strong> <code>?1 = sub</code>, <code>?2 = 33</code>, <code>?3 = mov</code>, <code>?4 = 10</code></p></li>
 <li><p><strong>B.</strong> <code>?1 = mov</code>, <code>?2 = 33</code>, <code>?3 = sub</code>, <code>?4 = 10</code></p></li>
 <li><p><strong>C.</strong> <code>?1 = sub</code>, <code>?2 = 10</code>, <code>?3 = mov</code>, <code>?4 = 33</code></p></li>
 <li><p><strong>D.</strong> <code>?1 = mov</code>, <code>?2 = 10</code>, <code>?3 = sub</code>, <code>?4 = 33</code></p></li>
 </ul>
-<p>How to compile <code>n1 * n2</code></p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true"></a><span class="kw">mov</span> <span class="kw">eax</span>, n1</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true"></a><span class="kw">mul</span> <span class="kw">eax</span>, n2</span></code></pre></div>
-<h4 id="example-bin1">Example: Bin1</h4>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="example-bin1">Example: Bin1</h2>
 <p>Lets start with some easy ones. The source:</p>
 <figure>
 <img src="../static/img/bin-1-to-asm.png" alt /><figcaption>Example: Bin 1</figcaption>
@@ -560,31 +567,8 @@ doTag i (If e1 e2 e3 _) = (i3 + 1, If e1' e2' e3' i3)
 <li>Move <code>n1</code> into <code>eax</code>,</li>
 <li>Add <code>n2</code> to <code>eax</code>.</li>
 </ul>
-<h4 id="example-bin2">Example: Bin2</h4>
-<div class="sourceCode" id="cb21"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true"></a><span class="kw">let</span> x <span class="ot">=</span> <span class="dv">10</span>        <span class="co">-- position 1 on stack</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true"></a>  , y <span class="ot">=</span> <span class="dv">20</span>        <span class="co">-- position 2 on stack</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true"></a>  , z <span class="ot">=</span> <span class="dv">30</span>        <span class="co">-- position 3 on stack</span></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true"></a><span class="kw">in</span></span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true"></a>   x <span class="op">+</span> (y <span class="op">*</span> z)</span></code></pre></div>
-<div class="sourceCode" id="cb22"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a><span class="kw">let</span> x <span class="ot">=</span> <span class="dv">10</span>        <span class="co">-- position 1 on stack</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true"></a>  , y <span class="ot">=</span> <span class="dv">20</span>        <span class="co">-- position 2 on stack</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true"></a>  , z <span class="ot">=</span> <span class="dv">30</span>        <span class="co">-- position 3 on stack</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true"></a>  , tmp <span class="ot">=</span> y <span class="op">*</span> z</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true"></a><span class="kw">in</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true"></a>   x <span class="op">+</span> tmp</span></code></pre></div>
-<div class="sourceCode" id="cb23"><pre class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true"></a><span class="kw">mov</span> <span class="kw">eax</span>, <span class="dv">10</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true"></a><span class="kw">mov</span> [<span class="kw">ebp</span> - <span class="dv">4</span>*<span class="dv">1</span>], <span class="kw">eax</span>    <span class="co">; put x on stack</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true"></a><span class="kw">mov</span> <span class="kw">eax</span>, <span class="dv">20</span></span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true"></a><span class="kw">mov</span> [<span class="kw">ebp</span> - <span class="dv">4</span>*<span class="dv">2</span>], <span class="kw">eax</span>    <span class="co">; put y on stack</span></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true"></a><span class="kw">mov</span> <span class="kw">eax</span>, <span class="dv">30</span></span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true"></a><span class="kw">mov</span> [<span class="kw">ebp</span> - <span class="dv">4</span>*<span class="dv">3</span>], <span class="kw">eax</span>    <span class="co">; put z on stack</span></span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true"></a></span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true"></a><span class="kw">mov</span> <span class="kw">eax</span>, [<span class="kw">ebp</span> - <span class="dv">4</span>*<span class="dv">2</span>]    <span class="co">; grab y </span></span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true"></a><span class="kw">mul</span> <span class="kw">eax</span>, [<span class="kw">ebp</span> - <span class="dv">4</span>*<span class="dv">3</span>]    <span class="co">; mul by z </span></span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true"></a><span class="kw">mov</span> [<span class="kw">ebp</span> - <span class="dv">4</span>*<span class="dv">4</span>], <span class="kw">eax</span>    <span class="co">; put tmp on stack</span></span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true"></a></span>
-<span id="cb23-12"><a href="#cb23-12" aria-hidden="true"></a><span class="kw">mov</span> <span class="kw">eax</span>, [<span class="kw">ebp</span> - <span class="dv">4</span>*<span class="dv">1</span>]    <span class="co">; grab x</span></span>
-<span id="cb23-13"><a href="#cb23-13" aria-hidden="true"></a><span class="kw">add</span> <span class="kw">eax</span>, [<span class="kw">ebp</span> - <span class="dv">4</span>*<span class="dv">4</span>]</span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="example-bin2">Example: Bin2</h2>
 <p>What if the first operand is a variable?</p>
 <figure>
 <img src="../static/img/bin-2-to-asm.png" alt /><figcaption>Example: Bin 2</figcaption>
@@ -595,7 +579,8 @@ doTag i (If e1 e2 e3 _) = (i3 + 1, If e1' e2' e3' i3)
 <li>Move <code>x</code> (from stack) into <code>eax</code>,</li>
 <li>Add <code>n</code> to <code>eax</code>.</li>
 </ul>
-<h4 id="example-bin3">Example: Bin3</h4>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="example-bin3">Example: Bin3</h2>
 <p>Same thing works if the second operand is a variable.</p>
 <figure>
 <img src="../static/img/bin-3-to-asm.png" alt /><figcaption>Example: Bin 3</figcaption>
@@ -605,47 +590,50 @@ doTag i (If e1 e2 e3 _) = (i3 + 1, If e1' e2' e3' i3)
 <li>Move <code>x</code> (from stack) into <code>eax</code>,</li>
 <li>Add <code>n</code> to <code>eax</code>.</li>
 </ul>
-<h3 id="quiz-2">QUIZ</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="quiz-2">QUIZ</h2>
 <p>What is the assembly corresponding to <code>(10 + 20) * 30</code> ?</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true"></a><span class="kw">mov</span> <span class="kw">eax</span>, <span class="dv">10</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true"></a>?<span class="dv">1</span>  <span class="kw">eax</span>, ?<span class="dv">2</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true"></a>?<span class="dv">3</span>  <span class="kw">eax</span>, ?<span class="dv">4</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true"></a><span class="kw">mov</span> <span class="kw">eax</span>, <span class="dv">10</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true"></a>?<span class="dv">1</span>  <span class="kw">eax</span>, ?<span class="dv">2</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true"></a>?<span class="dv">3</span>  <span class="kw">eax</span>, ?<span class="dv">4</span></span></code></pre></div>
 <ul>
 <li><p><strong>A.</strong> <code>?1 = add</code>, <code>?2 = 30</code>, <code>?3 = mul</code>, <code>?4 = 20</code></p></li>
 <li><p><strong>B.</strong> <code>?1 = mul</code>, <code>?2 = 30</code>, <code>?3 = add</code>, <code>?4 = 20</code></p></li>
 <li><p><strong>C.</strong> <code>?1 = add</code>, <code>?2 = 20</code>, <code>?3 = mul</code>, <code>?4 = 30</code></p></li>
 <li><p><strong>D.</strong> <code>?1 = mul</code>, <code>?2 = 20</code>, <code>?3 = add</code>, <code>?4 = 30</code></p></li>
 </ul>
-<h3 id="second-operand-is-constant">Second Operand is Constant</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="second-operand-is-constant">Second Operand is Constant</h2>
 <p>In general, to compile <code>e + n</code> we can do</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true"></a>     compile e      </span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true"></a>  <span class="op">++</span>              <span class="co">-- result of e is in eax</span></span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true"></a>     [add eax, n]</span></code></pre></div>
-<h3 id="example-bin4">Example: Bin4</h3>
+<div class="sourceCode" id="cb20"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true"></a>     compile e      </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true"></a>  <span class="op">++</span>              <span class="co">-- result of e is in eax</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true"></a>     [add eax, n]</span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="example-bin4">Example: Bin4</h2>
 <p>But what if we have <em>nested</em> expressions</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true"></a>(<span class="dv">1</span> <span class="op">+</span> <span class="dv">2</span>) <span class="op">*</span> (<span class="dv">3</span> <span class="op">+</span> <span class="dv">4</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true"></a>(<span class="dv">1</span> <span class="op">+</span> <span class="dv">2</span>) <span class="op">*</span> (<span class="dv">3</span> <span class="op">+</span> <span class="dv">4</span>)</span></code></pre></div>
 <ul>
 <li>Can compile <code>1 + 2</code> with result in <code>eax</code> …</li>
 <li>.. but then need to <em>reuse</em> <code>eax</code> for <code>3 + 4</code></li>
 </ul>
 <p>Need to <strong>save</strong> <code>1 + 2</code> somewhere!</p>
-<p><strong>Idea</strong> How about use <em>another</em> register for <code>3 + 4</code>?</p>
-<ul>
-<li>But then what about <code>(1 + 2) * (3 + 4) * (5 + 6)</code> ?</li>
-<li>In general, may need to <em>save</em> more sub-expressions than we have registers.</li>
-</ul>
-<h3 id="idea-immediate-expressions">Idea: Immediate Expressions</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="idea-how-about-use-another-register-for-3-4">Idea: How about use <em>another</em> register for <code>3 + 4</code>?</h2>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<p>But then what about <code>(1 + 2) * (3 + 4) * (5 + 6)</code> ? * In general, may need to <em>save</em> more sub-expressions than we have registers.</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="idea-immediate-expressions">Idea: Immediate Expressions</h2>
 <p>Why were <code>1 + 2</code> and <code>x + y</code> so easy to compile but <code>(1 + 2) * (3 + 4)</code> not?</p>
-<p>Because <code>1</code> and <code>x</code> are <strong>immediate expressions</strong></p>
-<p>Their values don’t require any computation!</p>
+<p>As <code>1</code> and <code>x</code> are <strong>immediate expressions</strong>: their values don’t require any computation!</p>
 <ul>
 <li>Either a <strong>constant</strong>, or,</li>
 <li><strong>variable</strong> whose value is on the stack.</li>
 </ul>
-<h3 id="idea-administrative-normal-form-anf">Idea: Administrative Normal Form (ANF)</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="idea-administrative-normal-form-anf">Idea: Administrative Normal Form (ANF)</h2>
 <p>An expression is in <strong>Administrative Normal Form (ANF)</strong></p>
 <blockquote>
-<p>if <strong>all primitive operations</strong> have <strong>immediate</strong> arguments.</p>
+<p>if all <strong>primitive operations</strong> have <strong>immediate</strong> arguments.</p>
 </blockquote>
 <p><strong>Primitive Operations:</strong> Those whose values we <em>need</em> for computation to proceed.</p>
 <ul>
@@ -653,45 +641,28 @@ doTag i (If e1 e2 e3 _) = (i3 + 1, If e1' e2' e3' i3)
 <li><code>v1 - v2</code></li>
 <li><code>v1 * v2</code></li>
 </ul>
-<h3 id="quiz-3">QUIZ</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="quiz-3">QUIZ</h2>
 <p>Is the following expression in ANF?</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true"></a>(<span class="dv">1</span> <span class="op">+</span> <span class="dv">2</span>) <span class="op">*</span> (<span class="dv">4</span> <span class="op">-</span> <span class="dv">3</span>)</span></code></pre></div>
-<p><strong>A.</strong> Yes, its ANF. <strong>B.</strong> Nope, its not, because of <code>+</code> <strong>C.</strong> Nope, its not, because of <code>*</code> <strong>D.</strong> Nope, its not, because of <code>-</code> <strong>E.</strong> Huh, WTF is ANF?</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true"></a><span class="ot">isImm ::</span> <span class="dt">Expr</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true"></a>isImm (<span class="dt">Number</span> {}) <span class="ot">=</span> <span class="dt">True</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true"></a>isImm (<span class="dt">Id</span> {})     <span class="ot">=</span> <span class="dt">True</span></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true"></a>isImm _           <span class="ot">=</span> <span class="dt">False</span></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true"></a></span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true"></a><span class="ot">isANF ::</span> <span class="dt">Expr</span> <span class="ot">-&gt;</span> <span class="dt">Bool</span></span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true"></a>isANF (<span class="dt">Number</span> {})       <span class="ot">=</span> <span class="dt">True</span></span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true"></a>isANF (<span class="dt">Id</span> {})           <span class="ot">=</span> <span class="dt">True</span></span>
-<span id="cb28-9"><a href="#cb28-9" aria-hidden="true"></a>isANF (<span class="dt">Prim1</span> _ e1 _)    <span class="ot">=</span> isANF e1 <span class="co">-- no need to be `isImm e1`!</span></span>
-<span id="cb28-10"><a href="#cb28-10" aria-hidden="true"></a></span>
-<span id="cb28-11"><a href="#cb28-11" aria-hidden="true"></a>isANF (<span class="dt">Prim2</span> _ e1 e2 _) <span class="ot">=</span> isImm e1 <span class="op">&amp;&amp;</span> isImm e2</span>
-<span id="cb28-12"><a href="#cb28-12" aria-hidden="true"></a>isANF (<span class="dt">Let</span> _ e1 e2 _)   <span class="ot">=</span> isANF e1 <span class="op">&amp;&amp;</span> isANF e2</span>
-<span id="cb28-13"><a href="#cb28-13" aria-hidden="true"></a>isANF (<span class="dt">If</span> e1 e2 e3 _)   <span class="ot">=</span> <span class="op">???</span>   <span class="op">&amp;&amp;</span> isANF e2 <span class="op">&amp;&amp;</span> isANF e3</span></code></pre></div>
-<p><strong>A.</strong> <em>must be</em> isImm <strong>B.</strong> <em>meh</em> ANF is fine!</p>
-<!-- 
-### Compound Expressions
-
-Unfortunately, the below is _not_ in ANF
-
-```haskell
-(1 + 2) * (3 + 4)
-```
-
-* As the `*` has _non-immediate_ arguments.
-
--->
-<h3 id="conversion-to-anf">Conversion to ANF</h3>
+<div class="sourceCode" id="cb22"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a>(<span class="dv">1</span> <span class="op">+</span> <span class="dv">2</span>) <span class="op">*</span> (<span class="dv">4</span> <span class="op">-</span> <span class="dv">3</span>)</span></code></pre></div>
+<p><strong>A.</strong> Yes, its ANF.</p>
+<p><strong>B.</strong> Nope, its not, because of <code>+</code></p>
+<p><strong>C.</strong> Nope, its not, because of <code>*</code></p>
+<p><strong>D.</strong> Nope, its not, because of <code>-</code></p>
+<p><strong>E.</strong> Huh, WTF is ANF?</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="conversion-to-anf">Conversion to ANF</h2>
+<p>So, the below is <em>not</em> in ANF as <code>*</code> has <em>non-immediate</em> arguments</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true"></a>(<span class="dv">1</span> <span class="op">+</span> <span class="dv">2</span>) <span class="op">*</span> (<span class="dv">3</span> <span class="op">+</span> <span class="dv">4</span>)</span></code></pre></div>
 <p>However, note the following variant <em>is</em> in ANF</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true"></a><span class="kw">let</span> t1 <span class="ot">=</span> <span class="dv">1</span> <span class="op">+</span> <span class="dv">2</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true"></a>  , t2 <span class="ot">=</span> <span class="dv">3</span> <span class="op">+</span> <span class="dv">4</span></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true"></a><span class="kw">in</span>  </span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true"></a>    t1 <span class="op">*</span> t2</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true"></a><span class="kw">let</span> t1 <span class="ot">=</span> <span class="dv">1</span> <span class="op">+</span> <span class="dv">2</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true"></a>  , t2 <span class="ot">=</span> <span class="dv">3</span> <span class="op">+</span> <span class="dv">4</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true"></a><span class="kw">in</span>  </span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true"></a>    t1 <span class="op">*</span> t2</span></code></pre></div>
 <p>How can we compile the above code?</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode asm"><code class="sourceCode fasm"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true"></a><span class="co">; TODO in class</span></span></code></pre></div>
-<h3 id="binary-operations-strategy">Binary Operations: Strategy</h3>
+<div class="sourceCode" id="cb25"><pre class="sourceCode asm"><code class="sourceCode fasm"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true"></a><span class="co">; TODO in class</span></span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="binary-operations-strategy">Binary Operations: Strategy</h2>
 <p>We can convert <em>any</em> expression to ANF</p>
 <ul>
 <li>By adding “temporary” variables for sub-expressions</li>
@@ -703,145 +674,148 @@ Unfortunately, the below is _not_ in ANF
 <li><strong>Step 1:</strong> Compiling ANF into Assembly</li>
 <li><strong>Step 2:</strong> Converting Expressions into ANF</li>
 </ul>
-<h3 id="types-source-1">Types: Source</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="types-source-1">Types: Source</h2>
 <p>Lets add binary primitive operators</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Prim2</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true"></a>  <span class="ot">=</span> <span class="dt">Plus</span> <span class="op">|</span> <span class="dt">Minus</span> <span class="op">|</span> <span class="dt">Times</span></span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Prim2</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true"></a>  <span class="ot">=</span> <span class="dt">Plus</span> <span class="op">|</span> <span class="dt">Minus</span> <span class="op">|</span> <span class="dt">Times</span></span></code></pre></div>
 <p>and use them to extend the source language:</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Expr</span> a</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true"></a>  <span class="ot">=</span> <span class="op">...</span></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">Prim2</span> <span class="dt">Prim2</span>  (<span class="dt">Expr</span> a) (<span class="dt">Expr</span> a) a</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Expr</span> a</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true"></a>  <span class="ot">=</span> <span class="op">...</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">Prim2</span> <span class="dt">Prim2</span>  (<span class="dt">Expr</span> a) (<span class="dt">Expr</span> a) a</span></code></pre></div>
 <p>So, for example, <code>2 + 3</code> would be parsed as:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true"></a><span class="dt">Prim2</span> <span class="dt">Plus</span> (<span class="dt">Number</span> <span class="dv">2</span> ()) (<span class="dt">Number</span> <span class="dv">3</span> ()) ()</span></code></pre></div>
-<h3 id="types-assembly-1">Types: Assembly</h3>
+<div class="sourceCode" id="cb28"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true"></a><span class="dt">Prim2</span> <span class="dt">Plus</span> (<span class="dt">Number</span> <span class="dv">2</span> ()) (<span class="dt">Number</span> <span class="dv">3</span> ()) ()</span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="types-assembly-1">Types: Assembly</h2>
 <p>Need to add X86 instructions for primitive arithmetic:</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Instruction</span></span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true"></a>  <span class="ot">=</span> <span class="op">...</span></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">IAdd</span> <span class="dt">Arg</span> <span class="dt">Arg</span></span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">ISub</span> <span class="dt">Arg</span> <span class="dt">Arg</span></span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">IMul</span> <span class="dt">Arg</span> <span class="dt">Arg</span></span></code></pre></div>
-<h3 id="types-anf">Types: ANF</h3>
+<div class="sourceCode" id="cb29"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Instruction</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true"></a>  <span class="ot">=</span> <span class="op">...</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">IAdd</span> <span class="dt">Arg</span> <span class="dt">Arg</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">ISub</span> <span class="dt">Arg</span> <span class="dt">Arg</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">IMul</span> <span class="dt">Arg</span> <span class="dt">Arg</span></span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="types-anf">Types: ANF</h2>
 <p>We <em>can</em> define a separate type for ANF (try it!)</p>
 <p>… but …</p>
 <p><em>super tedious</em> as it requires duplicating a bunch of code.</p>
 <p>Instead, lets write a <em>function</em> that describes <strong>immediate expressions</strong></p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true"></a><span class="ot">isImm ::</span> <span class="dt">Expr</span> a <span class="ot">-&gt;</span> <span class="dt">Bool</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true"></a>isImm (<span class="dt">Number</span> _ _) <span class="ot">=</span> <span class="dt">True</span></span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true"></a>isImm (<span class="dt">Var</span>    _ _) <span class="ot">=</span> <span class="dt">True</span></span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true"></a>isImm _            <span class="ot">=</span> <span class="dt">False</span></span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true"></a><span class="ot">isImm ::</span> <span class="dt">Expr</span> a <span class="ot">-&gt;</span> <span class="dt">Bool</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true"></a>isImm (<span class="dt">Number</span> _ _) <span class="ot">=</span> <span class="dt">True</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true"></a>isImm (<span class="dt">Var</span>    _ _) <span class="ot">=</span> <span class="dt">True</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true"></a>isImm _            <span class="ot">=</span> <span class="dt">False</span></span></code></pre></div>
 <p>We can now think of <strong>immediate</strong> expressions as:</p>
 <blockquote>
 <p>The <em>subset</em> of <code>Expr</code> <em>such that</em> <code>isImm</code> returns <code>True</code></p>
 </blockquote>
 <h3 id="quiz-4">QUIZ</h3>
 <p>Similarly, lets write a function that describes <strong>ANF</strong> expressions</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true"></a><span class="ot">isAnf ::</span> <span class="dt">Expr</span> a <span class="ot">-&gt;</span> <span class="dt">Bool</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true"></a>isAnf (<span class="dt">Number</span>  _     _) <span class="ot">=</span> <span class="dt">True</span></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true"></a>isAnf (<span class="dt">Var</span>     _     _) <span class="ot">=</span> <span class="dt">True</span></span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true"></a>isAnf (<span class="dt">Prim2</span> _ e1 e2 _) <span class="ot">=</span> _1</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true"></a>isAnf (<span class="dt">If</span> e1 e2 e3   _) <span class="ot">=</span> _2</span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true"></a>isAnf (<span class="dt">Let</span> x e1 e2   _) <span class="ot">=</span> _3</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true"></a><span class="ot">isAnf ::</span> <span class="dt">Expr</span> a <span class="ot">-&gt;</span> <span class="dt">Bool</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true"></a>isAnf (<span class="dt">Number</span>  _     _) <span class="ot">=</span> <span class="dt">True</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true"></a>isAnf (<span class="dt">Var</span>     _     _) <span class="ot">=</span> <span class="dt">True</span></span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true"></a>isAnf (<span class="dt">Prim2</span> _ e1 e2 _) <span class="ot">=</span> _1</span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true"></a>isAnf (<span class="dt">If</span> e1 e2 e3   _) <span class="ot">=</span> _2</span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true"></a>isAnf (<span class="dt">Let</span> x e1 e2   _) <span class="ot">=</span> _3</span></code></pre></div>
 <p>What should we fill in for <code>_1</code>?</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true"></a><span class="co">{- A -}</span> isAnf e1</span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true"></a><span class="co">{- B -}</span> isAnf e2</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true"></a><span class="co">{- C -}</span> isAnf e1 <span class="op">&amp;&amp;</span> isAnf e2</span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true"></a><span class="co">{- D -}</span> isImm e1 <span class="op">&amp;&amp;</span> isImm e2</span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true"></a><span class="co">{- E -}</span> isImm e2</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true"></a><span class="co">{- A -}</span> isAnf e1</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true"></a><span class="co">{- B -}</span> isAnf e2</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true"></a><span class="co">{- C -}</span> isAnf e1 <span class="op">&amp;&amp;</span> isAnf e2</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true"></a><span class="co">{- D -}</span> isImm e1 <span class="op">&amp;&amp;</span> isImm e2</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true"></a><span class="co">{- E -}</span> isImm e2</span></code></pre></div>
 <h3 id="quiz-5">QUIZ</h3>
 <p>Similarly, lets write a function that describes <strong>ANF</strong> expressions</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true"></a><span class="ot">isAnf ::</span> <span class="dt">Expr</span> a <span class="ot">-&gt;</span> <span class="dt">Bool</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true"></a>isAnf (<span class="dt">Number</span>  _     _) <span class="ot">=</span> <span class="dt">True</span></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true"></a>isAnf (<span class="dt">Var</span>     _     _) <span class="ot">=</span> <span class="dt">True</span></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true"></a>isAnf (<span class="dt">Prim1</span> _ e1 _)    <span class="ot">=</span> isAnf e1 </span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true"></a>isAnf (<span class="dt">Prim2</span> _ e1 e2 _) <span class="ot">=</span> isImm e1 <span class="op">&amp;&amp;</span> isImm e2 </span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true"></a>isAnf (<span class="dt">If</span> e1 e2 e3   _) <span class="ot">=</span> isANF e1 <span class="op">&amp;&amp;</span> isANF e2 <span class="op">&amp;&amp;</span> isANF e3</span>
-<span id="cb38-7"><a href="#cb38-7" aria-hidden="true"></a>isAnf (<span class="dt">Let</span> x e1 e2   _) <span class="ot">=</span> isANF e1 <span class="op">&amp;&amp;</span> isANF e2 </span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true"></a><span class="ot">isAnf ::</span> <span class="dt">Expr</span> a <span class="ot">-&gt;</span> <span class="dt">Bool</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true"></a>isAnf (<span class="dt">Number</span>  _     _) <span class="ot">=</span> <span class="dt">True</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true"></a>isAnf (<span class="dt">Var</span>     _     _) <span class="ot">=</span> <span class="dt">True</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true"></a>isAnf (<span class="dt">Prim1</span> _ e1 _)    <span class="ot">=</span> isAnf e1 </span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true"></a>isAnf (<span class="dt">Prim2</span> _ e1 e2 _) <span class="ot">=</span> isImm e1 <span class="op">&amp;&amp;</span> isImm e2 </span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true"></a>isAnf (<span class="dt">If</span> e1 e2 e3   _) <span class="ot">=</span> isANF e1 <span class="op">&amp;&amp;</span> isANF e2 <span class="op">&amp;&amp;</span> isANF e3</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true"></a>isAnf (<span class="dt">Let</span> x e1 e2   _) <span class="ot">=</span> isANF e1 <span class="op">&amp;&amp;</span> isANF e2 </span></code></pre></div>
 <p>What should we fill in for <code>_2</code>?</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true"></a><span class="co">{- A -}</span> isAnf e1      <span class="co">-- &lt;&lt;&lt;&lt;</span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true"></a><span class="co">{- B -}</span> isImm e1      <span class="co">-- &lt;&lt;&lt;&lt;</span></span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true"></a><span class="co">{- C -}</span> <span class="dt">True</span></span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true"></a><span class="co">{- D -}</span> <span class="dt">False</span></span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true"></a><span class="co">{- A -}</span> isAnf e1      <span class="co">-- &lt;&lt;&lt;&lt;</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true"></a><span class="co">{- B -}</span> isImm e1      <span class="co">-- &lt;&lt;&lt;&lt;</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true"></a><span class="co">{- C -}</span> <span class="dt">True</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true"></a><span class="co">{- D -}</span> <span class="dt">False</span></span></code></pre></div>
 <p>We can now think of <strong>ANF</strong> expressions as:</p>
 <blockquote>
 <p>The <em>subset</em> of <code>Expr</code> <em>such that</em> <code>isAnf</code> returns <code>True</code></p>
 </blockquote>
 <p>Use the above function to <strong>test</strong> our ANF conversion.</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true"></a><span class="ot">immArg ::</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> <span class="dt">ImmExpr</span> <span class="ot">-&gt;</span> <span class="dt">Arg</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true"></a>immArg env (<span class="dt">Number</span> n _) <span class="ot">=</span> <span class="dt">Const</span> n</span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true"></a>immArg env (<span class="dt">Id</span> x _)     <span class="ot">=</span> <span class="dt">RegOffset</span> <span class="dt">EBP</span> (lookupEnv env x)</span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true"></a></span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true"></a><span class="ot">compileImm ::</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> <span class="dt">ImmExpr</span> <span class="dt">Tag</span> <span class="ot">-&gt;</span> [<span class="dt">Instruction</span>]</span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true"></a>compileImm env v  <span class="ot">=</span> [<span class="dt">IMov</span> (<span class="dt">Reg</span> <span class="dt">EAX</span>) (immArg env v) ]</span>
-<span id="cb40-7"><a href="#cb40-7" aria-hidden="true"></a></span>
-<span id="cb40-8"><a href="#cb40-8" aria-hidden="true"></a><span class="ot">compile ::</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> <span class="dt">AnfExpr</span> <span class="dt">Tag</span> <span class="ot">-&gt;</span> [<span class="dt">Instruction</span>]</span>
-<span id="cb40-9"><a href="#cb40-9" aria-hidden="true"></a>compile env v<span class="op">@</span>(<span class="dt">Number</span> {})  <span class="ot">=</span> compileImm env v</span>
-<span id="cb40-10"><a href="#cb40-10" aria-hidden="true"></a>compile env v<span class="op">@</span>(<span class="dt">Id</span> _ _)     <span class="ot">=</span> compileImm env v </span>
-<span id="cb40-11"><a href="#cb40-11" aria-hidden="true"></a>compile env (<span class="dt">Prim1</span> op e)   <span class="ot">=</span> compile env e</span>
-<span id="cb40-12"><a href="#cb40-12" aria-hidden="true"></a>                          <span class="op">++</span> [ (prim1Asm op (<span class="dt">Reg</span> <span class="dt">EAX</span>) (<span class="dt">Const</span> <span class="dv">1</span>)]</span>
-<span id="cb40-13"><a href="#cb40-13" aria-hidden="true"></a>compile env (<span class="dt">Prim2</span> op v1 v2) <span class="ot">=</span> [ compileImm env v1 </span>
-<span id="cb40-14"><a href="#cb40-14" aria-hidden="true"></a>                               , prim2asm o (<span class="dt">Reg</span> <span class="dt">EAX</span>) (immArg env v2) </span>
-<span id="cb40-15"><a href="#cb40-15" aria-hidden="true"></a>                               ]</span>
-<span id="cb40-16"><a href="#cb40-16" aria-hidden="true"></a></span>
-<span id="cb40-17"><a href="#cb40-17" aria-hidden="true"></a>prim2Asm <span class="dt">Add2</span> <span class="ot">=</span> <span class="dt">IAdd</span></span>
-<span id="cb40-18"><a href="#cb40-18" aria-hidden="true"></a>prim2Asm <span class="dt">Sub2</span> <span class="ot">=</span> <span class="dt">ISub</span></span>
-<span id="cb40-19"><a href="#cb40-19" aria-hidden="true"></a>prim2Asm <span class="dt">Mul2</span> <span class="ot">=</span> <span class="dt">IMul</span></span>
-<span id="cb40-20"><a href="#cb40-20" aria-hidden="true"></a></span>
-<span id="cb40-21"><a href="#cb40-21" aria-hidden="true"></a>prim1Asm <span class="dt">Add1</span> <span class="ot">=</span> <span class="dt">IAdd</span></span>
-<span id="cb40-22"><a href="#cb40-22" aria-hidden="true"></a>prim1Asm <span class="dt">Sub1</span> <span class="ot">=</span> <span class="dt">ISub</span></span>
-<span id="cb40-23"><a href="#cb40-23" aria-hidden="true"></a></span>
-<span id="cb40-24"><a href="#cb40-24" aria-hidden="true"></a></span>
-<span id="cb40-25"><a href="#cb40-25" aria-hidden="true"></a><span class="ot">anf ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Expr</span> a <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">AnfExpr</span> a)</span>
-<span id="cb40-26"><a href="#cb40-26" aria-hidden="true"></a>anf i p<span class="op">@</span>(<span class="dt">Number</span> {}) <span class="ot">=</span> (i, p)</span>
-<span id="cb40-27"><a href="#cb40-27" aria-hidden="true"></a>anf i v<span class="op">@</span>(<span class="dt">Id</span> {})     <span class="ot">=</span> (i, v)</span>
-<span id="cb40-28"><a href="#cb40-28" aria-hidden="true"></a>anf i (<span class="dt">Prim1</span> o e)   <span class="ot">=</span> (i', <span class="dt">Prim1</span> o e') </span>
-<span id="cb40-29"><a href="#cb40-29" aria-hidden="true"></a>  <span class="kw">where</span> </span>
-<span id="cb40-30"><a href="#cb40-30" aria-hidden="true"></a>    (i', e')        <span class="ot">=</span> anf i e</span>
-<span id="cb40-31"><a href="#cb40-31" aria-hidden="true"></a></span>
-<span id="cb40-32"><a href="#cb40-32" aria-hidden="true"></a>anf i (<span class="dt">Prim2</span> o e1 e2) <span class="ot">=</span> (i2, mkLet (bs1 <span class="op">++</span> bs2) (<span class="dt">Prim2</span> o v1 v2))</span>
-<span id="cb40-33"><a href="#cb40-33" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb40-34"><a href="#cb40-34" aria-hidden="true"></a>     (i1, (bs1, v1))  <span class="ot">=</span> imm i  e1</span>
-<span id="cb40-35"><a href="#cb40-35" aria-hidden="true"></a>     (i2, (bs2, v2))  <span class="ot">=</span> imm i1 e2</span>
-<span id="cb40-36"><a href="#cb40-36" aria-hidden="true"></a></span>
-<span id="cb40-37"><a href="#cb40-37" aria-hidden="true"></a>anf i (<span class="dt">Let</span> x  e1 e2)  <span class="ot">=</span> (i2, <span class="dt">Let</span> x e1' e2')</span>
-<span id="cb40-38"><a href="#cb40-38" aria-hidden="true"></a>  <span class="kw">where</span> </span>
-<span id="cb40-39"><a href="#cb40-39" aria-hidden="true"></a>     (i1, e1')        <span class="ot">=</span> anf i e1</span>
-<span id="cb40-40"><a href="#cb40-40" aria-hidden="true"></a>     (i2, e2')        <span class="ot">=</span> anf i1 e2</span>
-<span id="cb40-41"><a href="#cb40-41" aria-hidden="true"></a></span>
-<span id="cb40-42"><a href="#cb40-42" aria-hidden="true"></a>anf i (<span class="dt">If</span>  e1 e2 e3)  <span class="ot">=</span> (i3, <span class="dt">If</span> e1' e2' e3')</span>
-<span id="cb40-43"><a href="#cb40-43" aria-hidden="true"></a>  <span class="kw">where</span> </span>
-<span id="cb40-44"><a href="#cb40-44" aria-hidden="true"></a>     (i1, e1')        <span class="ot">=</span> anf i e1</span>
-<span id="cb40-45"><a href="#cb40-45" aria-hidden="true"></a>     (i2, e2')        <span class="ot">=</span> anf i1 e2</span>
-<span id="cb40-46"><a href="#cb40-46" aria-hidden="true"></a>     (i3, e3')        <span class="ot">=</span> anf i2 e3</span>
-<span id="cb40-47"><a href="#cb40-47" aria-hidden="true"></a></span>
-<span id="cb40-48"><a href="#cb40-48" aria-hidden="true"></a><span class="ot">imm ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Expr</span> a <span class="ot">-&gt;</span> (<span class="dt">Int</span>, ([(<span class="dt">Id</span> , <span class="dt">AnfExpr</span> a)] , <span class="dt">ImmExpr</span> a))</span>
-<span id="cb40-49"><a href="#cb40-49" aria-hidden="true"></a>imm i e<span class="op">@</span>(<span class="dt">Number</span> {}) <span class="ot">=</span> (i, ([], e))</span>
-<span id="cb40-50"><a href="#cb40-50" aria-hidden="true"></a>imm i e<span class="op">@</span>(<span class="dt">Id</span> {})     <span class="ot">=</span> (i, ([], e))</span>
-<span id="cb40-51"><a href="#cb40-51" aria-hidden="true"></a>imm i e<span class="op">@</span>(<span class="dt">Prim1</span> {})  <span class="ot">=</span> immExp i e</span>
-<span id="cb40-52"><a href="#cb40-52" aria-hidden="true"></a>imm i e<span class="op">@</span>(<span class="dt">If</span> {})     <span class="ot">=</span> immExp i e</span>
-<span id="cb40-53"><a href="#cb40-53" aria-hidden="true"></a>imm i e<span class="op">@</span>(<span class="dt">Let</span> {})    <span class="ot">=</span> immExp i e</span>
-<span id="cb40-54"><a href="#cb40-54" aria-hidden="true"></a></span>
-<span id="cb40-55"><a href="#cb40-55" aria-hidden="true"></a>imm i (<span class="dt">Prim2</span> o e1 e2) <span class="ot">=</span> (i2<span class="op">+</span><span class="dv">1</span>, ((v, <span class="dt">Prim2</span> o v1 v2) <span class="op">:</span> bs2 <span class="op">++</span> bs1, <span class="dt">Id</span> v))</span>
-<span id="cb40-56"><a href="#cb40-56" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb40-57"><a href="#cb40-57" aria-hidden="true"></a>    (i1, (bs1, v1)) <span class="ot">=</span> imm i e1</span>
-<span id="cb40-58"><a href="#cb40-58" aria-hidden="true"></a>    (i2, (bs2, v2)) <span class="ot">=</span> imm i1 e2</span>
-<span id="cb40-59"><a href="#cb40-59" aria-hidden="true"></a>    v               <span class="ot">=</span> mkTmpVar i2</span>
-<span id="cb40-60"><a href="#cb40-60" aria-hidden="true"></a></span>
-<span id="cb40-61"><a href="#cb40-61" aria-hidden="true"></a>mkTmpVar i <span class="ot">=</span> <span class="st">&quot;tmp&quot;</span> <span class="op">++</span> <span class="fu">show</span> i</span>
-<span id="cb40-62"><a href="#cb40-62" aria-hidden="true"></a></span>
-<span id="cb40-63"><a href="#cb40-63" aria-hidden="true"></a><span class="ot">mkLet ::</span> [(<span class="dt">Id</span> , <span class="dt">AnfExpr</span> a)] <span class="ot">-&gt;</span> <span class="dt">AnfExpr</span> a <span class="ot">-&gt;</span> <span class="dt">AnfExpr</span> a</span>
-<span id="cb40-64"><a href="#cb40-64" aria-hidden="true"></a>mkLet []              e <span class="ot">=</span> e</span>
-<span id="cb40-65"><a href="#cb40-65" aria-hidden="true"></a>mkLet ((x1, e1) <span class="op">:</span> bs) e <span class="ot">=</span> <span class="dt">Let</span> x1 e1 (mkLet bs e)</span>
-<span id="cb40-66"><a href="#cb40-66" aria-hidden="true"></a></span>
-<span id="cb40-67"><a href="#cb40-67" aria-hidden="true"></a>immExp i e  <span class="ot">=</span> (i' <span class="op">+</span> <span class="dv">1</span>, ([(v, e')], v))</span>
-<span id="cb40-68"><a href="#cb40-68" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb40-69"><a href="#cb40-69" aria-hidden="true"></a>    (i',e') <span class="ot">=</span> anf e</span>
-<span id="cb40-70"><a href="#cb40-70" aria-hidden="true"></a>    v       <span class="ot">=</span> mkTmpVar i'</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true"></a><span class="ot">immArg ::</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> <span class="dt">ImmExpr</span> <span class="ot">-&gt;</span> <span class="dt">Arg</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true"></a>immArg env (<span class="dt">Number</span> n _) <span class="ot">=</span> <span class="dt">Const</span> n</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true"></a>immArg env (<span class="dt">Id</span> x _)     <span class="ot">=</span> <span class="dt">RegOffset</span> <span class="dt">EBP</span> (lookupEnv env x)</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true"></a></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true"></a><span class="ot">compileImm ::</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> <span class="dt">ImmExpr</span> <span class="dt">Tag</span> <span class="ot">-&gt;</span> [<span class="dt">Instruction</span>]</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true"></a>compileImm env v  <span class="ot">=</span> [<span class="dt">IMov</span> (<span class="dt">Reg</span> <span class="dt">EAX</span>) (immArg env v) ]</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true"></a></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true"></a><span class="ot">compile ::</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> <span class="dt">AnfExpr</span> <span class="dt">Tag</span> <span class="ot">-&gt;</span> [<span class="dt">Instruction</span>]</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true"></a>compile env v<span class="op">@</span>(<span class="dt">Number</span> {})  <span class="ot">=</span> compileImm env v</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true"></a>compile env v<span class="op">@</span>(<span class="dt">Id</span> _ _)     <span class="ot">=</span> compileImm env v </span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true"></a>compile env (<span class="dt">Prim1</span> op e)   <span class="ot">=</span> compile env e</span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true"></a>                          <span class="op">++</span> [ (prim1Asm op (<span class="dt">Reg</span> <span class="dt">EAX</span>) (<span class="dt">Const</span> <span class="dv">1</span>)]</span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true"></a>compile env (<span class="dt">Prim2</span> op v1 v2) <span class="ot">=</span> [ compileImm env v1 </span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true"></a>                               , prim2asm o (<span class="dt">Reg</span> <span class="dt">EAX</span>) (immArg env v2) </span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true"></a>                               ]</span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true"></a></span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true"></a>prim2Asm <span class="dt">Add2</span> <span class="ot">=</span> <span class="dt">IAdd</span></span>
+<span id="cb35-18"><a href="#cb35-18" aria-hidden="true"></a>prim2Asm <span class="dt">Sub2</span> <span class="ot">=</span> <span class="dt">ISub</span></span>
+<span id="cb35-19"><a href="#cb35-19" aria-hidden="true"></a>prim2Asm <span class="dt">Mul2</span> <span class="ot">=</span> <span class="dt">IMul</span></span>
+<span id="cb35-20"><a href="#cb35-20" aria-hidden="true"></a></span>
+<span id="cb35-21"><a href="#cb35-21" aria-hidden="true"></a>prim1Asm <span class="dt">Add1</span> <span class="ot">=</span> <span class="dt">IAdd</span></span>
+<span id="cb35-22"><a href="#cb35-22" aria-hidden="true"></a>prim1Asm <span class="dt">Sub1</span> <span class="ot">=</span> <span class="dt">ISub</span></span>
+<span id="cb35-23"><a href="#cb35-23" aria-hidden="true"></a></span>
+<span id="cb35-24"><a href="#cb35-24" aria-hidden="true"></a></span>
+<span id="cb35-25"><a href="#cb35-25" aria-hidden="true"></a><span class="ot">anf ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Expr</span> a <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">AnfExpr</span> a)</span>
+<span id="cb35-26"><a href="#cb35-26" aria-hidden="true"></a>anf i p<span class="op">@</span>(<span class="dt">Number</span> {}) <span class="ot">=</span> (i, p)</span>
+<span id="cb35-27"><a href="#cb35-27" aria-hidden="true"></a>anf i v<span class="op">@</span>(<span class="dt">Id</span> {})     <span class="ot">=</span> (i, v)</span>
+<span id="cb35-28"><a href="#cb35-28" aria-hidden="true"></a>anf i (<span class="dt">Prim1</span> o e)   <span class="ot">=</span> (i', <span class="dt">Prim1</span> o e') </span>
+<span id="cb35-29"><a href="#cb35-29" aria-hidden="true"></a>  <span class="kw">where</span> </span>
+<span id="cb35-30"><a href="#cb35-30" aria-hidden="true"></a>    (i', e')        <span class="ot">=</span> anf i e</span>
+<span id="cb35-31"><a href="#cb35-31" aria-hidden="true"></a></span>
+<span id="cb35-32"><a href="#cb35-32" aria-hidden="true"></a>anf i (<span class="dt">Prim2</span> o e1 e2) <span class="ot">=</span> (i2, mkLet (bs1 <span class="op">++</span> bs2) (<span class="dt">Prim2</span> o v1 v2))</span>
+<span id="cb35-33"><a href="#cb35-33" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb35-34"><a href="#cb35-34" aria-hidden="true"></a>     (i1, (bs1, v1))  <span class="ot">=</span> imm i  e1</span>
+<span id="cb35-35"><a href="#cb35-35" aria-hidden="true"></a>     (i2, (bs2, v2))  <span class="ot">=</span> imm i1 e2</span>
+<span id="cb35-36"><a href="#cb35-36" aria-hidden="true"></a></span>
+<span id="cb35-37"><a href="#cb35-37" aria-hidden="true"></a>anf i (<span class="dt">Let</span> x  e1 e2)  <span class="ot">=</span> (i2, <span class="dt">Let</span> x e1' e2')</span>
+<span id="cb35-38"><a href="#cb35-38" aria-hidden="true"></a>  <span class="kw">where</span> </span>
+<span id="cb35-39"><a href="#cb35-39" aria-hidden="true"></a>     (i1, e1')        <span class="ot">=</span> anf i e1</span>
+<span id="cb35-40"><a href="#cb35-40" aria-hidden="true"></a>     (i2, e2')        <span class="ot">=</span> anf i1 e2</span>
+<span id="cb35-41"><a href="#cb35-41" aria-hidden="true"></a></span>
+<span id="cb35-42"><a href="#cb35-42" aria-hidden="true"></a>anf i (<span class="dt">If</span>  e1 e2 e3)  <span class="ot">=</span> (i3, <span class="dt">If</span> e1' e2' e3')</span>
+<span id="cb35-43"><a href="#cb35-43" aria-hidden="true"></a>  <span class="kw">where</span> </span>
+<span id="cb35-44"><a href="#cb35-44" aria-hidden="true"></a>     (i1, e1')        <span class="ot">=</span> anf i e1</span>
+<span id="cb35-45"><a href="#cb35-45" aria-hidden="true"></a>     (i2, e2')        <span class="ot">=</span> anf i1 e2</span>
+<span id="cb35-46"><a href="#cb35-46" aria-hidden="true"></a>     (i3, e3')        <span class="ot">=</span> anf i2 e3</span>
+<span id="cb35-47"><a href="#cb35-47" aria-hidden="true"></a></span>
+<span id="cb35-48"><a href="#cb35-48" aria-hidden="true"></a><span class="ot">imm ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Expr</span> a <span class="ot">-&gt;</span> (<span class="dt">Int</span>, ([(<span class="dt">Id</span> , <span class="dt">AnfExpr</span> a)] , <span class="dt">ImmExpr</span> a))</span>
+<span id="cb35-49"><a href="#cb35-49" aria-hidden="true"></a>imm i e<span class="op">@</span>(<span class="dt">Number</span> {}) <span class="ot">=</span> (i, ([], e))</span>
+<span id="cb35-50"><a href="#cb35-50" aria-hidden="true"></a>imm i e<span class="op">@</span>(<span class="dt">Id</span> {})     <span class="ot">=</span> (i, ([], e))</span>
+<span id="cb35-51"><a href="#cb35-51" aria-hidden="true"></a>imm i e<span class="op">@</span>(<span class="dt">Prim1</span> {})  <span class="ot">=</span> immExp i e</span>
+<span id="cb35-52"><a href="#cb35-52" aria-hidden="true"></a>imm i e<span class="op">@</span>(<span class="dt">If</span> {})     <span class="ot">=</span> immExp i e</span>
+<span id="cb35-53"><a href="#cb35-53" aria-hidden="true"></a>imm i e<span class="op">@</span>(<span class="dt">Let</span> {})    <span class="ot">=</span> immExp i e</span>
+<span id="cb35-54"><a href="#cb35-54" aria-hidden="true"></a></span>
+<span id="cb35-55"><a href="#cb35-55" aria-hidden="true"></a>imm i (<span class="dt">Prim2</span> o e1 e2) <span class="ot">=</span> (i2<span class="op">+</span><span class="dv">1</span>, ((v, <span class="dt">Prim2</span> o v1 v2) <span class="op">:</span> bs2 <span class="op">++</span> bs1, <span class="dt">Id</span> v))</span>
+<span id="cb35-56"><a href="#cb35-56" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb35-57"><a href="#cb35-57" aria-hidden="true"></a>    (i1, (bs1, v1)) <span class="ot">=</span> imm i e1</span>
+<span id="cb35-58"><a href="#cb35-58" aria-hidden="true"></a>    (i2, (bs2, v2)) <span class="ot">=</span> imm i1 e2</span>
+<span id="cb35-59"><a href="#cb35-59" aria-hidden="true"></a>    v               <span class="ot">=</span> mkTmpVar i2</span>
+<span id="cb35-60"><a href="#cb35-60" aria-hidden="true"></a></span>
+<span id="cb35-61"><a href="#cb35-61" aria-hidden="true"></a>mkTmpVar i <span class="ot">=</span> <span class="st">&quot;tmp&quot;</span> <span class="op">++</span> <span class="fu">show</span> i</span>
+<span id="cb35-62"><a href="#cb35-62" aria-hidden="true"></a></span>
+<span id="cb35-63"><a href="#cb35-63" aria-hidden="true"></a><span class="ot">mkLet ::</span> [(<span class="dt">Id</span> , <span class="dt">AnfExpr</span> a)] <span class="ot">-&gt;</span> <span class="dt">AnfExpr</span> a <span class="ot">-&gt;</span> <span class="dt">AnfExpr</span> a</span>
+<span id="cb35-64"><a href="#cb35-64" aria-hidden="true"></a>mkLet []              e <span class="ot">=</span> e</span>
+<span id="cb35-65"><a href="#cb35-65" aria-hidden="true"></a>mkLet ((x1, e1) <span class="op">:</span> bs) e <span class="ot">=</span> <span class="dt">Let</span> x1 e1 (mkLet bs e)</span>
+<span id="cb35-66"><a href="#cb35-66" aria-hidden="true"></a></span>
+<span id="cb35-67"><a href="#cb35-67" aria-hidden="true"></a>immExp i e  <span class="ot">=</span> (i' <span class="op">+</span> <span class="dv">1</span>, ([(v, e')], v))</span>
+<span id="cb35-68"><a href="#cb35-68" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb35-69"><a href="#cb35-69" aria-hidden="true"></a>    (i',e') <span class="ot">=</span> anf e</span>
+<span id="cb35-70"><a href="#cb35-70" aria-hidden="true"></a>    v       <span class="ot">=</span> mkTmpVar i'</span></code></pre></div>
 <h3 id="types-strategy">Types &amp; Strategy</h3>
 <p>Writing the type aliases:</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">BareE</span>   <span class="ot">=</span> <span class="dt">Expr</span> ()</span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">AnfE</span>    <span class="ot">=</span> <span class="dt">Expr</span> ()  <span class="co">-- such that isAnf is True</span></span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">AnfTagE</span> <span class="ot">=</span> <span class="dt">Expr</span> <span class="dt">Tag</span> <span class="co">-- such that isAnf is True</span></span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">ImmTagE</span> <span class="ot">=</span> <span class="dt">Expr</span> <span class="dt">Tag</span> <span class="co">-- such that isImm is True</span></span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">BareE</span>   <span class="ot">=</span> <span class="dt">Expr</span> ()</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">AnfE</span>    <span class="ot">=</span> <span class="dt">Expr</span> ()  <span class="co">-- such that isAnf is True</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">AnfTagE</span> <span class="ot">=</span> <span class="dt">Expr</span> <span class="dt">Tag</span> <span class="co">-- such that isAnf is True</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">ImmTagE</span> <span class="ot">=</span> <span class="dt">Expr</span> <span class="dt">Tag</span> <span class="co">-- such that isImm is True</span></span></code></pre></div>
 <p>we get the overall pipeline:</p>
 <figure>
 <img src="../static/img/compiler-pipeline-anf-types.png" alt /><figcaption>Compiler Pipeline with ANF: Types</figcaption>
@@ -856,40 +830,40 @@ Unfortunately, the below is _not_ in ANF
 <li>Move <code>v1</code> into <code>eax</code>,</li>
 <li>Add <code>v2</code> to <code>eax</code>.</li>
 </ul>
-<div class="sourceCode" id="cb42"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true"></a><span class="ot">compile ::</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> <span class="dt">TagE</span> <span class="ot">-&gt;</span> <span class="dt">Asm</span></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true"></a>compile env (<span class="dt">Prim2</span> o v1 v2)</span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true"></a>  <span class="ot">=</span> [ <span class="dt">IMov</span>      (<span class="dt">Reg</span> <span class="dt">EAX</span>) (immArg env v1)</span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true"></a>    , (prim2 o) (<span class="dt">Reg</span> <span class="dt">EAX</span>) (immArg env v2)</span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true"></a>    ]</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true"></a><span class="ot">compile ::</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> <span class="dt">TagE</span> <span class="ot">-&gt;</span> <span class="dt">Asm</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true"></a>compile env (<span class="dt">Prim2</span> o v1 v2)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true"></a>  <span class="ot">=</span> [ <span class="dt">IMov</span>      (<span class="dt">Reg</span> <span class="dt">EAX</span>) (immArg env v1)</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true"></a>    , (prim2 o) (<span class="dt">Reg</span> <span class="dt">EAX</span>) (immArg env v2)</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true"></a>    ]</span></code></pre></div>
 <p>where we have a helper to find the <code>Asm</code> variant of a <code>Prim2</code> operation</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true"></a><span class="ot">prim2 ::</span> <span class="dt">Prim2</span> <span class="ot">-&gt;</span> <span class="dt">Arg</span> <span class="ot">-&gt;</span> <span class="dt">Arg</span> <span class="ot">-&gt;</span> <span class="dt">Instruction</span></span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true"></a>prim2 <span class="dt">Plus</span>  <span class="ot">=</span> <span class="dt">IAdd</span></span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true"></a>prim2 <span class="dt">Minus</span> <span class="ot">=</span> <span class="dt">ISub</span></span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true"></a>prim2 <span class="dt">Times</span> <span class="ot">=</span> <span class="dt">IMul</span></span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true"></a><span class="ot">prim2 ::</span> <span class="dt">Prim2</span> <span class="ot">-&gt;</span> <span class="dt">Arg</span> <span class="ot">-&gt;</span> <span class="dt">Arg</span> <span class="ot">-&gt;</span> <span class="dt">Instruction</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true"></a>prim2 <span class="dt">Plus</span>  <span class="ot">=</span> <span class="dt">IAdd</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true"></a>prim2 <span class="dt">Minus</span> <span class="ot">=</span> <span class="dt">ISub</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true"></a>prim2 <span class="dt">Times</span> <span class="ot">=</span> <span class="dt">IMul</span></span></code></pre></div>
 <p>and another to convert an <em>immediate expression</em> to an x86 argument:</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true"></a><span class="ot">immArg ::</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> <span class="dt">ImmTag</span> <span class="ot">-&gt;</span> <span class="dt">Arg</span></span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true"></a>immArg _   (<span class="dt">Number</span> n _) <span class="ot">=</span> <span class="dt">Const</span> n</span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true"></a>immArg env (<span class="dt">Var</span>    x _) <span class="ot">=</span> <span class="dt">RegOffset</span> <span class="dt">ESP</span> i</span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true"></a>    i                   <span class="ot">=</span> fromMaybe err (<span class="fu">lookup</span> x env)</span>
-<span id="cb44-6"><a href="#cb44-6" aria-hidden="true"></a>    err                 <span class="ot">=</span> <span class="fu">error</span> (printf <span class="st">&quot;Error: Variable '%s' is unbound&quot;</span> x)</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true"></a><span class="ot">immArg ::</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> <span class="dt">ImmTag</span> <span class="ot">-&gt;</span> <span class="dt">Arg</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true"></a>immArg _   (<span class="dt">Number</span> n _) <span class="ot">=</span> <span class="dt">Const</span> n</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true"></a>immArg env (<span class="dt">Var</span>    x _) <span class="ot">=</span> <span class="dt">RegOffset</span> <span class="dt">ESP</span> i</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true"></a>    i                   <span class="ot">=</span> fromMaybe err (<span class="fu">lookup</span> x env)</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true"></a>    err                 <span class="ot">=</span> <span class="fu">error</span> (printf <span class="st">&quot;Error: Variable '%s' is unbound&quot;</span> x)</span></code></pre></div>
 <h3 id="quiz-6">QUIZ</h3>
 <p>Which of the below are in ANF ?</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true"></a><span class="co">{- 1 -}</span> <span class="dv">2</span> <span class="op">+</span> <span class="dv">3</span> <span class="op">+</span> <span class="dv">4</span></span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true"></a></span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true"></a><span class="co">{- 2 -}</span> <span class="kw">let</span> x <span class="ot">=</span> <span class="dv">12</span> <span class="kw">in</span></span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true"></a>          x <span class="op">+</span> <span class="dv">1</span></span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true"></a></span>
-<span id="cb45-6"><a href="#cb45-6" aria-hidden="true"></a><span class="co">{- 3 -}</span> <span class="kw">let</span> x <span class="ot">=</span> <span class="dv">12</span></span>
-<span id="cb45-7"><a href="#cb45-7" aria-hidden="true"></a>          , y <span class="ot">=</span> x <span class="op">+</span> <span class="dv">6</span></span>
-<span id="cb45-8"><a href="#cb45-8" aria-hidden="true"></a>        <span class="kw">in</span></span>
-<span id="cb45-9"><a href="#cb45-9" aria-hidden="true"></a>          x <span class="op">+</span> y</span>
-<span id="cb45-10"><a href="#cb45-10" aria-hidden="true"></a></span>
-<span id="cb45-11"><a href="#cb45-11" aria-hidden="true"></a><span class="co">{- 4 -}</span> <span class="kw">let</span> x <span class="ot">=</span> <span class="dv">12</span></span>
-<span id="cb45-12"><a href="#cb45-12" aria-hidden="true"></a>          , y <span class="ot">=</span> <span class="dv">18</span></span>
-<span id="cb45-13"><a href="#cb45-13" aria-hidden="true"></a>          , t <span class="ot">=</span> x <span class="op">+</span> y <span class="op">+</span> <span class="dv">1</span></span>
-<span id="cb45-14"><a href="#cb45-14" aria-hidden="true"></a>        <span class="kw">in</span></span>
-<span id="cb45-15"><a href="#cb45-15" aria-hidden="true"></a>          <span class="kw">if</span> t<span class="op">:</span> <span class="dv">7</span> <span class="kw">else</span><span class="op">:</span> <span class="dv">9</span></span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true"></a><span class="co">{- 1 -}</span> <span class="dv">2</span> <span class="op">+</span> <span class="dv">3</span> <span class="op">+</span> <span class="dv">4</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true"></a></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true"></a><span class="co">{- 2 -}</span> <span class="kw">let</span> x <span class="ot">=</span> <span class="dv">12</span> <span class="kw">in</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true"></a>          x <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true"></a></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true"></a><span class="co">{- 3 -}</span> <span class="kw">let</span> x <span class="ot">=</span> <span class="dv">12</span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true"></a>          , y <span class="ot">=</span> x <span class="op">+</span> <span class="dv">6</span></span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true"></a>        <span class="kw">in</span></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true"></a>          x <span class="op">+</span> y</span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true"></a></span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true"></a><span class="co">{- 4 -}</span> <span class="kw">let</span> x <span class="ot">=</span> <span class="dv">12</span></span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true"></a>          , y <span class="ot">=</span> <span class="dv">18</span></span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true"></a>          , t <span class="ot">=</span> x <span class="op">+</span> y <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true"></a>        <span class="kw">in</span></span>
+<span id="cb40-15"><a href="#cb40-15" aria-hidden="true"></a>          <span class="kw">if</span> t<span class="op">:</span> <span class="dv">7</span> <span class="kw">else</span><span class="op">:</span> <span class="dv">9</span></span></code></pre></div>
 <ul>
 <li><p><strong>A.</strong> <code>1, 2, 3, 4</code></p></li>
 <li><p><strong>B.</strong> <code>1, 2, 3</code></p></li>
@@ -904,8 +878,8 @@ Unfortunately, the below is _not_ in ANF
 </figure>
 <h3 id="a-normalization">A-Normalization</h3>
 <p>We can fill in the base cases easily</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true"></a>anf (<span class="dt">Number</span> n)      <span class="ot">=</span> <span class="dt">Number</span> n</span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true"></a>anf (<span class="dt">Var</span> x)         <span class="ot">=</span> <span class="dt">Var</span> x</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true"></a>anf (<span class="dt">Number</span> n)      <span class="ot">=</span> <span class="dt">Number</span> n</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true"></a>anf (<span class="dt">Var</span> x)         <span class="ot">=</span> <span class="dt">Var</span> x</span></code></pre></div>
 <p>Interesting cases are the binary operations</p>
 <h4 id="example-anf-1">Example: Anf-1</h4>
 <p>Left operand is not immediate</p>
@@ -913,18 +887,18 @@ Unfortunately, the below is _not_ in ANF
 <img src="../static/img/anf-1.png" alt /><figcaption>Example: ANF 1</figcaption>
 </figure>
 <p><strong>Key Idea: Helper Function</strong></p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true"></a><span class="ot">imm ::</span> <span class="dt">BareE</span> <span class="ot">-&gt;</span> ([(<span class="dt">Id</span>, <span class="dt">AnfE</span>)], <span class="dt">ImmE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true"></a><span class="ot">imm ::</span> <span class="dt">BareE</span> <span class="ot">-&gt;</span> ([(<span class="dt">Id</span>, <span class="dt">AnfE</span>)], <span class="dt">ImmE</span>)</span></code></pre></div>
 <p><code>imm e</code> returns <code>([(t1, a1),...,(tn, an)], v)</code> where</p>
 <ul>
 <li><code>ti, ai</code> are new temporary variables bound to ANF exprs,</li>
 <li><code>v</code> is an <strong>immediate value</strong> (either a constant or variable)</li>
 </ul>
 <p>Such that <code>e</code> is <em>equivalent to</em></p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true"></a><span class="kw">let</span> t1 <span class="ot">=</span> a1</span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true"></a>  , <span class="op">...</span></span>
-<span id="cb48-3"><a href="#cb48-3" aria-hidden="true"></a>  , tn <span class="ot">=</span> an</span>
-<span id="cb48-4"><a href="#cb48-4" aria-hidden="true"></a><span class="kw">in</span></span>
-<span id="cb48-5"><a href="#cb48-5" aria-hidden="true"></a>   v</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true"></a><span class="kw">let</span> t1 <span class="ot">=</span> a1</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true"></a>  , <span class="op">...</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true"></a>  , tn <span class="ot">=</span> an</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true"></a><span class="kw">in</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true"></a>   v</span></code></pre></div>
 <p>Lets look at some more examples.</p>
 <h4 id="example-anf-2">Example: Anf-2</h4>
 <p>Left operand is not internally immediate</p>
@@ -947,48 +921,48 @@ Unfortunately, the below is _not_ in ANF
 </ol>
 <h3 id="anf-implementation">ANF: Implementation</h3>
 <p>Lets implement the above strategy</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true"></a>anf (<span class="dt">Prim2</span> o e1 e2) <span class="ot">=</span> lets (b1s <span class="op">++</span> b2s)</span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true"></a>                        (<span class="dt">Prim2</span> o (<span class="dt">Var</span> v1) (<span class="dt">Var</span> v2))</span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb49-4"><a href="#cb49-4" aria-hidden="true"></a>    (b1s, v1)       <span class="ot">=</span> imm e1</span>
-<span id="cb49-5"><a href="#cb49-5" aria-hidden="true"></a>    (b2s, v2)       <span class="ot">=</span> imm e2</span>
-<span id="cb49-6"><a href="#cb49-6" aria-hidden="true"></a></span>
-<span id="cb49-7"><a href="#cb49-7" aria-hidden="true"></a><span class="ot">lets ::</span> [(<span class="dt">Id</span>, <span class="dt">AnfE</span>)] <span class="ot">-&gt;</span> <span class="dt">AnfE</span> <span class="ot">-&gt;</span> <span class="dt">AnfE</span></span>
-<span id="cb49-8"><a href="#cb49-8" aria-hidden="true"></a>lets []         e' <span class="ot">=</span> e</span>
-<span id="cb49-9"><a href="#cb49-9" aria-hidden="true"></a>lets ((x,e)<span class="op">:</span>bs) e' <span class="ot">=</span> <span class="dt">Let</span> x e (lets bs e')</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true"></a>anf (<span class="dt">Prim2</span> o e1 e2) <span class="ot">=</span> lets (b1s <span class="op">++</span> b2s)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true"></a>                        (<span class="dt">Prim2</span> o (<span class="dt">Var</span> v1) (<span class="dt">Var</span> v2))</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true"></a>    (b1s, v1)       <span class="ot">=</span> imm e1</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true"></a>    (b2s, v2)       <span class="ot">=</span> imm e2</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true"></a></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true"></a><span class="ot">lets ::</span> [(<span class="dt">Id</span>, <span class="dt">AnfE</span>)] <span class="ot">-&gt;</span> <span class="dt">AnfE</span> <span class="ot">-&gt;</span> <span class="dt">AnfE</span></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true"></a>lets []         e' <span class="ot">=</span> e</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true"></a>lets ((x,e)<span class="op">:</span>bs) e' <span class="ot">=</span> <span class="dt">Let</span> x e (lets bs e')</span></code></pre></div>
 <p>Intuitively, <code>lets</code> <em>stitches</em> together a bunch of definitions as follows:</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true"></a>lets [(x1, e1), (x2, e2), (x3, e3)] e</span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true"></a>  <span class="op">===&gt;</span> <span class="dt">Let</span> x1 e1 (<span class="dt">Let</span> x2 e2 (<span class="dt">Let</span> x3 e3 e))</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true"></a>lets [(x1, e1), (x2, e2), (x3, e3)] e</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true"></a>  <span class="op">===&gt;</span> <span class="dt">Let</span> x1 e1 (<span class="dt">Let</span> x2 e2 (<span class="dt">Let</span> x3 e3 e))</span></code></pre></div>
 <p>For <code>Let</code> just make sure we recursively <code>anf</code> the sub-expressions.</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true"></a>anf (<span class="dt">Let</span> x e1 e2)   <span class="ot">=</span> <span class="dt">Let</span> x e1' e2'</span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb51-3"><a href="#cb51-3" aria-hidden="true"></a>    e1'             <span class="ot">=</span> anf e1</span>
-<span id="cb51-4"><a href="#cb51-4" aria-hidden="true"></a>    e2'             <span class="ot">=</span> anf e2</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true"></a>anf (<span class="dt">Let</span> x e1 e2)   <span class="ot">=</span> <span class="dt">Let</span> x e1' e2'</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true"></a>    e1'             <span class="ot">=</span> anf e1</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true"></a>    e2'             <span class="ot">=</span> anf e2</span></code></pre></div>
 <p>Same principle applies to <code>If</code></p>
 <ul>
 <li>use <code>anf</code> to recursively transform the branches.</li>
 </ul>
-<div class="sourceCode" id="cb52"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true"></a>anf (<span class="dt">If</span> e1 e2 e3) <span class="ot">=</span> <span class="dt">If</span> e1' e2' e3'  </span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb52-3"><a href="#cb52-3" aria-hidden="true"></a>    e1'           <span class="ot">=</span> anf e1</span>
-<span id="cb52-4"><a href="#cb52-4" aria-hidden="true"></a>    e2'           <span class="ot">=</span> anf e2</span>
-<span id="cb52-5"><a href="#cb52-5" aria-hidden="true"></a>    e3'           <span class="ot">=</span> anf e3</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true"></a>anf (<span class="dt">If</span> e1 e2 e3) <span class="ot">=</span> <span class="dt">If</span> e1' e2' e3'  </span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true"></a>    e1'           <span class="ot">=</span> anf e1</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true"></a>    e2'           <span class="ot">=</span> anf e2</span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true"></a>    e3'           <span class="ot">=</span> anf e3</span></code></pre></div>
 <h3 id="anf-making-arguments-immediate-via-imm">ANF: Making Arguments Immediate via <code>imm</code></h3>
 <p>The workhorse is the function</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true"></a><span class="ot">imm ::</span> <span class="dt">BareE</span> <span class="ot">-&gt;</span> ([(<span class="dt">Id</span>, <span class="dt">AnfE</span>)], <span class="dt">ImmE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true"></a><span class="ot">imm ::</span> <span class="dt">BareE</span> <span class="ot">-&gt;</span> ([(<span class="dt">Id</span>, <span class="dt">AnfE</span>)], <span class="dt">ImmE</span>)</span></code></pre></div>
 <p>which creates temporary variables to crunch an arbitrary <code>Bare</code> into an <em>immediate</em> value.</p>
 <p>No need to create an variables if the expression is <em>already</em> immediate:</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true"></a>imm (<span class="dt">Number</span> n l) <span class="ot">=</span> ( [], <span class="dt">Number</span> n l )</span>
-<span id="cb54-2"><a href="#cb54-2" aria-hidden="true"></a>imm (<span class="dt">Id</span>     x l) <span class="ot">=</span> ( [], <span class="dt">Id</span>     x l )</span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true"></a>imm (<span class="dt">Number</span> n l) <span class="ot">=</span> ( [], <span class="dt">Number</span> n l )</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true"></a>imm (<span class="dt">Id</span>     x l) <span class="ot">=</span> ( [], <span class="dt">Id</span>     x l )</span></code></pre></div>
 <p>The tricky case is when the expression has a primop:</p>
-<div class="sourceCode" id="cb55"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true"></a>imm (<span class="dt">Prim2</span> o e1 e2) <span class="ot">=</span> ( b1s <span class="op">++</span> b2s <span class="op">++</span> [(t,  <span class="dt">Prim2</span> o v1 v2)]</span>
-<span id="cb55-2"><a href="#cb55-2" aria-hidden="true"></a>                      , <span class="dt">Id</span> t  )</span>
-<span id="cb55-3"><a href="#cb55-3" aria-hidden="true"></a>  t                 <span class="ot">=</span> makeFreshVar ()</span>
-<span id="cb55-4"><a href="#cb55-4" aria-hidden="true"></a>  (b1s, v1)         <span class="ot">=</span> imm e1</span>
-<span id="cb55-5"><a href="#cb55-5" aria-hidden="true"></a>  (b2s, v2)         <span class="ot">=</span> imm e2  </span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true"></a>imm (<span class="dt">Prim2</span> o e1 e2) <span class="ot">=</span> ( b1s <span class="op">++</span> b2s <span class="op">++</span> [(t,  <span class="dt">Prim2</span> o v1 v2)]</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true"></a>                      , <span class="dt">Id</span> t  )</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true"></a>  t                 <span class="ot">=</span> makeFreshVar ()</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true"></a>  (b1s, v1)         <span class="ot">=</span> imm e1</span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true"></a>  (b2s, v2)         <span class="ot">=</span> imm e2  </span></code></pre></div>
 <p>Oh, what shall we do when:</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true"></a>imm (<span class="dt">If</span> e1 e2 e3)   <span class="ot">=</span> <span class="op">???</span></span>
-<span id="cb56-2"><a href="#cb56-2" aria-hidden="true"></a>imm (<span class="dt">Let</span> x e1 e2)   <span class="ot">=</span> <span class="op">???</span></span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true"></a>imm (<span class="dt">If</span> e1 e2 e3)   <span class="ot">=</span> <span class="op">???</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true"></a>imm (<span class="dt">Let</span> x e1 e2)   <span class="ot">=</span> <span class="op">???</span></span></code></pre></div>
 <p>Lets look at an example for inspiration.</p>
 <figure>
 <img src="../static/img/anf-4.png" alt /><figcaption>Example: ANF 4</figcaption>
@@ -998,14 +972,14 @@ Unfortunately, the below is _not_ in ANF
 <li><code>anf</code> the relevant expressions,</li>
 <li>bind them to a fresh variable.</li>
 </ul>
-<div class="sourceCode" id="cb57"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true"></a>imm e<span class="op">@</span>(<span class="dt">If</span> _ _ _) <span class="ot">=</span> immExp e</span>
-<span id="cb57-2"><a href="#cb57-2" aria-hidden="true"></a>imm e<span class="op">@</span>(<span class="dt">If</span> _ _ _) <span class="ot">=</span> immExp e</span>
-<span id="cb57-3"><a href="#cb57-3" aria-hidden="true"></a></span>
-<span id="cb57-4"><a href="#cb57-4" aria-hidden="true"></a><span class="ot">immExp ::</span> <span class="dt">AnfE</span> <span class="ot">-&gt;</span> ([(<span class="dt">Id</span>, <span class="dt">AnfE</span>)], <span class="dt">ImmE</span>)</span>
-<span id="cb57-5"><a href="#cb57-5" aria-hidden="true"></a>immExp e <span class="ot">=</span> ([(t, e')], t)</span>
-<span id="cb57-6"><a href="#cb57-6" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb57-7"><a href="#cb57-7" aria-hidden="true"></a>    e'   <span class="ot">=</span> anf e</span>
-<span id="cb57-8"><a href="#cb57-8" aria-hidden="true"></a>    t    <span class="ot">=</span> makeFreshVar ()</span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true"></a>imm e<span class="op">@</span>(<span class="dt">If</span> _ _ _) <span class="ot">=</span> immExp e</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true"></a>imm e<span class="op">@</span>(<span class="dt">If</span> _ _ _) <span class="ot">=</span> immExp e</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true"></a></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true"></a><span class="ot">immExp ::</span> <span class="dt">AnfE</span> <span class="ot">-&gt;</span> ([(<span class="dt">Id</span>, <span class="dt">AnfE</span>)], <span class="dt">ImmE</span>)</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true"></a>immExp e <span class="ot">=</span> ([(t, e')], t)</span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true"></a>    e'   <span class="ot">=</span> anf e</span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true"></a>    t    <span class="ot">=</span> makeFreshVar ()</span></code></pre></div>
 <h3 id="one-last-thing-whats-up-with-makefreshvar">One last thing: Whats up with <code>makeFreshVar</code> ?</h3>
 <p>Wait a minute, what is this magic <strong>FRESH</strong> ?</p>
 <p>How can we create <strong>distinct</strong> names out of thin air?</p>
@@ -1017,54 +991,54 @@ Unfortunately, the below is _not_ in ANF
 <blockquote>
 <p>Just like <code>doTag</code></p>
 </blockquote>
-<div class="sourceCode" id="cb58"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true"></a><span class="ot">anf ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">BareE</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">AnfE</span>)</span>
-<span id="cb58-2"><a href="#cb58-2" aria-hidden="true"></a></span>
-<span id="cb58-3"><a href="#cb58-3" aria-hidden="true"></a>anf i (<span class="dt">Number</span> n l)      <span class="ot">=</span> (i, <span class="dt">Number</span> n l)</span>
-<span id="cb58-4"><a href="#cb58-4" aria-hidden="true"></a></span>
-<span id="cb58-5"><a href="#cb58-5" aria-hidden="true"></a>anf i (<span class="dt">Id</span>     x l)      <span class="ot">=</span> (i, <span class="dt">Id</span>     x l)</span>
-<span id="cb58-6"><a href="#cb58-6" aria-hidden="true"></a></span>
-<span id="cb58-7"><a href="#cb58-7" aria-hidden="true"></a>anf i (<span class="dt">Let</span> x e b l)     <span class="ot">=</span> (i'', <span class="dt">Let</span> x e' b' l)</span>
-<span id="cb58-8"><a href="#cb58-8" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb58-9"><a href="#cb58-9" aria-hidden="true"></a>    (i',  e')           <span class="ot">=</span> anf i e</span>
-<span id="cb58-10"><a href="#cb58-10" aria-hidden="true"></a>    (i'', b')           <span class="ot">=</span> anf i' b</span>
-<span id="cb58-11"><a href="#cb58-11" aria-hidden="true"></a></span>
-<span id="cb58-12"><a href="#cb58-12" aria-hidden="true"></a>anf i (<span class="dt">Prim2</span> o e1 e2 l) <span class="ot">=</span> (i'', lets (b1s <span class="op">++</span> b2s) (<span class="dt">Prim2</span> o e1' e2' l))</span>
-<span id="cb58-13"><a href="#cb58-13" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb58-14"><a href="#cb58-14" aria-hidden="true"></a>    (i' , b1s, e1')     <span class="ot">=</span> imm i  e1</span>
-<span id="cb58-15"><a href="#cb58-15" aria-hidden="true"></a>    (i'', b2s, e2')     <span class="ot">=</span> imm i' e2</span>
-<span id="cb58-16"><a href="#cb58-16" aria-hidden="true"></a></span>
-<span id="cb58-17"><a href="#cb58-17" aria-hidden="true"></a>anf i (<span class="dt">If</span> c e1 e2 l)    <span class="ot">=</span> (i''', lets bs  (<span class="dt">If</span> c' e1' e2' l))</span>
-<span id="cb58-18"><a href="#cb58-18" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb58-19"><a href="#cb58-19" aria-hidden="true"></a>    (i'  , bs, c')      <span class="ot">=</span> imm i   c</span>
-<span id="cb58-20"><a href="#cb58-20" aria-hidden="true"></a>    (i'' ,     e1')     <span class="ot">=</span> anf i'  e1</span>
-<span id="cb58-21"><a href="#cb58-21" aria-hidden="true"></a>    (i''',     e2')     <span class="ot">=</span> anf i'' e2</span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true"></a><span class="ot">anf ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">BareE</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">AnfE</span>)</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true"></a></span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true"></a>anf i (<span class="dt">Number</span> n l)      <span class="ot">=</span> (i, <span class="dt">Number</span> n l)</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true"></a></span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true"></a>anf i (<span class="dt">Id</span>     x l)      <span class="ot">=</span> (i, <span class="dt">Id</span>     x l)</span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true"></a></span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true"></a>anf i (<span class="dt">Let</span> x e b l)     <span class="ot">=</span> (i'', <span class="dt">Let</span> x e' b' l)</span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true"></a>    (i',  e')           <span class="ot">=</span> anf i e</span>
+<span id="cb53-10"><a href="#cb53-10" aria-hidden="true"></a>    (i'', b')           <span class="ot">=</span> anf i' b</span>
+<span id="cb53-11"><a href="#cb53-11" aria-hidden="true"></a></span>
+<span id="cb53-12"><a href="#cb53-12" aria-hidden="true"></a>anf i (<span class="dt">Prim2</span> o e1 e2 l) <span class="ot">=</span> (i'', lets (b1s <span class="op">++</span> b2s) (<span class="dt">Prim2</span> o e1' e2' l))</span>
+<span id="cb53-13"><a href="#cb53-13" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb53-14"><a href="#cb53-14" aria-hidden="true"></a>    (i' , b1s, e1')     <span class="ot">=</span> imm i  e1</span>
+<span id="cb53-15"><a href="#cb53-15" aria-hidden="true"></a>    (i'', b2s, e2')     <span class="ot">=</span> imm i' e2</span>
+<span id="cb53-16"><a href="#cb53-16" aria-hidden="true"></a></span>
+<span id="cb53-17"><a href="#cb53-17" aria-hidden="true"></a>anf i (<span class="dt">If</span> c e1 e2 l)    <span class="ot">=</span> (i''', lets bs  (<span class="dt">If</span> c' e1' e2' l))</span>
+<span id="cb53-18"><a href="#cb53-18" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb53-19"><a href="#cb53-19" aria-hidden="true"></a>    (i'  , bs, c')      <span class="ot">=</span> imm i   c</span>
+<span id="cb53-20"><a href="#cb53-20" aria-hidden="true"></a>    (i'' ,     e1')     <span class="ot">=</span> anf i'  e1</span>
+<span id="cb53-21"><a href="#cb53-21" aria-hidden="true"></a>    (i''',     e2')     <span class="ot">=</span> anf i'' e2</span></code></pre></div>
 <p>and</p>
-<div class="sourceCode" id="cb59"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true"></a><span class="ot">imm ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">AnfE</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, [(<span class="dt">Id</span>, <span class="dt">AnfE</span>)], <span class="dt">ImmE</span>)</span>
-<span id="cb59-2"><a href="#cb59-2" aria-hidden="true"></a></span>
-<span id="cb59-3"><a href="#cb59-3" aria-hidden="true"></a>imm i (<span class="dt">Number</span> n l)        <span class="ot">=</span> (i  , [], <span class="dt">Number</span> n l)</span>
-<span id="cb59-4"><a href="#cb59-4" aria-hidden="true"></a></span>
-<span id="cb59-5"><a href="#cb59-5" aria-hidden="true"></a>imm i (<span class="dt">Var</span> x l)           <span class="ot">=</span> (i  , [], <span class="dt">Var</span> x l)</span>
-<span id="cb59-6"><a href="#cb59-6" aria-hidden="true"></a></span>
-<span id="cb59-7"><a href="#cb59-7" aria-hidden="true"></a>imm i (<span class="dt">Prim2</span> o e1 e2 l) <span class="ot">=</span> (i''', bs, <span class="dt">Var</span> v l)</span>
-<span id="cb59-8"><a href="#cb59-8" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb59-9"><a href="#cb59-9" aria-hidden="true"></a>    (i'  , b1s, v1)     <span class="ot">=</span> imm i  e1</span>
-<span id="cb59-10"><a href="#cb59-10" aria-hidden="true"></a>    (i'' , b2s, v2)     <span class="ot">=</span> imm i' e2</span>
-<span id="cb59-11"><a href="#cb59-11" aria-hidden="true"></a>    (i''', v)           <span class="ot">=</span> fresh i''</span>
-<span id="cb59-12"><a href="#cb59-12" aria-hidden="true"></a>    bs                  <span class="ot">=</span> b1s <span class="op">++</span> b2s <span class="op">++</span> [(v, <span class="dt">Prim2</span> o v1 v2 l)]</span>
-<span id="cb59-13"><a href="#cb59-13" aria-hidden="true"></a></span>
-<span id="cb59-14"><a href="#cb59-14" aria-hidden="true"></a>imm i e<span class="op">@</span>(<span class="dt">If</span> _ _ _  l)   <span class="ot">=</span> immExp i e</span>
-<span id="cb59-15"><a href="#cb59-15" aria-hidden="true"></a></span>
-<span id="cb59-16"><a href="#cb59-16" aria-hidden="true"></a>imm i e<span class="op">@</span>(<span class="dt">Let</span> _ _ _ l)   <span class="ot">=</span> immExp i e</span>
-<span id="cb59-17"><a href="#cb59-17" aria-hidden="true"></a></span>
-<span id="cb59-18"><a href="#cb59-18" aria-hidden="true"></a><span class="ot">immExp ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">BareE</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, [(<span class="dt">Id</span>, <span class="dt">AnfE</span>)], <span class="dt">ImmE</span>)</span>
-<span id="cb59-19"><a href="#cb59-19" aria-hidden="true"></a>immExp i e l  <span class="ot">=</span> (i'', bs, <span class="dt">Var</span> v ())</span>
-<span id="cb59-20"><a href="#cb59-20" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb59-21"><a href="#cb59-21" aria-hidden="true"></a>    (i' , e') <span class="ot">=</span> anf i e</span>
-<span id="cb59-22"><a href="#cb59-22" aria-hidden="true"></a>    (i'', v)  <span class="ot">=</span> fresh i'</span>
-<span id="cb59-23"><a href="#cb59-23" aria-hidden="true"></a>    bs        <span class="ot">=</span> [(v, e')]</span></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true"></a><span class="ot">imm ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">AnfE</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, [(<span class="dt">Id</span>, <span class="dt">AnfE</span>)], <span class="dt">ImmE</span>)</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true"></a></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true"></a>imm i (<span class="dt">Number</span> n l)        <span class="ot">=</span> (i  , [], <span class="dt">Number</span> n l)</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true"></a></span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true"></a>imm i (<span class="dt">Var</span> x l)           <span class="ot">=</span> (i  , [], <span class="dt">Var</span> x l)</span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true"></a></span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true"></a>imm i (<span class="dt">Prim2</span> o e1 e2 l) <span class="ot">=</span> (i''', bs, <span class="dt">Var</span> v l)</span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb54-9"><a href="#cb54-9" aria-hidden="true"></a>    (i'  , b1s, v1)     <span class="ot">=</span> imm i  e1</span>
+<span id="cb54-10"><a href="#cb54-10" aria-hidden="true"></a>    (i'' , b2s, v2)     <span class="ot">=</span> imm i' e2</span>
+<span id="cb54-11"><a href="#cb54-11" aria-hidden="true"></a>    (i''', v)           <span class="ot">=</span> fresh i''</span>
+<span id="cb54-12"><a href="#cb54-12" aria-hidden="true"></a>    bs                  <span class="ot">=</span> b1s <span class="op">++</span> b2s <span class="op">++</span> [(v, <span class="dt">Prim2</span> o v1 v2 l)]</span>
+<span id="cb54-13"><a href="#cb54-13" aria-hidden="true"></a></span>
+<span id="cb54-14"><a href="#cb54-14" aria-hidden="true"></a>imm i e<span class="op">@</span>(<span class="dt">If</span> _ _ _  l)   <span class="ot">=</span> immExp i e</span>
+<span id="cb54-15"><a href="#cb54-15" aria-hidden="true"></a></span>
+<span id="cb54-16"><a href="#cb54-16" aria-hidden="true"></a>imm i e<span class="op">@</span>(<span class="dt">Let</span> _ _ _ l)   <span class="ot">=</span> immExp i e</span>
+<span id="cb54-17"><a href="#cb54-17" aria-hidden="true"></a></span>
+<span id="cb54-18"><a href="#cb54-18" aria-hidden="true"></a><span class="ot">immExp ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">BareE</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, [(<span class="dt">Id</span>, <span class="dt">AnfE</span>)], <span class="dt">ImmE</span>)</span>
+<span id="cb54-19"><a href="#cb54-19" aria-hidden="true"></a>immExp i e l  <span class="ot">=</span> (i'', bs, <span class="dt">Var</span> v ())</span>
+<span id="cb54-20"><a href="#cb54-20" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb54-21"><a href="#cb54-21" aria-hidden="true"></a>    (i' , e') <span class="ot">=</span> anf i e</span>
+<span id="cb54-22"><a href="#cb54-22" aria-hidden="true"></a>    (i'', v)  <span class="ot">=</span> fresh i'</span>
+<span id="cb54-23"><a href="#cb54-23" aria-hidden="true"></a>    bs        <span class="ot">=</span> [(v, e')]</span></code></pre></div>
 <p>where now, the <code>fresh</code> function returns a <em>new counter</em> and a variable</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true"></a><span class="ot">fresh ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Id</span>)</span>
-<span id="cb60-2"><a href="#cb60-2" aria-hidden="true"></a>fresh n <span class="ot">=</span> (n<span class="op">+</span><span class="dv">1</span>, <span class="st">&quot;t&quot;</span> <span class="op">++</span> <span class="fu">show</span> n)</span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true"></a><span class="ot">fresh ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Id</span>)</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true"></a>fresh n <span class="ot">=</span> (n<span class="op">+</span><span class="dv">1</span>, <span class="st">&quot;t&quot;</span> <span class="op">++</span> <span class="fu">show</span> n)</span></code></pre></div>
 <p><strong>Note</strong> this is super clunky. There <em>is</em> a really slick way to write the above code without the clutter of the <code>i</code> but thats too much of a digression, <a href="https://cseweb.ucsd.edu/classes/wi12/cse230-a/lectures/monads.html">but feel free to look it up yourself</a></p>
 <h2 id="recap-and-summary">Recap and Summary</h2>
 <p>Just created <code>Boa</code> with</p>
@@ -1080,7 +1054,44 @@ Unfortunately, the below is _not_ in ANF
 <p>Specifically,</p>
 <figure>
 <img src="../static/img/compiler-pipeline-anf-types.png" alt /><figcaption>Compiler Pipeline with ANF</figcaption>
-</figure>	
+</figure>
+<!--
+```haskell
+let x = 10        -- position 1 on stack
+  , y = 20        -- position 2 on stack
+  , z = 30        -- position 3 on stack
+in
+   x + (y * z)
+```
+
+```haskell
+let x = 10        -- position 1 on stack
+  , y = 20        -- position 2 on stack
+  , z = 30        -- position 3 on stack
+  , tmp = y * z
+in
+   x + tmp
+```
+
+
+
+```nasm
+mov eax, 10
+mov [ebp - 4*1], eax    ; put x on stack
+mov eax, 20
+mov [ebp - 4*2], eax    ; put y on stack
+mov eax, 30
+mov [ebp - 4*3], eax    ; put z on stack
+
+mov eax, [ebp - 4*2]    ; grab y 
+mul eax, [ebp - 4*3]    ; mul by z 
+mov [ebp - 4*4], eax    ; put tmp on stack
+
+mov eax, [ebp - 4*1]    ; grab x
+add eax, [ebp - 4*4]
+```
+
+-->	
                 <hr>
             </div>
         </div>

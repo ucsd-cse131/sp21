@@ -1085,9 +1085,6 @@ data Instruction
 
 ## Types: ANF
 
-
-**FIXME-HEREHEREHERE**
-
 We _can_ define a separate type for ANF (try it!)
 
 ... but ...
