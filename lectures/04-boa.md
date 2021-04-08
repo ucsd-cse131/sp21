@@ -1104,7 +1104,18 @@ We can now think of **immediate** expressions as:
 
 > The _subset_ of `Expr` _such that_ `isImm` returns `True`
 
-### QUIZ
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## QUIZ
 
 Similarly, lets write a function that describes **ANF** expressions
 
@@ -1137,15 +1148,15 @@ isAnf (Number  _     _) = True
 isAnf (Var     _     _) = True
 isAnf (Prim1 _ e1 _)    = isAnf e1 
 isAnf (Prim2 _ e1 e2 _) = isImm e1 && isImm e2 
-isAnf (If e1 e2 e3   _) = isANF e1 && isANF e2 && isANF e3
+isAnf (If e1 e2 e3   _) = _2       && isANF e2 && isANF e3
 isAnf (Let x e1 e2   _) = isANF e1 && isANF e2 
 ```
 
 What should we fill in for `_2`?
 
 ```haskell
-{- A -} isAnf e1      -- <<<<
-{- B -} isImm e1      -- <<<<
+{- A -} isAnf e1
+{- B -} isImm e1
 {- C -} True
 {- D -} False
 ```
@@ -1157,81 +1168,16 @@ We can now think of **ANF** expressions as:
 
 Use the above function to **test** our ANF conversion.
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-```haskell 
-immArg :: Env -> ImmExpr -> Arg
-immArg env (Number n _) = Const n
-immArg env (Id x _)     = RegOffset EBP (lookupEnv env x)
-
-compileImm :: Env -> ImmExpr Tag -> [Instruction]
-compileImm env v  = [IMov (Reg EAX) (immArg env v) ]
-
-compile :: Env -> AnfExpr Tag -> [Instruction]
-compile env v@(Number {})  = compileImm env v
-compile env v@(Id _ _)     = compileImm env v 
-compile env (Prim1 op e)   = compile env e
-                          ++ [ (prim1Asm op (Reg EAX) (Const 1)]
-compile env (Prim2 op v1 v2) = [ compileImm env v1 
-                               , prim2asm o (Reg EAX) (immArg env v2) 
-                               ]
-
-prim2Asm Add2 = IAdd
-prim2Asm Sub2 = ISub
-prim2Asm Mul2 = IMul
-
-prim1Asm Add1 = IAdd
-prim1Asm Sub1 = ISub
-
-
-anf :: Int -> Expr a -> (Int, AnfExpr a)
-anf i p@(Number {}) = (i, p)
-anf i v@(Id {})     = (i, v)
-anf i (Prim1 o e)   = (i', Prim1 o e') 
-  where 
-    (i', e')        = anf i e
-
-anf i (Prim2 o e1 e2) = (i2, mkLet (bs1 ++ bs2) (Prim2 o v1 v2))
-  where
-     (i1, (bs1, v1))  = imm i  e1
-     (i2, (bs2, v2))  = imm i1 e2
-
-anf i (Let x  e1 e2)  = (i2, Let x e1' e2')
-  where 
-     (i1, e1')        = anf i e1
-     (i2, e2')        = anf i1 e2
-
-anf i (If  e1 e2 e3)  = (i3, If e1' e2' e3')
-  where 
-     (i1, e1')        = anf i e1
-     (i2, e2')        = anf i1 e2
-     (i3, e3')        = anf i2 e3
-
-imm :: Int -> Expr a -> (Int, ([(Id , AnfExpr a)] , ImmExpr a))
-imm i e@(Number {}) = (i, ([], e))
-imm i e@(Id {})     = (i, ([], e))
-imm i e@(Prim1 {})  = immExp i e
-imm i e@(If {})     = immExp i e
-imm i e@(Let {})    = immExp i e
-
-imm i (Prim2 o e1 e2) = (i2+1, ((v, Prim2 o v1 v2) : bs2 ++ bs1, Id v))
-  where
-    (i1, (bs1, v1)) = imm i e1
-    (i2, (bs2, v2)) = imm i1 e2
-    v               = mkTmpVar i2
-
-mkTmpVar i = "tmp" ++ show i
-
-mkLet :: [(Id , AnfExpr a)] -> AnfExpr a -> AnfExpr a
-mkLet []              e = e
-mkLet ((x1, e1) : bs) e = Let x1 e1 (mkLet bs e)
-
-immExp i e  = (i' + 1, ([(v, e')], v))
-  where
-    (i',e') = anf e
-    v       = mkTmpVar i'
-```
-
-### Types & Strategy
+## Types & Strategy
 
 Writing the type aliases:
 
@@ -1246,8 +1192,18 @@ we get the overall pipeline:
 
 ![Compiler Pipeline with ANF: Types](/static/img/compiler-pipeline-anf-types.png)
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-### Transforms: Compiling `AnfTagE` to `Asm`
+## Transforms: Compiling `AnfTagE` to `Asm`
 
 ![Compiler Pipeline: ANF to ASM](/static/img/compiler-pipeline-anf-to-asm.png)
 
@@ -1286,7 +1242,19 @@ immArg env (Var    x _) = RegOffset ESP i
     err                 = error (printf "Error: Variable '%s' is unbound" x)
 ```
 
-### QUIZ
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## QUIZ
 
 Which of the below are in ANF ?
 
@@ -1318,13 +1286,41 @@ Which of the below are in ANF ?
 
 * **E.** `2, 3`
 
-### Transforms: Compiling `Bare` to `Anf`
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Transforms: Compiling `Bare` to `Anf`
 
 Next lets focus on **A-Normalization** i.e. transforming expressions into ANF
 
 ![Compiler Pipeline: Bare to ANF](/static/img/compiler-pipeline-bare-to-anf.png)
 
-### A-Normalization
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## A-Normalization
 
 We can fill in the base cases easily
 
@@ -1335,7 +1331,21 @@ anf (Var x)         = Var x
 
 Interesting cases are the binary operations
 
-#### Example: Anf-1
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+### Example: Anf-1
 
 Left operand is not immediate
 
@@ -1349,7 +1359,7 @@ imm :: BareE -> ([(Id, AnfE)], ImmE)
 
 `imm e` returns `([(t1, a1),...,(tn, an)], v)` where
 
-* `ti, ai` are new temporary variables bound to ANF exprs,
+* `ti, ai` are new temporary variables bound to ANF expressions
 * `v` is an **immediate value** (either a constant or variable)
 
 Such that `e` is _equivalent to_
@@ -1364,29 +1374,80 @@ in
 
 Lets look at some more examples.
 
-#### Example: Anf-2
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+### Example: Anf-2
 
 Left operand is not internally immediate
 
 ![Example: ANF 2](/static/img/anf-2.png)
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-#### Example: Anf-3
+
+### Example: Anf-3
 
 Both operands are not immediate
 
 ![Example: ANF 3](/static/img/anf-3.png)
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-### ANF: General Strategy
+## ANF: General Strategy
 
 ![ANF Strategy](/static/img/anf-strategy.png)
 
 1. **Invoke** `imm` on both the operands
 2. **Concat** the `let` bindings
-3. **Apply** the binop to the immediate values
+3. **Apply** the binary operator to the immediate values
 
-### ANF: Implementation
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+### ANF Implementation: Binary Operations
 
 Lets implement the above strategy
 
@@ -1402,13 +1463,25 @@ lets []         e' = e
 lets ((x,e):bs) e' = Let x e (lets bs e')
 ```
 
-Intuitively, `lets` _stitches_ together a bunch of definitions 
-as follows: 
+Intuitively, `lets` _stitches_ together a bunch of definitions: 
 
 ```haskell
 lets [(x1, e1), (x2, e2), (x3, e3)] e
   ===> Let x1 e1 (Let x2 e2 (Let x3 e3 e))
 ```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+### ANF Implementation: Let-bindings
 
 For `Let` just make sure we recursively `anf`
 the sub-expressions.
@@ -1419,6 +1492,20 @@ anf (Let x e1 e2)   = Let x e1' e2'
     e1'             = anf e1
     e2'             = anf e2
 ```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+### ANF Implementation: Branches
 
 Same principle applies to `If`
 
@@ -1432,6 +1519,18 @@ anf (If e1 e2 e3) = If e1' e2' e3'
     e3'           = anf e3
 ```
 
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ### ANF: Making Arguments Immediate via `imm`
 
@@ -1452,7 +1551,7 @@ imm (Number n l) = ( [], Number n l )
 imm (Id     x l) = ( [], Id     x l )
 ```
 
-The tricky case is when the expression has a primop:
+The tricky case is when the expression has a primitive operation:
 
 ```haskell
 imm (Prim2 o e1 e2) = ( b1s ++ b2s ++ [(t,  Prim2 o v1 v2)]
@@ -1479,27 +1578,36 @@ That is, simply
 * bind them to a fresh variable.
 
 ```haskell
-imm e@(If _ _ _) = immExp e
-imm e@(If _ _ _) = immExp e
+imm e@(If _ _ _)  = immExp e
+imm e@(Let _ _ _) = immExp e
 
-immExp :: AnfE -> ([(Id, AnfE)], ImmE)
+immExp :: Expr -> ([(Id, AnfE)], ImmE)
 immExp e = ([(t, e')], t)
   where
     e'   = anf e
     t    = makeFreshVar ()
 ```
 
-### One last thing: Whats up with `makeFreshVar` ?
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## One last thing: Whats up with `makeFreshVar` ?
 
 Wait a minute, what is this magic **FRESH** ?
 
 How can we create **distinct** names out of thin air?
 
-What's that? Global variables? Increment a counter?
+(Sorry, no "global variables" in Haskell...)
 
-![Get thee behind me Satan!](/static/img/dr-evil.jpg)
-
-We will use a counter, but will have to **pass its value around**
+We will use a counter, but will **pass its value around**
 
 > Just like `doTag`
 
@@ -1565,6 +1673,20 @@ fresh n = (n+1, "t" ++ show n)
 **Note** this is super clunky. There _is_ a really slick way to write the above
 code without the clutter of the `i` but thats too much of a digression,
 [but feel free to look it up yourself][monad-230]
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ## Recap and Summary
 
