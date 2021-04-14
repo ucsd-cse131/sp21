@@ -1,6 +1,6 @@
 ---
 title: Data Representation
-date: 2016-10-17
+date: 2021-4-15
 headerImg: cobra.jpg
 ---
 
@@ -14,6 +14,17 @@ In the process of doing so, we will learn about
 * **Tagged Representations**
 * **Calling Conventions**
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 ## Plan
 
 Our plan will be to (start with `boa`) and add the following features:
@@ -26,27 +37,74 @@ Our plan will be to (start with `boa`) and add the following features:
 
 4. **Dynamic Checking** (to ensure operators are well behaved)
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 ## 1. Representation
 
 ### Motivation: Why booleans?
 
-In the year 2018, its a bit silly to use
+In the year 2021, its a bit silly to use
 
 + `0` for `false` and
 + non-zero for `true`.
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 But really, `boolean` is a stepping stone to other data
 
-+ Pointers,
-+ Tuples,
-+ Structures,
-+ Closures.
++ Pointers
++ Tuples
++ Structures
++ Closures
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ### The Key Issue
 
 How to _distinguish_ numbers from booleans?
 
 * Need to store some _extra_ information to mark values as `number` or `bool`.
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ### Option 1: Use _Two_ Words
 
@@ -73,6 +131,18 @@ Cons
 
 In short, rather wasteful. Don't need _so many_ types.
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 ### Option 2: Use a _Tag Bit_
 
 Can distinguish _two_ types with a _single bit_.
@@ -83,6 +153,19 @@ Can distinguish _two_ types with a _single bit_.
 * `1` for `boolean`
 
 (Hmm, why not `0` for `boolean` and `1` for `number`?)
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ### Tag Bit: Numbers
 
@@ -109,6 +192,19 @@ Or in HEX,
 |      `12`|          `[0x00000018]`|
 |      `42`|          `[0x00000054]`|
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 ### Tag Bit: Booleans
 
 *Most Significant Bit* (MSB) is
@@ -130,6 +226,17 @@ Or, in HEX
 |    `true`|          `[0x80000001]`|
 |   `false`|          `[0x00000001]`|
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ### Types
 
@@ -160,6 +267,17 @@ So, our examples become:
 |      `Number 12`|   `HexConst 0x0000000c`|
 |      `Number 42`|   `HexConst 0x0000002a`|
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ### Transforms
 
@@ -170,6 +288,17 @@ Next, lets update our implementation
 The `parse`, `anf` and `tag` stages are straightforward.
 
 Lets focus on the `compile` function.
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 #### A TypeClass for Representing Constants
 
@@ -192,11 +321,21 @@ instance Repr Bool where
   repr True  = HexConst 0x80000001
 ```  
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 #### Immediate Values to Arguments
 
 `Boolean b` is an _immediate_ value (like `Number n`).
 
-Lets extend `immArg` that tranforms an immediate expression to an x86 argument.
+Lets extend `immArg` that transforms an immediate expression to an x86 argument.
 
 ```haskell
 immArg :: Env -> ImmTag -> Arg
@@ -204,6 +343,19 @@ immArg (Var    x _)  = ...
 immArg (Number n _)  = repr n
 immArg (Boolean b _) = repr b
 ```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 #### Compiling Constants
 
@@ -219,6 +371,17 @@ compileEnv _ e@(Boolean _ _) = [IMov (Reg EAX) (immArg env e)]
 
 Lets run some tests to double check.
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 ### QUIZ
 
 What is the result of:
@@ -227,16 +390,32 @@ What is the result of:
 ghci> exec "15"
 ```
 
-* **A** Error
-* **B** `0`
-* **C** `15`
-* **D** `30`
+**A.** Error
+
+**B.** `0`
+
+**C.** `15`
+
+**D.** `30`
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 
 ### Output Representation
 
-
-Say what?! Ah. Need to update our run-time printer in `main.c`
+Say what?! Need to update our run-time printer in `main.c`
 
 ```c
 void print(int val){
@@ -266,11 +445,27 @@ What is the result of
 ghci> exec "let x = 15 in x"
 ```
 
-* **A** Error
-* **B** `0`
-* **C** `15`
-* **D** `30`
+**A.** Error
 
+**B.** `0`
+
+**C.** `15`
+
+**D.** `30`
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ### QUIZ
 
@@ -280,10 +475,25 @@ What is the result of
 ghci> exec "if 3: 12 else: 49"
 ```
 
-* **A** Error
-* **B** `0`
-* **C** `12`
-* **D** `49`
+**A.** Error
+
+**B.** `0`
+
+**C.** `12`
+
+**D.** `49`
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ## 2. Arithmetic Operations
 
@@ -300,11 +510,27 @@ What will be the result of:
 ghci> exec "12 + 4"
 ```
 
-1. Does not compile
-2. Run-time error (e.g. segmentation fault)
-3. `16`
-4. `32`
-5. `0`
+**A.** Does not compile
+
+**B.** Run-time error (e.g. segmentation fault)
+
+**C.** `16`
+
+**D.** `32`
+
+**E.** `0`
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ### Shifted Representation and Addition
 

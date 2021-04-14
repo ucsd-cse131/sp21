@@ -9,6 +9,8 @@ headerImg: books.jpg
 |            | Crash course in Haskell       | [html][lec2] [md][md2] |             | [code][cod2]   |
 |            | Numbers, UnaryOps, Variables  | [html][lec3] [md][md3] | [pdf][pdf3] | [code][cod3]   |
 | 4/6        | Branches and Binary Operators | [html][lec4] [md][md4] | [pdf][pdf4] | [code][cod4]   |
+| 4/8        | ""			     | 			      | [pdf][pdf5] |                |
+| 4/13        | ""			     | 			      | [pdf][pdf6] |                |
 
 <!-- 
 | 10/15      | Branches and Binary Operators | [html][lec4] [md][md4] |             | [code][cod4]   |
@@ -34,6 +36,8 @@ headerImg: books.jpg
 [md4]:  http://github.com/ucsd-cse131/sp21/blob/main/lectures/04-boa.md
 [cod4]: https://github.com/ucsd-cse131/02-boa
 [pdf4]: static/img/04-boa-A.pdf
+[pdf5]: static/img/04-boa-B.pdf
+[pdf6]: static/img/04-boa-C.pdf
 
 [lec5]: lectures/05-cobra.html
 [md5]:  http://github.com/ucsd-progsys/131-web/blob/master/lectures/05-cobra.md

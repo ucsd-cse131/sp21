@@ -870,9 +870,13 @@ Need to **save** `1 + 2` somewhere!
 <br>
 
 
-
 But then what about `(1 + 2) * (3 + 4) * (5 + 6)` ?
+
 * In general, may need to _save_ more sub-expressions than we have registers.
+
+**Question:** 
+
+Why are `1 + 2` and `x + y` so easy to compile but `(1 + 2) * (3 + 4)` not?
 
 <br>
 <br>
@@ -892,6 +896,7 @@ Why were `1 + 2` and `x + y` so easy to compile but `(1 + 2) * (3 + 4)` not?
 As `1` and `x` are **immediate expressions**: their values don't require any computation!
 
 * Either a **constant**, or,
+
 * **variable** whose value is on the stack.
 
 <br>
@@ -910,7 +915,7 @@ As `1` and `x` are **immediate expressions**: their values don't require any com
 
 An expression is in **Administrative Normal Form (ANF)**
 
-> if all **primitive operations** have **immediate** arguments.
+> ANF means all **primitive operations** have **immediate** arguments.
 
 **Primitive Operations:** Those whose values we _need_ for computation to proceed.
 
@@ -930,6 +935,8 @@ An expression is in **Administrative Normal Form (ANF)**
 
 
 ## QUIZ
+
+> ANF means all **primitive operations** have **immediate** arguments.
 
 Is the following expression in ANF?
 
@@ -970,17 +977,17 @@ Is the following expression in ANF?
 
 ## Conversion to ANF
 
-So, the below is _not_ in ANF as `*` has _non-immediate_ arguments
+So, the below is _not_ in ANF as `*` has **non-immediate** arguments
 
 ```haskell
-(1 + 2) * (3 + 4)
+(1 + 2) * (4 - 3)
 ```
 
 However, note the following variant _is_ in ANF
 
 ```haskell
 let t1 = 1 + 2
-  , t2 = 3 + 4
+  , t2 = 4 - 3
 in  
     t1 * t2
 ```
@@ -1102,7 +1109,11 @@ isImm _            = False
 
 We can now think of **immediate** expressions as:
 
-> The _subset_ of `Expr` _such that_ `isImm` returns `True`
+```haskell
+type ImmExpr = {e:Expr | isImm e == True}
+```
+
+The _subset_ of `Expr` _such that_ `isImm` returns `True`
 
 <br>
 <br>
@@ -1118,6 +1129,8 @@ We can now think of **immediate** expressions as:
 ## QUIZ
 
 Similarly, lets write a function that describes **ANF** expressions
+
+> ANF means all **primitive operations** have **immediate** arguments.
 
 ```haskell
 isAnf :: Expr a -> Bool
@@ -1138,9 +1151,24 @@ What should we fill in for `_1`?
 {- E -} isImm e2
 ```
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 ### QUIZ
 
 Similarly, lets write a function that describes **ANF** expressions
+
+> ANF means all **primitive operations** have **immediate** arguments.
 
 ```haskell
 isAnf :: Expr a -> Bool
@@ -1164,7 +1192,11 @@ What should we fill in for `_2`?
 
 We can now think of **ANF** expressions as:
 
-> The _subset_ of `Expr` _such that_ `isAnf` returns `True`
+```haskell
+type AnfExpr = {e:Expr | isAnf e == True}
+```
+
+The _subset_ of `Expr` _such that_ `isAnf` returns `True`
 
 Use the above function to **test** our ANF conversion.
 
@@ -1207,9 +1239,29 @@ we get the overall pipeline:
 
 ![Compiler Pipeline: ANF to ASM](/static/img/compiler-pipeline-anf-to-asm.png)
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 The compilation from ANF is easy, lets recall our examples and strategy:
 
 Strategy: Given `v1 + v2` (where `v1` and `v2` are **immediate expressions**)
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 * Move `v1` into `eax`,
 * Add `v2` to `eax`.
@@ -1236,10 +1288,10 @@ and another to convert an _immediate expression_ to an x86 argument:
 ```haskell
 immArg :: Env -> ImmTag -> Arg
 immArg _   (Number n _) = Const n
-immArg env (Var    x _) = RegOffset ESP i
+immArg env (Var    x _) = RegOffset RBP i
   where
     i                   = fromMaybe err (lookup x env)
-    err                 = error (printf "Error: Variable '%s' is unbound" x)
+    err                 = error (printf "Error: '%s' is unbound" x)
 ```
 
 <br>
