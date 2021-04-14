@@ -8,14 +8,12 @@ headerImg: books.jpg
 | 3/30       | Introduction                  | [html][lec1] [md][md1] |             |                |
 |            | Crash course in Haskell       | [html][lec2] [md][md2] |             | [code][cod2]   |
 |            | Numbers, UnaryOps, Variables  | [html][lec3] [md][md3] | [pdf][pdf3] | [code][cod3]   |
-| 4/6        | Branches and Binary Operators | [html][lec4] [md][md4] | [pdf][pdf4] | [code][cod4]   |
-| 4/8        | "" | "" | [pdf][pdf5] | "" |
-| 4/13       | "" | "" | [pdf][pdf6] | "" |
-
+| 4/6        | Branches and Binary Operators | [html][lec4] [md][md4] | [pdf][pdf4a] | [code][cod4]   |
+| 4/8        | "" | "" | [pdf][pdf4b] | "" |
+| 4/13       | "" | "" | [pdf][pdf4c] | "" |
+| 4/15       | Data Representation           | [html][lec5] [md][md5] | [pdf][pdf5a] | [code][cod5]   |
 
 <!-- 
-| 10/15      | Branches and Binary Operators | [html][lec4] [md][md4] |             | [code][cod4]   |
-| 10/24      | Data Representation           | [html][lec5] [md][md5] |             | [code][cod5]   |
 | 11/5       | Functions                     | [html][lec6] [md][md6] |             | [code][cod6]   |
 | 11/19      | Heap Data                     | [html][lec7] [md][md7] |             | [code][cod7]   |
 | 11/28      | Garbage Collection            | [html][lec8] [md][md8] | [pdf][pdf8] | [code][cod8]   |
@@ -36,13 +34,14 @@ headerImg: books.jpg
 [lec4]: lectures/04-boa.html
 [md4]:  http://github.com/ucsd-cse131/sp21/blob/main/lectures/04-boa.md
 [cod4]: https://github.com/ucsd-cse131/02-boa
-[pdf4]: static/img/04-boa-A.pdf
-[pdf5]: static/img/04-boa-B.pdf
-[pdf6]: static/img/04-boa-C.pdf
+[pdf4a]: static/img/04-boa-A.pdf
+[pdf4b]: static/img/04-boa-B.pdf
+[pdf4c]: static/img/04-boa-C.pdf
 
 [lec5]: lectures/05-cobra.html
-[md5]:  http://github.com/ucsd-progsys/131-web/blob/master/lectures/05-cobra.md
-[cod5]: https://github.com/ucsd-cse131-fa18/03-cobra
+[md5]:  http://github.com/ucsd-cse131/sp21/blob/main/lectures/05-cobra.md
+[cod5]: https://github.com/ucsd-cse131/03-cobra
+[pdf5a]: static/img/05-cobra-A.pdf
 
 [lec6]: lectures/06-diamond.html
 [md6]:  http://github.com/ucsd-progsys/131-web/blob/master/lectures/06-diamond.md

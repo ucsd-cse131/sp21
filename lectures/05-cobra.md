@@ -87,11 +87,11 @@ But really, `boolean` is a stepping stone to other data
 <br>
 <br>
 
-### The Key Issue
+## The Key Issue
 
 How to _distinguish_ numbers from booleans?
 
-* Need to store some _extra_ information to mark values as `number` or `bool`.
+* Need _extra_ information to mark values as `number` or `bool`.
 
 <br>
 <br>
@@ -106,7 +106,39 @@ How to _distinguish_ numbers from booleans?
 <br>
 <br>
 
-### Option 1: Use _Two_ Words
+## A Word 
+
+(A reminder for me, since I always get mixed up)
+
+- A *Bit*  is 1-bit  
+- A *Byte* is 8-bits 
+- A *Word* is 2-bytes = 16 bits 
+- A *Double Word* is 2-words = 4-bytes = 32 bits 
+- A *Quad   Word* is 4-words = 8-bytes = 64 bits
+
+We are working in `x86_64` where the _default_ size is a `qword`
+
+- Registers are 64-bits
+- Arithmetic is 64-bits 
+- Stack slots should be 64-bits
+- etc.
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+## Option 1: Use _Two_ (Quad-)Words
+
+How to _distinguish_ numbers from booleans?
+
+> Need _extra_ information to mark values as `number` or `bool`.
 
 First word is `0` means `bool`, is `1` means `number`, `2` means pointer etc.
 
@@ -120,16 +152,29 @@ First word is `0` means `bool`, is `1` means `number`, `2` means pointer etc.
 |   `false`|    `[0x000000001][0x00000000]`|
 |    `true`|    `[0x000000001][0x00000001]`|
 
-Pros
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+**Pros**
 
 * Can have _lots_ of different types, but
 
-Cons
+**Cons**
 
 * Takes up _double_ memory,
-* Operators `+`, `-` do _two_ memory reads `[eax]`, `[eax - 4]`.
 
-In short, rather wasteful. Don't need _so many_ types.
+* Operators `+`, `-` require _two_ memory reads.
+
+In short, rather wasteful! We don't need **so many** types.
 
 <br>
 <br>
@@ -143,7 +188,7 @@ In short, rather wasteful. Don't need _so many_ types.
 <br>
 <br>
 
-### Option 2: Use a _Tag Bit_
+## Option 2: Use a _Tag Bit_
 
 Can distinguish _two_ types with a _single bit_.
 
@@ -152,7 +197,7 @@ Can distinguish _two_ types with a _single bit_.
 * `0` for `number`
 * `1` for `boolean`
 
-(Hmm, why not `0` for `boolean` and `1` for `number`?)
+**Question**: why not `0` for `boolean` and `1` for `number`?
 
 <br>
 <br>
@@ -167,30 +212,30 @@ Can distinguish _two_ types with a _single bit_.
 <br>
 <br>
 
-### Tag Bit: Numbers
+## Tag Bit: Numbers
 
 So `number` is the binary representation shifted left by 1 bit
 
 * Lowest bit is always `0`
 * Remaining bits are number's binary representation
 
-For example,
+For example, in binary:
 
-|    Value |               Representation (Binary) |
-|---------:|--------------------------------------:|
-|       `3`| `[0b00000000000000000000000000000110]`|
-|       `5`| `[0b00000000000000000000000000001010]`|
-|      `12`| `[0b00000000000000000000000000011000]`|
-|      `42`| `[0b00000000000000000000000001010100]`|
+|    Value |  Representation (Binary) |
+|---------:|-------------------------:|
+|       `3`| `[0b00000110]`           |
+|       `5`| `[0b00001010]`           |
+|      `12`| `[0b00011000]`           |
+|      `42`| `[0b01010100]`           |
 
-Or in HEX,
+Or in hexadecimal:
 
 |    Value |   Representation (HEX) |
-|----------|-------------------------
-|       `3`|          `[0x00000006]`|
-|       `5`|          `[0x0000000a]`|
-|      `12`|          `[0x00000018]`|
-|      `42`|          `[0x00000054]`|
+|---------:|-----------------------:|
+|       `3`|  `[0x06]`              |
+|       `5`|  `[0x0a]`              |
+|      `12`|  `[0x18]`              |
+|      `42`|  `[0x54]`              |
 
 <br>
 <br>
@@ -205,7 +250,7 @@ Or in HEX,
 <br>
 <br>
 
-### Tag Bit: Booleans
+## Tag Bit: Booleans
 
 *Most Significant Bit* (MSB) is
 
@@ -227,6 +272,10 @@ Or, in HEX
 |   `false`|          `[0x00000001]`|
 
 <br>
+
+(eliding the 32/8 zeros in the "most-significant" `DWORD`)
+
+<br>
 <br>
 <br>
 <br>
@@ -238,7 +287,7 @@ Or, in HEX
 <br>
 <br>
 
-### Types
+## Types
 
 Lets extend our source types with `boolean` constants
 
@@ -279,13 +328,14 @@ So, our examples become:
 <br>
 <br>
 
-### Transforms
+## Transforms
 
 Next, lets update our implementation
 
+The `parse`, `anf` and `tag` stages are straightforward.
+
 ![Compiler Pipeline](/static/img/compiler-pipeline-representation.png)
 
-The `parse`, `anf` and `tag` stages are straightforward.
 
 Lets focus on the `compile` function.
 
@@ -363,8 +413,8 @@ Finally, we can easily update the `compile` function as:
 
 ```haskell
 compileEnv :: Env -> AnfTagE -> Asm
-compileEnv _ e@(Number _ _)  = [IMov (Reg EAX) (immArg env e)]
-compileEnv _ e@(Boolean _ _) = [IMov (Reg EAX) (immArg env e)]
+compileEnv _ e@(Number _ _)  = [IMov (Reg RAX) (immArg env e)]
+compileEnv _ e@(Boolean _ _) = [IMov (Reg RAX) (immArg env e)]
 ```
 
 (The other cases remain unchanged.)
@@ -467,12 +517,24 @@ ghci> exec "let x = 15 in x"
 <br>
 <br>
 
-### QUIZ
+## QUIZ
 
 What is the result of
 
 ```haskell
-ghci> exec "if 3: 12 else: 49"
+>>> exec "if 3: 12 else: 49"
+```
+
+```haskell
+>>> exec "if 0: 12 else: 49"
+```
+
+```haskell
+>>> exec "if true: 12 else: 49"
+```
+
+```haskell
+>>> exec "if false: 12 else: 49"
 ```
 
 **A.** Error
@@ -494,6 +556,8 @@ ghci> exec "if 3: 12 else: 49"
 <br>
 <br>
 <br>
+
+Lets go and fix the code so the above do the right thing!
 
 ## 2. Arithmetic Operations
 
@@ -532,7 +596,7 @@ ghci> exec "12 + 4"
 <br>
 <br>
 
-### Shifted Representation and Addition
+## Shifted Representation and Addition
 
 We are _representing_ a number `n` by **shifting it left by 1**
 
@@ -550,7 +614,19 @@ Thus, our _source values_ have the following _representations:
 That is, _addition_ (and similarly, _subtraction_)
 works _as is_ with the shifted representation.
 
-### QUIZ: Multiplication
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## QUIZ: Multiplication
 
 What will be the result (using our code so far) of:
 
@@ -558,15 +634,31 @@ What will be the result (using our code so far) of:
 ghci> exec "12 * 4"
 ```
 
-1. Does not compile
-2. Run-time error (e.g. segmentation fault)
-3. `24`
-4. `48`
-5. `96`
+**A.** Does not compile
 
-Hmm. What happened?
+**B.** Run-time error (e.g. segmentation fault)
 
-### Shifted Representation and Multiplication
+**C.** `24`
+
+**D.** `48`
+
+**E.** `96`
+
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Shifted Representation and Multiplication
 
 We are _representing_ a number `n` by **shifting it left by 1**
 
@@ -581,18 +673,48 @@ Thus, our _source values_ have the following _representations:
 |     `3 * 5 = 15`|                `6 * 10 = 60` |
 |        `n1 * n2`|  `2*n1 * 2*n2 = 4*(n1 + n2)` |
 
+<br>
+
 Thus, multiplication ends up accumulating the factor of 2.
+
 * Result is _two times_ the desired one.
 
-### Strategy
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-Thus, our strategy for compiling arithmetic operations is simply:
+## Strategy
 
-* Addition and Subtraction "just work" as before, as shifting "cancels out",
-* Multiplication result must be "adjusted" by dividing-by-two
+Thus, our strategy for compiling arithmetic operations is:
+
+**Addition and Subtraction** "just work" 
+  - as shifting "cancels out",
+
+
+**Multiplication** result must be "adjusted" by dividing-by-two
+
   - i.e. **right shifting by 1**
 
-### Types
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+## Types
 
 The _source_ language does not change at all, for the `Asm`
 lets add a "right shift" instruction (`shr`):
@@ -617,25 +739,25 @@ and _immediate arguments_:
 
 ```haskell
 compilePrim2 :: Env -> Prim2 -> ImmE -> ImmE -> [Instruction]
-compilePrim2 env Plus v1 v2   = [ IMov (Reg EAX) (immArg env v1)
-                                , IAdd (Reg EAX) (immArg env v2)
+compilePrim2 env Plus v1 v2   = [ IMov (Reg RAX) (immArg env v1)
+                                , IAdd (Reg RAX) (immArg env v2)
                                 ]
-compilePrim2 env Minus v1 v2  = [ IMov (Reg EAX) (immArg env v1)
-                                , ISub (Reg EAX) (immArg env v2)
+compilePrim2 env Minus v1 v2  = [ IMov (Reg RAX) (immArg env v1)
+                                , ISub (Reg RAX) (immArg env v2)
                                 ]
-compilePrim2 env Times v1 v2  = [ IMov (Reg EAX) (immArg env v1)
-                                , IMul (Reg EAX) (immArg env v2)
-                                , IShr (Reg EAX) (Const 1)
+compilePrim2 env Times v1 v2  = [ IMov (Reg RAX) (immArg env v1)
+                                , IMul (Reg RAX) (immArg env v2)
+                                , IShr (Reg RAX) (Const 1)
                                 ]
 ```
 
-### Tests
+## Tests
 
 Lets take it out for a drive.
 
 ```haskell
-ghci> exec "2 * (-1)"
-2147483644
+ghci> exec' "2 * (0 - 1)"
+4611686018427387902
 ```
 
 Whoa?!
@@ -644,20 +766,35 @@ Well, its easy to figure out if you look at
 the generated assembly:
 
 ```nasm
-mov eax, 4
-imul eax, -2
-shr eax, 1
+mov rax, 4
+imul rax, -2
+shr rax, 1
 ret
 ```
 
-The trouble is that the **negative** result of the multiplication is
-saved in **twos-complement** format, and when we shift that right by
-one bit, we get the wierd value (**does not "divide by two"**)
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-| Decimal      | Hexadecimal |                             Binary   |
-|-------------:|------------:|-------------------------------------:|
-|         `-8` | `0xFFFFFFF8`| `0b11111111111111111111111111111000` |
-| `2147483644` | `0x7FFFFFFC`| `0b01111111111111111111111111111100` |
+## Two's Complement
+
+The **negative** result is in **twos-complement** format.
+
+When we shift that right-by-one, we get the odd value 
+
+- **does not "divide by two"**
+
+| Decimal      |         Hexadecimal |
+|-------------:|--------------------:|
+|         `-8` | `0xFFFFFFFFFFFFFFF8`|
+| `2147483644` | `0x7FFFFFFFFFFFFFFC`|
 
 **Solution: Signed/Arithmetic Shift**
 
@@ -668,7 +805,19 @@ does what we want, namely:
 * preserves the sign-bit when shifting
 * i.e. doesn't introduce a `0` by default
 
-### Transforms Revisited
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Transforms Revisited
 
 Lets add `sar` to our target:
 
@@ -683,18 +832,30 @@ and use it to fix the post-multiplication adjustment
 * i.e. use `ISar` instead of `IShr`
 
 ```haskell
-compilePrim2 env Times v1 v2  = [ IMov (Reg EAX) (immArg env v1)
-                                , IMul (Reg EAX) (immArg env v2)
-                                , ISar (Reg EAX) (Const 1)
+compilePrim2 env Times v1 v2  = [ IMov (Reg RAX) (immArg env v1)
+                                , IMul (Reg RAX) (immArg env v2)
+                                , ISar (Reg RAX) (Const 1)
                                 ]
 ```
 
 After which all is well:
 
 ```haskell
-ghci> exec "2 * (-1)"
+ghci> exec' "2 * (-1)"
 -2
 ```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ## 3. Arithmetic Comparisons
 
@@ -708,32 +869,134 @@ boa: lib/Language/Boa/Compiler.hs:(104,1)-(106,43): Non-exhaustive patterns in f
 
 Oops. Need to implement it first!
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## How to implement comparisons?
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
 Many ways to do this:
 
-* branches `jne, jl, jg` or
-* bit-twiddling.
+1. branches `jne, jl, jg` or
 
-### Comparisons via Bit-Twiddling
+2. bit-twiddling.
+
+## Option 1: Comparisons via Branches
+
+**Key Idea:** 
+
+> Use the machine comparisons and branch
+
+To implement `arg1 < arg2`
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+```
+IF 
+  arg1 < arg2
+
+THEN 
+  rax := <true>
+
+ELSE 
+  rax := <false>
+```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+```asm
+mov rax, <arg1> 
+cmp rax, <arg2>       # flags are set with comparison
+jg false_label        # if cmp-greater then false else true
+  mov rax, <true>     # assign to RAX := true
+jmp exit_label
+false_label: 
+  mov rax, <false>    # assign to RAX := false
+exit_label:
+```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Option 2: Comparisons via Bit-Twiddling
 
 **Key idea:**
 
 > A *negative* number's **most significant bit** is `1`
 
 To implement `arg1 < arg2`, compute `arg1 - arg2`
-* When result is negative, MSB is `1`, ensure `eax` set to `0x80000001`
-* When result is non-negative, MSB is `0`, ensure `eax` set to `0x00000001`
 
-1. Can **extract msb** by bitwise `and` with `0x80000000`.
+* When result is negative, MSB is `1`, ensure `rax` set to `0x80000001`
+* When result is non-negative, MSB is `0`, ensure `rax` set to `0x00000001`
+
+1. Can **extract msb** by bitwise `and` with `0x8000000000000000`.
+2. Can **shift msb** to 32-position with `shr` 
 2. Can **set tag bit** by bitwise ` or` with `0x00000001`
 
 So compilation strategy is:
 
 ```nasm
-mov eax, arg1
-sub eax, arg2
-and eax, 0x80000000   ; mask out "sign" bit (msb)
-or  eax, 0x00000001   ; set tag bit to bool
+mov rax, arg1
+sub rax, arg2
+and rax, 0x8000000000000000   ; mask out "sign" bit (msb)
+shr rax, 32                   ; shift "sign" bit (msb) by 32
+or  rax, 0x00000001           ; set tag bit to bool
 ```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ### Comparisons: Implementation
 
@@ -758,9 +1021,19 @@ instrAsm (IOr  a1 a2) = ...
 
 3. The actual `compilePrim2` function   
 
+**Do in class**
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-### Exercise: Comparisons via Bit-Twiddling
+## Exercise: Comparisons via Bit-Twiddling
 
 * Can compute `arg1 > arg2`  by computing `arg2 < arg1`.
 * Can compute `arg1 != arg2` by computing `arg1 < arg2 || arg2 < arg1`
@@ -773,6 +1046,17 @@ For the above, can you figure out how to implement:
 3. Boolean `&&` ?
 
 You may find [these instructions useful](https://en.wikibooks.org/wiki/X86_Assembly/Logic)
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ## 4. Dynamic Checking
 
@@ -797,16 +1081,32 @@ ghci> exec "2 + true"
 
 Oops.
 
-### Checking Tags at Run-Time
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-Later, we will look into adding a _static_ type system that will reject
-such meaningless programs at _compile_ time. For now, lets see how to
-extend the compilation to _abort execution_ when the wrong _types of operands_
-are found when the code is _executing_.
 
-The following table lists the types of operands that _should be_ allowed
-for each primitive operation.
+## Static vs. Dynamic Type Checking
 
+**Later** we will add a _static_ type system
+
+-  that rejects meaningless programs at _compile_ time. 
+
+
+**Now** lets add a _dynamic_ system 
+
+- that _aborts execution_ with wrong _operands_ at _run_ time.
+
+## Checking Tags at Run-Time
+
+Here are the **allowed** types of operands for each primitive operation.
 
 | Operation |           Op-1 |           Op-2 |
 |----------:|---------------:|---------------:|
@@ -821,20 +1121,33 @@ for each primitive operation.
 | `if`      |          `bool`|                |
 | `=`       | `int` or `bool`| `int` or `bool`|
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-### Strategy
+### Strategy: Asserting a Type
 
-Lets check that the data in `eax` is an `int`
+To check if `arg` is a `number`
+
 * Suffices to check that the LSB is `0`
+
 * If not, jump to special `error_non_int` label
 
-For example, to check if `arg` is a `Number`
+For example
 
 ```nasm
-mov eax, arg
-mov ebx, eax              ; copy into ebx register
-and ebx, 0x00000001       ; extract lsb
-cmp ebx, 0                ; check if lsb equals 0
+mov rax, arg
+mov rbx, rax              ; copy into rbx register
+and rbx, 0x00000001       ; extract lsb
+cmp rbx, 0                ; check if lsb equals 0
 jne error_non_number      
 ...
 ```
@@ -843,15 +1156,15 @@ at `error_non_number` we can call into a `C` function:
 
 ```
 error_non_number:
-  push eax                ; pass erroneous value
-  push 0                  ; pass error code
+  mov rdi, 0              ; pass error code
+  mov rsi, rax            ; pass erroneous value
   call error              ; call run-time "error" function
 ```
 
 Finally, the `error` function is part of the _run-time_ and looks like:
 
 ```c
-void error(int code, int v){
+void error(long code, long v){
    if (code == 0) {
      fprintf(stderr, "Error: expected a number but got %#010x\n", v);
    }
@@ -865,7 +1178,19 @@ void error(int code, int v){
  }
 ```
 
-### Strategy By Example
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Strategy By Example
 
 Lets implement the above in a simple file `tests/output/int-check.s`
 
@@ -875,14 +1200,14 @@ extern error
 extern print
 global our_code_starts_here
 our_code_starts_here:
-  mov eax, 1                ; not a valid number
-  mov ebx, eax              ; copy into ebx register
-  and ebx, 0x00000001       ; extract lsb
-  cmp ebx, 0                ; check if lsb equals 0
+  mov rax, 1                ; not a valid number
+  mov rbx, rax              ; copy into rbx register
+  and rbx, 0x00000001       ; extract lsb
+  cmp rbx, 0                ; check if lsb equals 0
   jne error_non_number      
 error_non_number:
-  push eax
-  push 0
+  mov rdi, 0
+  mov rsi, rax
   call error
 ```
 
@@ -895,62 +1220,72 @@ make tests/output/int-check.result
 
 What happened ?
 
-### Managing the Call Stack
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Managing the Call Stack
 
 To properly call into C functions (like `error`), we must play by the rules of
-the [C calling convention](http://www.cs.virginia.edu/~evans/cs216/guides/x86.html#calling)
-
-![Stack Frames](/static/img/stack-frames.png)
+the [C calling convention](https://aaronbloomfield.github.io/pdr/book/x86-64bit-ccc-chapter.pdf)
 
 1. The _local variables_ of an (executing) function are saved in its _stack frame_.
-2. The _start_ of the stack frame is saved in register `ebp`,
-3. The _start_ of the _next_ frame is saved in register `esp`.
+2. The _start_ of the stack frame is saved in register `rbp`,
+3. The _start_ of the _next_ frame is saved in register `rsp`.
 
-### Calling Convention
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Calling Convention
 
 We must **preserve the above invariant** as follows:
 
-#### In the Callee
+## In the Callee
 
 At the **start** of the function
 
 ```nasm
-push ebp          ; save (previous, caller's) ebp on stack
-mov ebp, esp      ; make current esp the new ebp
-sub esp, 4*N      ; "allocate space" for N local variables
+push rbp          ; SAVE (previous) caller's base-pointer on stack
+mov rbp, rsp      ; set our base-pointer using the current stack-pointer
+sub rsp, 8*N      ; ALLOCATE space for N local variables
 ```
 
 At the **end** of the function
 
 ```nasm
-mov esp, ebp      ; restore value of esp to that just before call
-                  ; now, value at [esp] is caller's (saved) ebp
-pop ebp           ; so: restore caller's ebp from stack [esp]
+add rsp, 8*N0     ; FREE space for N local variables
+pop rbp           ; RESTORE caller's base-pointer from stack
 ret               ; return to caller
 ```
 
-#### In the Caller
-
-To call a function `target` that takes `N` parameters:
-
-```nasm
-push arg_N        ; push last arg first ...
-...
-push arg_2        ; then the second ...
-push arg_1        ; finally the first
-call target       ; make the call (which puts return addr on stack)
-add esp, 4*N      ; now we are back: "clear" args by adding 4*numArgs
-```
-
-**NOTE:** If you are compiling on MacOS, you must respect the
-[16-Byte Stack Alignment Invariant](http://www.fabiensanglard.net/macosxassembly/index.php)
-
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ### Fixed Strategy By Example
 
 Lets implement the above in a simple file `tests/output/int-check.s`
-
-TODO
 
 ```nasm
 section .text
@@ -958,20 +1293,22 @@ extern error
 extern print
 global our_code_starts_here
 our_code_starts_here:
-  push ebp
-  mov ebp, esp
-  sub esp, 0                ; 0 local variables here
-  mov eax, 1                ; not a valid number
-  mov ebx, eax              ; copy into ebx register
-  and ebx, 0x00000001       ; extract lsb
-  cmp ebx, 0                ; check if lsb equals 0
+  push rbp                  ; save caller's base-pointer
+  mov rbp, rsp              ; set our base-pointer
+  sub rsp, 1600             ; alloc '100' vars
+
+  mov rax, 1                ; not a valid number
+  mov rbx, rax              ; copy into rbx register
+  and rbx, 0x00000001       ; extract lsb
+  cmp rbx, 0                ; check if lsb equals 0
   jne error_non_number      
-  mov esp, ebp
-  pop ebp  
+
+  add rsp, 1600             ; de-alloc '100' vars
+  pop rbp                   ; restore caller's base-pointer
   ret
 error_non_number:
-  push eax
-  push 0
+  mov rdi, 0
+  mov rsi, rax
   call error
 ```
 
@@ -984,10 +1321,19 @@ make tests/output/int-check.result
 
 **Q:** What NEW thing does our compiler need to compute?
 
-**Hint:** Why do we `sub esp, 0` above?
+**Hint:** Why do we `sub esp, 1600` above?
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-### Types
+## Types
 
 Lets implement the above strategy.
 
@@ -1008,7 +1354,19 @@ data Label
 
 and thats it.
 
-### Transforms
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Transforms
 
 The compiler must generate code to:
 
@@ -1016,17 +1374,17 @@ The compiler must generate code to:
 2. Exit by calling `error` if a failure occurs,
 3. Manage the stack per the convention above.
 
-#### 1. Type Assertions
+### 1. Type Assertions
 
 The key step in the implementation is to write a function
 
 ```haskell
 assertType :: Env -> IExp -> Ty -> [Instruction]
 assertType env v ty
-  = [ IMov (Reg EAX) (immArg env v)
-    , IMov (Reg EBX) (Reg EAX)
-    , IAnd (Reg EBX) (HexConst 0x00000001)
-    , ICmp (Reg EBX) (typeTag  ty)
+  = [ IMov (Reg RAX) (immArg env v)
+    , IMov (Reg RBX) (Reg RAX)
+    , IAnd (Reg RBX) (HexConst 0x00000001)
+    , ICmp (Reg RBX) (typeTag  ty)
     , IJne (TypeError ty)
     ]
 ```
@@ -1046,12 +1404,12 @@ computations, e.g.
 compilePrim2 :: Env -> Prim2 -> ImmE -> ImmE -> [Instruction]
 compilePrim2 env Plus v1 v2   = assertType env v1 TNumber
                              ++ assertType env v2 TNumber  
-                             ++ [ IMov (Reg EAX) (immArg env v1)
-                                , IAdd (Reg EAX) (immArg env v2)
+                             ++ [ IMov (Reg RAX) (immArg env v1)
+                                , IAdd (Reg RAX) (immArg env v2)
                                 ]
 ```
 
-#### 2. Errors
+### 2. Errors
 
 We must also add code _at_ the `TypeError TNumber`
 and `TypeError TBoolean` labels.
@@ -1060,8 +1418,8 @@ and `TypeError TBoolean` labels.
 errorHandler :: Ty -> Asm
 errorHandler t =
   [ ILabel   (TypeError t)        -- the expected-number error
-  ,   IPush  (Reg EAX)            -- push the second "value" param first,
-  ,   IPush  (ecode t)            -- then the first  "code" param,
+  ,   IMov   (Reg RDI) (ecode t)  -- set the first  "code" param,
+  ,   IMov   (Reg RSI) (Reg RAX)  -- set the second "value" param first,
   ,   ICall  (Builtin "error")    -- call the run-time's "error" function.  
   ]
 
@@ -1070,29 +1428,28 @@ ecode TNumber  = Const 0
 ecode TBoolean = Const 1
 ```
 
-#### 4. Stack Management
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-**Local Variables**
+### 3. Stack Management
 
-First, [note that](#calling-convention) the local variables live at offsets
-from `ebp`, so lets update
-
-```haskell
-immArg :: Env -> ImmTag -> Arg
-immArg _   (Number n _) = Const n
-immArg env (Var    x _) = RegOffset EBP i
-  where
-    i                   = fromMaybe err (lookup x env)
-    err                 = error (printf "Error: Variable '%s' is unbound" x)
-```
-
-**Maintaining `esp` and `ebp`**
+**Maintaining `rsp` and `rbp`**
 
 We need to make sure that _all_ our code respects
 [the C calling convention.](#calling-convention).
 
 To do so, just _wrap_ the generated code, with
-instructions to save and restore `ebp` and `esp`
+instructions to save and restore `rbp` and `rsp`
 
 ```haskell
 compileBody :: AnfTagE -> Asm
@@ -1101,18 +1458,29 @@ compileBody e = entryCode e
              ++ exitCode e
 
 entryCode :: AnfTagE -> Asm
-entryCode e = [ IPush (Reg EBP)
-              , IMov  (Reg EBP) (Reg ESP)
-              , ISub  (Reg ESP) (Const 4 * n)
+entryCode e = [ IPush (Reg RBP)                       -- SAVE caller's RBP
+              , IMov  (Reg RBP) (Reg RSP)             -- SET our RBP
+              , ISub  (Reg RSP) (Const (argBytes n))  -- ALLOC n local-vars
               ]
   where
     n       = countVars e
 
 exitCode :: AnfTagE -> Asm
-exitCode = [ IMove (Reg ESP) (Reg EBP)
-           , IPop  (Reg EBP)
-           , IRet
-           ]
+exitCode e = [ IAdd (Reg RSP) (Const (argBytes n))      -- FREE n local-vars
+             , IPop (Reg RBP)                           -- RESTORE caller's RBP
+             , IRet                                     -- RETURN to caller
+             ]
+  where
+    n       = countVars e
+```
+
+the `rsp` needs to be a multiple of `16` so:
+
+```haskell
+argBytes :: Int -> Int
+argBytes n = 8 * n' 
+  where 
+    n' = if even n then n else n + 1
 ```
 
 **Q:** But how shall we compute `countVars`?
@@ -1127,7 +1495,20 @@ countVars = 100
 Obviously a sleazy hack (_why?_), but lets use it
 to _test everything else_; then we can fix it.
 
-## 5. Computing the Size of the Stack
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## 4. Computing the Size of the Stack
 
 Ok, now that everything (else) seems to work, lets work out:
 
@@ -1146,7 +1527,7 @@ However, it is easy to find an _overapproximate_ heuristic, i.e.
 
 As usual, lets see if we can work out a heuristic by example.
 
-### QUIZ
+## QUIZ
 
 How many stack slots/vars are needed for the following program?
 
@@ -1154,13 +1535,25 @@ How many stack slots/vars are needed for the following program?
 1 + 2
 ```
 
-1. `0`
-2. `1`
-3. `2`
+**A.** `0`
 
+**B.** `1`
 
+**C.** `2`
 
-### QUIZ
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## QUIZ
 
 How many stack slots/vars are needed for the following program?
 
@@ -1172,11 +1565,27 @@ in
   x + y + z
 ```
 
-1. `0`
-2. `1`
-3. `2`
-4. `3`
-5. `4`
+**A.** `0`
+
+**B.** `1`
+
+**C.** `2`
+
+**D.** `3`
+
+**E.** `4`
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ### QUIZ
 
@@ -1193,11 +1602,27 @@ else:
   0
 ```
 
-1. `0`
-2. `1`
-3. `2`
-4. `3`
-5. `4`
+**A.** `0`
+
+**B.** `1`
+
+**C.** `2`
+
+**D.** `3`
+
+**E.** `4`
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 
 ### QUIZ
 
@@ -1212,13 +1637,28 @@ let x =
 in x + 1
 ```
 
-1. `0`
-2. `1`
-3. `2`
-4. `3`
-5. `4`
+**A.** `0`
 
-### Strategy
+**B.** `1`
+
+**C.** `2`
+
+**D.** `3`
+
+**E.** `4`
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Strategy
 
 Let `countVars e` be:
 
@@ -1245,8 +1685,18 @@ Lets work it out on a case-by-case basis:
   * _pushing_ the result onto the stack and then evaluating `e2`
   * i.e. larger of `countVars e1` and `1 + countVars e2`
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-### Implementation
+## Implementation
 
 We can implement the above a simple recursive function:
 
@@ -1257,6 +1707,14 @@ countVars (Let x e1 e2) = max (countVars e1) (1 + countVars e2)
 countVars _             = 0
 ```
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ### Naive Heuristic is Naive
 
@@ -1276,6 +1734,19 @@ but clearly _none_ of the variables are actually used.
 
 Will revisit this problem later, when looking at optimizations.
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 ## Recap
 
 We just saw how to add support for
@@ -1293,4 +1764,4 @@ To get some practice, in your assignment, you will add:
 1. Dynamic Checks for Arithmetic Overflows (see the `jo` and `jno` operations)
 2. A Primitive `print` operation implemented by a function in the `c` run-time.
 
-And next, we'll see how to easily add **user-defined functions**.
+And next, we'll see how to add **user-defined functions**.
