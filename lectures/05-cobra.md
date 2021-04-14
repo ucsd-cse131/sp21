@@ -1527,6 +1527,19 @@ However, it is easy to find an _overapproximate_ heuristic, i.e.
 
 As usual, lets see if we can work out a heuristic by example.
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 ## QUIZ
 
 How many stack slots/vars are needed for the following program?
