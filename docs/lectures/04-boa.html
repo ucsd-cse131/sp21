@@ -620,20 +620,25 @@ doTag i (If e1 e2 e3 _) = (i3 + 1, If e1' e2' e3' i3)
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="idea-how-about-use-another-register-for-3-4">Idea: How about use <em>another</em> register for <code>3 + 4</code>?</h2>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
-<p>But then what about <code>(1 + 2) * (3 + 4) * (5 + 6)</code> ? * In general, may need to <em>save</em> more sub-expressions than we have registers.</p>
+<p>But then what about <code>(1 + 2) * (3 + 4) * (5 + 6)</code> ?</p>
+<ul>
+<li>In general, may need to <em>save</em> more sub-expressions than we have registers.</li>
+</ul>
+<p><strong>Question:</strong></p>
+<p>Why are <code>1 + 2</code> and <code>x + y</code> so easy to compile but <code>(1 + 2) * (3 + 4)</code> not?</p>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="idea-immediate-expressions">Idea: Immediate Expressions</h2>
 <p>Why were <code>1 + 2</code> and <code>x + y</code> so easy to compile but <code>(1 + 2) * (3 + 4)</code> not?</p>
 <p>As <code>1</code> and <code>x</code> are <strong>immediate expressions</strong>: their values don’t require any computation!</p>
 <ul>
-<li>Either a <strong>constant</strong>, or,</li>
-<li><strong>variable</strong> whose value is on the stack.</li>
+<li><p>Either a <strong>constant</strong>, or,</p></li>
+<li><p><strong>variable</strong> whose value is on the stack.</p></li>
 </ul>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="idea-administrative-normal-form-anf">Idea: Administrative Normal Form (ANF)</h2>
 <p>An expression is in <strong>Administrative Normal Form (ANF)</strong></p>
 <blockquote>
-<p>if all <strong>primitive operations</strong> have <strong>immediate</strong> arguments.</p>
+<p>ANF means all <strong>primitive operations</strong> have <strong>immediate</strong> arguments.</p>
 </blockquote>
 <p><strong>Primitive Operations:</strong> Those whose values we <em>need</em> for computation to proceed.</p>
 <ul>
@@ -643,6 +648,9 @@ doTag i (If e1 e2 e3 _) = (i3 + 1, If e1' e2' e3' i3)
 </ul>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="quiz-3">QUIZ</h2>
+<blockquote>
+<p>ANF means all <strong>primitive operations</strong> have <strong>immediate</strong> arguments.</p>
+</blockquote>
 <p>Is the following expression in ANF?</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a>(<span class="dv">1</span> <span class="op">+</span> <span class="dv">2</span>) <span class="op">*</span> (<span class="dv">4</span> <span class="op">-</span> <span class="dv">3</span>)</span></code></pre></div>
 <p><strong>A.</strong> Yes, its ANF.</p>
@@ -652,11 +660,11 @@ doTag i (If e1 e2 e3 _) = (i3 + 1, If e1' e2' e3' i3)
 <p><strong>E.</strong> Huh, WTF is ANF?</p>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="conversion-to-anf">Conversion to ANF</h2>
-<p>So, the below is <em>not</em> in ANF as <code>*</code> has <em>non-immediate</em> arguments</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true"></a>(<span class="dv">1</span> <span class="op">+</span> <span class="dv">2</span>) <span class="op">*</span> (<span class="dv">3</span> <span class="op">+</span> <span class="dv">4</span>)</span></code></pre></div>
+<p>So, the below is <em>not</em> in ANF as <code>*</code> has <strong>non-immediate</strong> arguments</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true"></a>(<span class="dv">1</span> <span class="op">+</span> <span class="dv">2</span>) <span class="op">*</span> (<span class="dv">4</span> <span class="op">-</span> <span class="dv">3</span>)</span></code></pre></div>
 <p>However, note the following variant <em>is</em> in ANF</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true"></a><span class="kw">let</span> t1 <span class="ot">=</span> <span class="dv">1</span> <span class="op">+</span> <span class="dv">2</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true"></a>  , t2 <span class="ot">=</span> <span class="dv">3</span> <span class="op">+</span> <span class="dv">4</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true"></a>  , t2 <span class="ot">=</span> <span class="dv">4</span> <span class="op">-</span> <span class="dv">3</span></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true"></a><span class="kw">in</span>  </span>
 <span id="cb24-4"><a href="#cb24-4" aria-hidden="true"></a>    t1 <span class="op">*</span> t2</span></code></pre></div>
 <p>How can we compile the above code?</p>
@@ -704,50 +712,55 @@ doTag i (If e1 e2 e3 _) = (i3 + 1, If e1' e2' e3' i3)
 <span id="cb30-3"><a href="#cb30-3" aria-hidden="true"></a>isImm (<span class="dt">Var</span>    _ _) <span class="ot">=</span> <span class="dt">True</span></span>
 <span id="cb30-4"><a href="#cb30-4" aria-hidden="true"></a>isImm _            <span class="ot">=</span> <span class="dt">False</span></span></code></pre></div>
 <p>We can now think of <strong>immediate</strong> expressions as:</p>
-<blockquote>
+<div class="sourceCode" id="cb31"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">ImmExpr</span> <span class="ot">=</span> {e<span class="op">:</span><span class="dt">Expr</span> <span class="op">|</span> isImm e <span class="op">==</span> <span class="dt">True</span>}</span></code></pre></div>
 <p>The <em>subset</em> of <code>Expr</code> <em>such that</em> <code>isImm</code> returns <code>True</code></p>
-</blockquote>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="quiz-4">QUIZ</h2>
 <p>Similarly, lets write a function that describes <strong>ANF</strong> expressions</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true"></a><span class="ot">isAnf ::</span> <span class="dt">Expr</span> a <span class="ot">-&gt;</span> <span class="dt">Bool</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true"></a>isAnf (<span class="dt">Number</span>  _     _) <span class="ot">=</span> <span class="dt">True</span></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true"></a>isAnf (<span class="dt">Var</span>     _     _) <span class="ot">=</span> <span class="dt">True</span></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true"></a>isAnf (<span class="dt">Prim2</span> _ e1 e2 _) <span class="ot">=</span> _1</span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true"></a>isAnf (<span class="dt">If</span> e1 e2 e3   _) <span class="ot">=</span> _2</span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true"></a>isAnf (<span class="dt">Let</span> x e1 e2   _) <span class="ot">=</span> _3</span></code></pre></div>
+<blockquote>
+<p>ANF means all <strong>primitive operations</strong> have <strong>immediate</strong> arguments.</p>
+</blockquote>
+<div class="sourceCode" id="cb32"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true"></a><span class="ot">isAnf ::</span> <span class="dt">Expr</span> a <span class="ot">-&gt;</span> <span class="dt">Bool</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true"></a>isAnf (<span class="dt">Number</span>  _     _) <span class="ot">=</span> <span class="dt">True</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true"></a>isAnf (<span class="dt">Var</span>     _     _) <span class="ot">=</span> <span class="dt">True</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true"></a>isAnf (<span class="dt">Prim2</span> _ e1 e2 _) <span class="ot">=</span> _1</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true"></a>isAnf (<span class="dt">If</span> e1 e2 e3   _) <span class="ot">=</span> _2</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true"></a>isAnf (<span class="dt">Let</span> x e1 e2   _) <span class="ot">=</span> _3</span></code></pre></div>
 <p>What should we fill in for <code>_1</code>?</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true"></a><span class="co">{- A -}</span> isAnf e1</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true"></a><span class="co">{- B -}</span> isAnf e2</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true"></a><span class="co">{- C -}</span> isAnf e1 <span class="op">&amp;&amp;</span> isAnf e2</span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true"></a><span class="co">{- D -}</span> isImm e1 <span class="op">&amp;&amp;</span> isImm e2</span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true"></a><span class="co">{- E -}</span> isImm e2</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true"></a><span class="co">{- A -}</span> isAnf e1</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true"></a><span class="co">{- B -}</span> isAnf e2</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true"></a><span class="co">{- C -}</span> isAnf e1 <span class="op">&amp;&amp;</span> isAnf e2</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true"></a><span class="co">{- D -}</span> isImm e1 <span class="op">&amp;&amp;</span> isImm e2</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true"></a><span class="co">{- E -}</span> isImm e2</span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="quiz-5">QUIZ</h3>
 <p>Similarly, lets write a function that describes <strong>ANF</strong> expressions</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true"></a><span class="ot">isAnf ::</span> <span class="dt">Expr</span> a <span class="ot">-&gt;</span> <span class="dt">Bool</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true"></a>isAnf (<span class="dt">Number</span>  _     _) <span class="ot">=</span> <span class="dt">True</span></span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true"></a>isAnf (<span class="dt">Var</span>     _     _) <span class="ot">=</span> <span class="dt">True</span></span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true"></a>isAnf (<span class="dt">Prim1</span> _ e1 _)    <span class="ot">=</span> isAnf e1 </span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true"></a>isAnf (<span class="dt">Prim2</span> _ e1 e2 _) <span class="ot">=</span> isImm e1 <span class="op">&amp;&amp;</span> isImm e2 </span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true"></a>isAnf (<span class="dt">If</span> e1 e2 e3   _) <span class="ot">=</span> _2       <span class="op">&amp;&amp;</span> isANF e2 <span class="op">&amp;&amp;</span> isANF e3</span>
-<span id="cb33-7"><a href="#cb33-7" aria-hidden="true"></a>isAnf (<span class="dt">Let</span> x e1 e2   _) <span class="ot">=</span> isANF e1 <span class="op">&amp;&amp;</span> isANF e2 </span></code></pre></div>
-<p>What should we fill in for <code>_2</code>?</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true"></a><span class="co">{- A -}</span> isAnf e1</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true"></a><span class="co">{- B -}</span> isImm e1</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true"></a><span class="co">{- C -}</span> <span class="dt">True</span></span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true"></a><span class="co">{- D -}</span> <span class="dt">False</span></span></code></pre></div>
-<p>We can now think of <strong>ANF</strong> expressions as:</p>
 <blockquote>
-<p>The <em>subset</em> of <code>Expr</code> <em>such that</em> <code>isAnf</code> returns <code>True</code></p>
+<p>ANF means all <strong>primitive operations</strong> have <strong>immediate</strong> arguments.</p>
 </blockquote>
+<div class="sourceCode" id="cb34"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true"></a><span class="ot">isAnf ::</span> <span class="dt">Expr</span> a <span class="ot">-&gt;</span> <span class="dt">Bool</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true"></a>isAnf (<span class="dt">Number</span>  _     _) <span class="ot">=</span> <span class="dt">True</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true"></a>isAnf (<span class="dt">Var</span>     _     _) <span class="ot">=</span> <span class="dt">True</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true"></a>isAnf (<span class="dt">Prim1</span> _ e1 _)    <span class="ot">=</span> isAnf e1 </span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true"></a>isAnf (<span class="dt">Prim2</span> _ e1 e2 _) <span class="ot">=</span> isImm e1 <span class="op">&amp;&amp;</span> isImm e2 </span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true"></a>isAnf (<span class="dt">If</span> e1 e2 e3   _) <span class="ot">=</span> _2       <span class="op">&amp;&amp;</span> isANF e2 <span class="op">&amp;&amp;</span> isANF e3</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true"></a>isAnf (<span class="dt">Let</span> x e1 e2   _) <span class="ot">=</span> isANF e1 <span class="op">&amp;&amp;</span> isANF e2 </span></code></pre></div>
+<p>What should we fill in for <code>_2</code>?</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true"></a><span class="co">{- A -}</span> isAnf e1</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true"></a><span class="co">{- B -}</span> isImm e1</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true"></a><span class="co">{- C -}</span> <span class="dt">True</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true"></a><span class="co">{- D -}</span> <span class="dt">False</span></span></code></pre></div>
+<p>We can now think of <strong>ANF</strong> expressions as:</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">AnfExpr</span> <span class="ot">=</span> {e<span class="op">:</span><span class="dt">Expr</span> <span class="op">|</span> isAnf e <span class="op">==</span> <span class="dt">True</span>}</span></code></pre></div>
+<p>The <em>subset</em> of <code>Expr</code> <em>such that</em> <code>isAnf</code> returns <code>True</code></p>
 <p>Use the above function to <strong>test</strong> our ANF conversion.</p>
 <p><br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="types-strategy">Types &amp; Strategy</h2>
 <p>Writing the type aliases:</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">BareE</span>   <span class="ot">=</span> <span class="dt">Expr</span> ()</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">AnfE</span>    <span class="ot">=</span> <span class="dt">Expr</span> ()  <span class="co">-- such that isAnf is True</span></span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">AnfTagE</span> <span class="ot">=</span> <span class="dt">Expr</span> <span class="dt">Tag</span> <span class="co">-- such that isAnf is True</span></span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">ImmTagE</span> <span class="ot">=</span> <span class="dt">Expr</span> <span class="dt">Tag</span> <span class="co">-- such that isImm is True</span></span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">BareE</span>   <span class="ot">=</span> <span class="dt">Expr</span> ()</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">AnfE</span>    <span class="ot">=</span> <span class="dt">Expr</span> ()  <span class="co">-- such that isAnf is True</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">AnfTagE</span> <span class="ot">=</span> <span class="dt">Expr</span> <span class="dt">Tag</span> <span class="co">-- such that isAnf is True</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">ImmTagE</span> <span class="ot">=</span> <span class="dt">Expr</span> <span class="dt">Tag</span> <span class="co">-- such that isImm is True</span></span></code></pre></div>
 <p>we get the overall pipeline:</p>
 <figure>
 <img src="../static/img/compiler-pipeline-anf-types.png" alt /><figcaption>Compiler Pipeline with ANF: Types</figcaption>
@@ -757,47 +770,49 @@ doTag i (If e1 e2 e3 _) = (i3 + 1, If e1' e2' e3' i3)
 <figure>
 <img src="../static/img/compiler-pipeline-anf-to-asm.png" alt /><figcaption>Compiler Pipeline: ANF to ASM</figcaption>
 </figure>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <p>The compilation from ANF is easy, lets recall our examples and strategy:</p>
 <p>Strategy: Given <code>v1 + v2</code> (where <code>v1</code> and <code>v2</code> are <strong>immediate expressions</strong>)</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <ul>
 <li>Move <code>v1</code> into <code>eax</code>,</li>
 <li>Add <code>v2</code> to <code>eax</code>.</li>
 </ul>
-<div class="sourceCode" id="cb36"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true"></a><span class="ot">compile ::</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> <span class="dt">TagE</span> <span class="ot">-&gt;</span> <span class="dt">Asm</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true"></a>compile env (<span class="dt">Prim2</span> o v1 v2)</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true"></a>  <span class="ot">=</span> [ <span class="dt">IMov</span>      (<span class="dt">Reg</span> <span class="dt">EAX</span>) (immArg env v1)</span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true"></a>    , (prim2 o) (<span class="dt">Reg</span> <span class="dt">EAX</span>) (immArg env v2)</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true"></a>    ]</span></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true"></a><span class="ot">compile ::</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> <span class="dt">TagE</span> <span class="ot">-&gt;</span> <span class="dt">Asm</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true"></a>compile env (<span class="dt">Prim2</span> o v1 v2)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true"></a>  <span class="ot">=</span> [ <span class="dt">IMov</span>      (<span class="dt">Reg</span> <span class="dt">EAX</span>) (immArg env v1)</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true"></a>    , (prim2 o) (<span class="dt">Reg</span> <span class="dt">EAX</span>) (immArg env v2)</span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true"></a>    ]</span></code></pre></div>
 <p>where we have a helper to find the <code>Asm</code> variant of a <code>Prim2</code> operation</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true"></a><span class="ot">prim2 ::</span> <span class="dt">Prim2</span> <span class="ot">-&gt;</span> <span class="dt">Arg</span> <span class="ot">-&gt;</span> <span class="dt">Arg</span> <span class="ot">-&gt;</span> <span class="dt">Instruction</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true"></a>prim2 <span class="dt">Plus</span>  <span class="ot">=</span> <span class="dt">IAdd</span></span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true"></a>prim2 <span class="dt">Minus</span> <span class="ot">=</span> <span class="dt">ISub</span></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true"></a>prim2 <span class="dt">Times</span> <span class="ot">=</span> <span class="dt">IMul</span></span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true"></a><span class="ot">prim2 ::</span> <span class="dt">Prim2</span> <span class="ot">-&gt;</span> <span class="dt">Arg</span> <span class="ot">-&gt;</span> <span class="dt">Arg</span> <span class="ot">-&gt;</span> <span class="dt">Instruction</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true"></a>prim2 <span class="dt">Plus</span>  <span class="ot">=</span> <span class="dt">IAdd</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true"></a>prim2 <span class="dt">Minus</span> <span class="ot">=</span> <span class="dt">ISub</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true"></a>prim2 <span class="dt">Times</span> <span class="ot">=</span> <span class="dt">IMul</span></span></code></pre></div>
 <p>and another to convert an <em>immediate expression</em> to an x86 argument:</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true"></a><span class="ot">immArg ::</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> <span class="dt">ImmTag</span> <span class="ot">-&gt;</span> <span class="dt">Arg</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true"></a>immArg _   (<span class="dt">Number</span> n _) <span class="ot">=</span> <span class="dt">Const</span> n</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true"></a>immArg env (<span class="dt">Var</span>    x _) <span class="ot">=</span> <span class="dt">RegOffset</span> <span class="dt">ESP</span> i</span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true"></a>    i                   <span class="ot">=</span> fromMaybe err (<span class="fu">lookup</span> x env)</span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true"></a>    err                 <span class="ot">=</span> <span class="fu">error</span> (printf <span class="st">&quot;Error: Variable '%s' is unbound&quot;</span> x)</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true"></a><span class="ot">immArg ::</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> <span class="dt">ImmTag</span> <span class="ot">-&gt;</span> <span class="dt">Arg</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true"></a>immArg _   (<span class="dt">Number</span> n _) <span class="ot">=</span> <span class="dt">Const</span> n</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true"></a>immArg env (<span class="dt">Var</span>    x _) <span class="ot">=</span> <span class="dt">RegOffset</span> <span class="dt">RBP</span> i</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true"></a>    i                   <span class="ot">=</span> fromMaybe err (<span class="fu">lookup</span> x env)</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true"></a>    err                 <span class="ot">=</span> <span class="fu">error</span> (printf <span class="st">&quot;Error: '%s' is unbound&quot;</span> x)</span></code></pre></div>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="quiz-6">QUIZ</h2>
 <p>Which of the below are in ANF ?</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true"></a><span class="co">{- 1 -}</span> <span class="dv">2</span> <span class="op">+</span> <span class="dv">3</span> <span class="op">+</span> <span class="dv">4</span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true"></a></span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true"></a><span class="co">{- 2 -}</span> <span class="kw">let</span> x <span class="ot">=</span> <span class="dv">12</span> <span class="kw">in</span></span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true"></a>          x <span class="op">+</span> <span class="dv">1</span></span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true"></a></span>
-<span id="cb39-6"><a href="#cb39-6" aria-hidden="true"></a><span class="co">{- 3 -}</span> <span class="kw">let</span> x <span class="ot">=</span> <span class="dv">12</span></span>
-<span id="cb39-7"><a href="#cb39-7" aria-hidden="true"></a>          , y <span class="ot">=</span> x <span class="op">+</span> <span class="dv">6</span></span>
-<span id="cb39-8"><a href="#cb39-8" aria-hidden="true"></a>        <span class="kw">in</span></span>
-<span id="cb39-9"><a href="#cb39-9" aria-hidden="true"></a>          x <span class="op">+</span> y</span>
-<span id="cb39-10"><a href="#cb39-10" aria-hidden="true"></a></span>
-<span id="cb39-11"><a href="#cb39-11" aria-hidden="true"></a><span class="co">{- 4 -}</span> <span class="kw">let</span> x <span class="ot">=</span> <span class="dv">12</span></span>
-<span id="cb39-12"><a href="#cb39-12" aria-hidden="true"></a>          , y <span class="ot">=</span> <span class="dv">18</span></span>
-<span id="cb39-13"><a href="#cb39-13" aria-hidden="true"></a>          , t <span class="ot">=</span> x <span class="op">+</span> y <span class="op">+</span> <span class="dv">1</span></span>
-<span id="cb39-14"><a href="#cb39-14" aria-hidden="true"></a>        <span class="kw">in</span></span>
-<span id="cb39-15"><a href="#cb39-15" aria-hidden="true"></a>          <span class="kw">if</span> t<span class="op">:</span> <span class="dv">7</span> <span class="kw">else</span><span class="op">:</span> <span class="dv">9</span></span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true"></a><span class="co">{- 1 -}</span> <span class="dv">2</span> <span class="op">+</span> <span class="dv">3</span> <span class="op">+</span> <span class="dv">4</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true"></a></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true"></a><span class="co">{- 2 -}</span> <span class="kw">let</span> x <span class="ot">=</span> <span class="dv">12</span> <span class="kw">in</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true"></a>          x <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true"></a></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true"></a><span class="co">{- 3 -}</span> <span class="kw">let</span> x <span class="ot">=</span> <span class="dv">12</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true"></a>          , y <span class="ot">=</span> x <span class="op">+</span> <span class="dv">6</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true"></a>        <span class="kw">in</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true"></a>          x <span class="op">+</span> y</span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true"></a></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true"></a><span class="co">{- 4 -}</span> <span class="kw">let</span> x <span class="ot">=</span> <span class="dv">12</span></span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true"></a>          , y <span class="ot">=</span> <span class="dv">18</span></span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true"></a>          , t <span class="ot">=</span> x <span class="op">+</span> y <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true"></a>        <span class="kw">in</span></span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true"></a>          <span class="kw">if</span> t<span class="op">:</span> <span class="dv">7</span> <span class="kw">else</span><span class="op">:</span> <span class="dv">9</span></span></code></pre></div>
 <ul>
 <li><p><strong>A.</strong> <code>1, 2, 3, 4</code></p></li>
 <li><p><strong>B.</strong> <code>1, 2, 3</code></p></li>
@@ -814,8 +829,8 @@ doTag i (If e1 e2 e3 _) = (i3 + 1, If e1' e2' e3' i3)
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="a-normalization">A-Normalization</h2>
 <p>We can fill in the base cases easily</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true"></a>anf (<span class="dt">Number</span> n)      <span class="ot">=</span> <span class="dt">Number</span> n</span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true"></a>anf (<span class="dt">Var</span> x)         <span class="ot">=</span> <span class="dt">Var</span> x</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true"></a>anf (<span class="dt">Number</span> n)      <span class="ot">=</span> <span class="dt">Number</span> n</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true"></a>anf (<span class="dt">Var</span> x)         <span class="ot">=</span> <span class="dt">Var</span> x</span></code></pre></div>
 <p>Interesting cases are the binary operations</p>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="example-anf-1">Example: Anf-1</h3>
@@ -824,18 +839,18 @@ doTag i (If e1 e2 e3 _) = (i3 + 1, If e1' e2' e3' i3)
 <img src="../static/img/anf-1.png" alt /><figcaption>Example: ANF 1</figcaption>
 </figure>
 <p><strong>Key Idea: Helper Function</strong></p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true"></a><span class="ot">imm ::</span> <span class="dt">BareE</span> <span class="ot">-&gt;</span> ([(<span class="dt">Id</span>, <span class="dt">AnfE</span>)], <span class="dt">ImmE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true"></a><span class="ot">imm ::</span> <span class="dt">BareE</span> <span class="ot">-&gt;</span> ([(<span class="dt">Id</span>, <span class="dt">AnfE</span>)], <span class="dt">ImmE</span>)</span></code></pre></div>
 <p><code>imm e</code> returns <code>([(t1, a1),...,(tn, an)], v)</code> where</p>
 <ul>
 <li><code>ti, ai</code> are new temporary variables bound to ANF expressions</li>
 <li><code>v</code> is an <strong>immediate value</strong> (either a constant or variable)</li>
 </ul>
 <p>Such that <code>e</code> is <em>equivalent to</em></p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true"></a><span class="kw">let</span> t1 <span class="ot">=</span> a1</span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true"></a>  , <span class="op">...</span></span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true"></a>  , tn <span class="ot">=</span> an</span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true"></a><span class="kw">in</span></span>
-<span id="cb42-5"><a href="#cb42-5" aria-hidden="true"></a>   v</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true"></a><span class="kw">let</span> t1 <span class="ot">=</span> a1</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true"></a>  , <span class="op">...</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true"></a>  , tn <span class="ot">=</span> an</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true"></a><span class="kw">in</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true"></a>   v</span></code></pre></div>
 <p>Lets look at some more examples.</p>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="example-anf-2">Example: Anf-2</h3>
@@ -862,53 +877,53 @@ doTag i (If e1 e2 e3 _) = (i3 + 1, If e1' e2' e3' i3)
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="anf-implementation-binary-operations">ANF Implementation: Binary Operations</h3>
 <p>Lets implement the above strategy</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true"></a>anf (<span class="dt">Prim2</span> o e1 e2) <span class="ot">=</span> lets (b1s <span class="op">++</span> b2s)</span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true"></a>                        (<span class="dt">Prim2</span> o (<span class="dt">Var</span> v1) (<span class="dt">Var</span> v2))</span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true"></a>    (b1s, v1)       <span class="ot">=</span> imm e1</span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true"></a>    (b2s, v2)       <span class="ot">=</span> imm e2</span>
-<span id="cb43-6"><a href="#cb43-6" aria-hidden="true"></a></span>
-<span id="cb43-7"><a href="#cb43-7" aria-hidden="true"></a><span class="ot">lets ::</span> [(<span class="dt">Id</span>, <span class="dt">AnfE</span>)] <span class="ot">-&gt;</span> <span class="dt">AnfE</span> <span class="ot">-&gt;</span> <span class="dt">AnfE</span></span>
-<span id="cb43-8"><a href="#cb43-8" aria-hidden="true"></a>lets []         e' <span class="ot">=</span> e</span>
-<span id="cb43-9"><a href="#cb43-9" aria-hidden="true"></a>lets ((x,e)<span class="op">:</span>bs) e' <span class="ot">=</span> <span class="dt">Let</span> x e (lets bs e')</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true"></a>anf (<span class="dt">Prim2</span> o e1 e2) <span class="ot">=</span> lets (b1s <span class="op">++</span> b2s)</span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true"></a>                        (<span class="dt">Prim2</span> o (<span class="dt">Var</span> v1) (<span class="dt">Var</span> v2))</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true"></a>    (b1s, v1)       <span class="ot">=</span> imm e1</span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true"></a>    (b2s, v2)       <span class="ot">=</span> imm e2</span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true"></a></span>
+<span id="cb45-7"><a href="#cb45-7" aria-hidden="true"></a><span class="ot">lets ::</span> [(<span class="dt">Id</span>, <span class="dt">AnfE</span>)] <span class="ot">-&gt;</span> <span class="dt">AnfE</span> <span class="ot">-&gt;</span> <span class="dt">AnfE</span></span>
+<span id="cb45-8"><a href="#cb45-8" aria-hidden="true"></a>lets []         e' <span class="ot">=</span> e</span>
+<span id="cb45-9"><a href="#cb45-9" aria-hidden="true"></a>lets ((x,e)<span class="op">:</span>bs) e' <span class="ot">=</span> <span class="dt">Let</span> x e (lets bs e')</span></code></pre></div>
 <p>Intuitively, <code>lets</code> <em>stitches</em> together a bunch of definitions:</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true"></a>lets [(x1, e1), (x2, e2), (x3, e3)] e</span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true"></a>  <span class="op">===&gt;</span> <span class="dt">Let</span> x1 e1 (<span class="dt">Let</span> x2 e2 (<span class="dt">Let</span> x3 e3 e))</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true"></a>lets [(x1, e1), (x2, e2), (x3, e3)] e</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true"></a>  <span class="op">===&gt;</span> <span class="dt">Let</span> x1 e1 (<span class="dt">Let</span> x2 e2 (<span class="dt">Let</span> x3 e3 e))</span></code></pre></div>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="anf-implementation-let-bindings">ANF Implementation: Let-bindings</h3>
 <p>For <code>Let</code> just make sure we recursively <code>anf</code> the sub-expressions.</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true"></a>anf (<span class="dt">Let</span> x e1 e2)   <span class="ot">=</span> <span class="dt">Let</span> x e1' e2'</span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true"></a>    e1'             <span class="ot">=</span> anf e1</span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true"></a>    e2'             <span class="ot">=</span> anf e2</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true"></a>anf (<span class="dt">Let</span> x e1 e2)   <span class="ot">=</span> <span class="dt">Let</span> x e1' e2'</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true"></a>    e1'             <span class="ot">=</span> anf e1</span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true"></a>    e2'             <span class="ot">=</span> anf e2</span></code></pre></div>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="anf-implementation-branches">ANF Implementation: Branches</h3>
 <p>Same principle applies to <code>If</code></p>
 <ul>
 <li>use <code>anf</code> to recursively transform the branches.</li>
 </ul>
-<div class="sourceCode" id="cb46"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true"></a>anf (<span class="dt">If</span> e1 e2 e3) <span class="ot">=</span> <span class="dt">If</span> e1' e2' e3'  </span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true"></a>    e1'           <span class="ot">=</span> anf e1</span>
-<span id="cb46-4"><a href="#cb46-4" aria-hidden="true"></a>    e2'           <span class="ot">=</span> anf e2</span>
-<span id="cb46-5"><a href="#cb46-5" aria-hidden="true"></a>    e3'           <span class="ot">=</span> anf e3</span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true"></a>anf (<span class="dt">If</span> e1 e2 e3) <span class="ot">=</span> <span class="dt">If</span> e1' e2' e3'  </span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true"></a>    e1'           <span class="ot">=</span> anf e1</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true"></a>    e2'           <span class="ot">=</span> anf e2</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true"></a>    e3'           <span class="ot">=</span> anf e3</span></code></pre></div>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="anf-making-arguments-immediate-via-imm">ANF: Making Arguments Immediate via <code>imm</code></h3>
 <p>The workhorse is the function</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true"></a><span class="ot">imm ::</span> <span class="dt">BareE</span> <span class="ot">-&gt;</span> ([(<span class="dt">Id</span>, <span class="dt">AnfE</span>)], <span class="dt">ImmE</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true"></a><span class="ot">imm ::</span> <span class="dt">BareE</span> <span class="ot">-&gt;</span> ([(<span class="dt">Id</span>, <span class="dt">AnfE</span>)], <span class="dt">ImmE</span>)</span></code></pre></div>
 <p>which creates temporary variables to crunch an arbitrary <code>Bare</code> into an <em>immediate</em> value.</p>
 <p>No need to create an variables if the expression is <em>already</em> immediate:</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true"></a>imm (<span class="dt">Number</span> n l) <span class="ot">=</span> ( [], <span class="dt">Number</span> n l )</span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true"></a>imm (<span class="dt">Id</span>     x l) <span class="ot">=</span> ( [], <span class="dt">Id</span>     x l )</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true"></a>imm (<span class="dt">Number</span> n l) <span class="ot">=</span> ( [], <span class="dt">Number</span> n l )</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true"></a>imm (<span class="dt">Id</span>     x l) <span class="ot">=</span> ( [], <span class="dt">Id</span>     x l )</span></code></pre></div>
 <p>The tricky case is when the expression has a primitive operation:</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true"></a>imm (<span class="dt">Prim2</span> o e1 e2) <span class="ot">=</span> ( b1s <span class="op">++</span> b2s <span class="op">++</span> [(t,  <span class="dt">Prim2</span> o v1 v2)]</span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true"></a>                      , <span class="dt">Id</span> t  )</span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true"></a>  t                 <span class="ot">=</span> makeFreshVar ()</span>
-<span id="cb49-4"><a href="#cb49-4" aria-hidden="true"></a>  (b1s, v1)         <span class="ot">=</span> imm e1</span>
-<span id="cb49-5"><a href="#cb49-5" aria-hidden="true"></a>  (b2s, v2)         <span class="ot">=</span> imm e2  </span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true"></a>imm (<span class="dt">Prim2</span> o e1 e2) <span class="ot">=</span> ( b1s <span class="op">++</span> b2s <span class="op">++</span> [(t,  <span class="dt">Prim2</span> o v1 v2)]</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true"></a>                      , <span class="dt">Id</span> t  )</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true"></a>  t                 <span class="ot">=</span> makeFreshVar ()</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true"></a>  (b1s, v1)         <span class="ot">=</span> imm e1</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true"></a>  (b2s, v2)         <span class="ot">=</span> imm e2  </span></code></pre></div>
 <p>Oh, what shall we do when:</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true"></a>imm (<span class="dt">If</span> e1 e2 e3)   <span class="ot">=</span> <span class="op">???</span></span>
-<span id="cb50-2"><a href="#cb50-2" aria-hidden="true"></a>imm (<span class="dt">Let</span> x e1 e2)   <span class="ot">=</span> <span class="op">???</span></span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true"></a>imm (<span class="dt">If</span> e1 e2 e3)   <span class="ot">=</span> <span class="op">???</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true"></a>imm (<span class="dt">Let</span> x e1 e2)   <span class="ot">=</span> <span class="op">???</span></span></code></pre></div>
 <p>Lets look at an example for inspiration.</p>
 <figure>
 <img src="../static/img/anf-4.png" alt /><figcaption>Example: ANF 4</figcaption>
@@ -918,14 +933,14 @@ doTag i (If e1 e2 e3 _) = (i3 + 1, If e1' e2' e3' i3)
 <li><code>anf</code> the relevant expressions,</li>
 <li>bind them to a fresh variable.</li>
 </ul>
-<div class="sourceCode" id="cb51"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true"></a>imm e<span class="op">@</span>(<span class="dt">If</span> _ _ _)  <span class="ot">=</span> immExp e</span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true"></a>imm e<span class="op">@</span>(<span class="dt">Let</span> _ _ _) <span class="ot">=</span> immExp e</span>
-<span id="cb51-3"><a href="#cb51-3" aria-hidden="true"></a></span>
-<span id="cb51-4"><a href="#cb51-4" aria-hidden="true"></a><span class="ot">immExp ::</span> <span class="dt">Expr</span> <span class="ot">-&gt;</span> ([(<span class="dt">Id</span>, <span class="dt">AnfE</span>)], <span class="dt">ImmE</span>)</span>
-<span id="cb51-5"><a href="#cb51-5" aria-hidden="true"></a>immExp e <span class="ot">=</span> ([(t, e')], t)</span>
-<span id="cb51-6"><a href="#cb51-6" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb51-7"><a href="#cb51-7" aria-hidden="true"></a>    e'   <span class="ot">=</span> anf e</span>
-<span id="cb51-8"><a href="#cb51-8" aria-hidden="true"></a>    t    <span class="ot">=</span> makeFreshVar ()</span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true"></a>imm e<span class="op">@</span>(<span class="dt">If</span> _ _ _)  <span class="ot">=</span> immExp e</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true"></a>imm e<span class="op">@</span>(<span class="dt">Let</span> _ _ _) <span class="ot">=</span> immExp e</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true"></a></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true"></a><span class="ot">immExp ::</span> <span class="dt">Expr</span> <span class="ot">-&gt;</span> ([(<span class="dt">Id</span>, <span class="dt">AnfE</span>)], <span class="dt">ImmE</span>)</span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true"></a>immExp e <span class="ot">=</span> ([(t, e')], t)</span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true"></a>    e'   <span class="ot">=</span> anf e</span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true"></a>    t    <span class="ot">=</span> makeFreshVar ()</span></code></pre></div>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="one-last-thing-whats-up-with-makefreshvar">One last thing: Whats up with <code>makeFreshVar</code> ?</h2>
 <p>Wait a minute, what is this magic <strong>FRESH</strong> ?</p>
@@ -935,54 +950,54 @@ doTag i (If e1 e2 e3 _) = (i3 + 1, If e1' e2' e3' i3)
 <blockquote>
 <p>Just like <code>doTag</code></p>
 </blockquote>
-<div class="sourceCode" id="cb52"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true"></a><span class="ot">anf ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">BareE</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">AnfE</span>)</span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true"></a></span>
-<span id="cb52-3"><a href="#cb52-3" aria-hidden="true"></a>anf i (<span class="dt">Number</span> n l)      <span class="ot">=</span> (i, <span class="dt">Number</span> n l)</span>
-<span id="cb52-4"><a href="#cb52-4" aria-hidden="true"></a></span>
-<span id="cb52-5"><a href="#cb52-5" aria-hidden="true"></a>anf i (<span class="dt">Id</span>     x l)      <span class="ot">=</span> (i, <span class="dt">Id</span>     x l)</span>
-<span id="cb52-6"><a href="#cb52-6" aria-hidden="true"></a></span>
-<span id="cb52-7"><a href="#cb52-7" aria-hidden="true"></a>anf i (<span class="dt">Let</span> x e b l)     <span class="ot">=</span> (i'', <span class="dt">Let</span> x e' b' l)</span>
-<span id="cb52-8"><a href="#cb52-8" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb52-9"><a href="#cb52-9" aria-hidden="true"></a>    (i',  e')           <span class="ot">=</span> anf i e</span>
-<span id="cb52-10"><a href="#cb52-10" aria-hidden="true"></a>    (i'', b')           <span class="ot">=</span> anf i' b</span>
-<span id="cb52-11"><a href="#cb52-11" aria-hidden="true"></a></span>
-<span id="cb52-12"><a href="#cb52-12" aria-hidden="true"></a>anf i (<span class="dt">Prim2</span> o e1 e2 l) <span class="ot">=</span> (i'', lets (b1s <span class="op">++</span> b2s) (<span class="dt">Prim2</span> o e1' e2' l))</span>
-<span id="cb52-13"><a href="#cb52-13" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb52-14"><a href="#cb52-14" aria-hidden="true"></a>    (i' , b1s, e1')     <span class="ot">=</span> imm i  e1</span>
-<span id="cb52-15"><a href="#cb52-15" aria-hidden="true"></a>    (i'', b2s, e2')     <span class="ot">=</span> imm i' e2</span>
-<span id="cb52-16"><a href="#cb52-16" aria-hidden="true"></a></span>
-<span id="cb52-17"><a href="#cb52-17" aria-hidden="true"></a>anf i (<span class="dt">If</span> c e1 e2 l)    <span class="ot">=</span> (i''', lets bs  (<span class="dt">If</span> c' e1' e2' l))</span>
-<span id="cb52-18"><a href="#cb52-18" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb52-19"><a href="#cb52-19" aria-hidden="true"></a>    (i'  , bs, c')      <span class="ot">=</span> imm i   c</span>
-<span id="cb52-20"><a href="#cb52-20" aria-hidden="true"></a>    (i'' ,     e1')     <span class="ot">=</span> anf i'  e1</span>
-<span id="cb52-21"><a href="#cb52-21" aria-hidden="true"></a>    (i''',     e2')     <span class="ot">=</span> anf i'' e2</span></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true"></a><span class="ot">anf ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">BareE</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">AnfE</span>)</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true"></a></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true"></a>anf i (<span class="dt">Number</span> n l)      <span class="ot">=</span> (i, <span class="dt">Number</span> n l)</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true"></a></span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true"></a>anf i (<span class="dt">Id</span>     x l)      <span class="ot">=</span> (i, <span class="dt">Id</span>     x l)</span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true"></a></span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true"></a>anf i (<span class="dt">Let</span> x e b l)     <span class="ot">=</span> (i'', <span class="dt">Let</span> x e' b' l)</span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb54-9"><a href="#cb54-9" aria-hidden="true"></a>    (i',  e')           <span class="ot">=</span> anf i e</span>
+<span id="cb54-10"><a href="#cb54-10" aria-hidden="true"></a>    (i'', b')           <span class="ot">=</span> anf i' b</span>
+<span id="cb54-11"><a href="#cb54-11" aria-hidden="true"></a></span>
+<span id="cb54-12"><a href="#cb54-12" aria-hidden="true"></a>anf i (<span class="dt">Prim2</span> o e1 e2 l) <span class="ot">=</span> (i'', lets (b1s <span class="op">++</span> b2s) (<span class="dt">Prim2</span> o e1' e2' l))</span>
+<span id="cb54-13"><a href="#cb54-13" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb54-14"><a href="#cb54-14" aria-hidden="true"></a>    (i' , b1s, e1')     <span class="ot">=</span> imm i  e1</span>
+<span id="cb54-15"><a href="#cb54-15" aria-hidden="true"></a>    (i'', b2s, e2')     <span class="ot">=</span> imm i' e2</span>
+<span id="cb54-16"><a href="#cb54-16" aria-hidden="true"></a></span>
+<span id="cb54-17"><a href="#cb54-17" aria-hidden="true"></a>anf i (<span class="dt">If</span> c e1 e2 l)    <span class="ot">=</span> (i''', lets bs  (<span class="dt">If</span> c' e1' e2' l))</span>
+<span id="cb54-18"><a href="#cb54-18" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb54-19"><a href="#cb54-19" aria-hidden="true"></a>    (i'  , bs, c')      <span class="ot">=</span> imm i   c</span>
+<span id="cb54-20"><a href="#cb54-20" aria-hidden="true"></a>    (i'' ,     e1')     <span class="ot">=</span> anf i'  e1</span>
+<span id="cb54-21"><a href="#cb54-21" aria-hidden="true"></a>    (i''',     e2')     <span class="ot">=</span> anf i'' e2</span></code></pre></div>
 <p>and</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true"></a><span class="ot">imm ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">AnfE</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, [(<span class="dt">Id</span>, <span class="dt">AnfE</span>)], <span class="dt">ImmE</span>)</span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true"></a></span>
-<span id="cb53-3"><a href="#cb53-3" aria-hidden="true"></a>imm i (<span class="dt">Number</span> n l)        <span class="ot">=</span> (i  , [], <span class="dt">Number</span> n l)</span>
-<span id="cb53-4"><a href="#cb53-4" aria-hidden="true"></a></span>
-<span id="cb53-5"><a href="#cb53-5" aria-hidden="true"></a>imm i (<span class="dt">Var</span> x l)           <span class="ot">=</span> (i  , [], <span class="dt">Var</span> x l)</span>
-<span id="cb53-6"><a href="#cb53-6" aria-hidden="true"></a></span>
-<span id="cb53-7"><a href="#cb53-7" aria-hidden="true"></a>imm i (<span class="dt">Prim2</span> o e1 e2 l) <span class="ot">=</span> (i''', bs, <span class="dt">Var</span> v l)</span>
-<span id="cb53-8"><a href="#cb53-8" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb53-9"><a href="#cb53-9" aria-hidden="true"></a>    (i'  , b1s, v1)     <span class="ot">=</span> imm i  e1</span>
-<span id="cb53-10"><a href="#cb53-10" aria-hidden="true"></a>    (i'' , b2s, v2)     <span class="ot">=</span> imm i' e2</span>
-<span id="cb53-11"><a href="#cb53-11" aria-hidden="true"></a>    (i''', v)           <span class="ot">=</span> fresh i''</span>
-<span id="cb53-12"><a href="#cb53-12" aria-hidden="true"></a>    bs                  <span class="ot">=</span> b1s <span class="op">++</span> b2s <span class="op">++</span> [(v, <span class="dt">Prim2</span> o v1 v2 l)]</span>
-<span id="cb53-13"><a href="#cb53-13" aria-hidden="true"></a></span>
-<span id="cb53-14"><a href="#cb53-14" aria-hidden="true"></a>imm i e<span class="op">@</span>(<span class="dt">If</span> _ _ _  l)   <span class="ot">=</span> immExp i e</span>
-<span id="cb53-15"><a href="#cb53-15" aria-hidden="true"></a></span>
-<span id="cb53-16"><a href="#cb53-16" aria-hidden="true"></a>imm i e<span class="op">@</span>(<span class="dt">Let</span> _ _ _ l)   <span class="ot">=</span> immExp i e</span>
-<span id="cb53-17"><a href="#cb53-17" aria-hidden="true"></a></span>
-<span id="cb53-18"><a href="#cb53-18" aria-hidden="true"></a><span class="ot">immExp ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">BareE</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, [(<span class="dt">Id</span>, <span class="dt">AnfE</span>)], <span class="dt">ImmE</span>)</span>
-<span id="cb53-19"><a href="#cb53-19" aria-hidden="true"></a>immExp i e l  <span class="ot">=</span> (i'', bs, <span class="dt">Var</span> v ())</span>
-<span id="cb53-20"><a href="#cb53-20" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb53-21"><a href="#cb53-21" aria-hidden="true"></a>    (i' , e') <span class="ot">=</span> anf i e</span>
-<span id="cb53-22"><a href="#cb53-22" aria-hidden="true"></a>    (i'', v)  <span class="ot">=</span> fresh i'</span>
-<span id="cb53-23"><a href="#cb53-23" aria-hidden="true"></a>    bs        <span class="ot">=</span> [(v, e')]</span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true"></a><span class="ot">imm ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">AnfE</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, [(<span class="dt">Id</span>, <span class="dt">AnfE</span>)], <span class="dt">ImmE</span>)</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true"></a></span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true"></a>imm i (<span class="dt">Number</span> n l)        <span class="ot">=</span> (i  , [], <span class="dt">Number</span> n l)</span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true"></a></span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true"></a>imm i (<span class="dt">Var</span> x l)           <span class="ot">=</span> (i  , [], <span class="dt">Var</span> x l)</span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true"></a></span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true"></a>imm i (<span class="dt">Prim2</span> o e1 e2 l) <span class="ot">=</span> (i''', bs, <span class="dt">Var</span> v l)</span>
+<span id="cb55-8"><a href="#cb55-8" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb55-9"><a href="#cb55-9" aria-hidden="true"></a>    (i'  , b1s, v1)     <span class="ot">=</span> imm i  e1</span>
+<span id="cb55-10"><a href="#cb55-10" aria-hidden="true"></a>    (i'' , b2s, v2)     <span class="ot">=</span> imm i' e2</span>
+<span id="cb55-11"><a href="#cb55-11" aria-hidden="true"></a>    (i''', v)           <span class="ot">=</span> fresh i''</span>
+<span id="cb55-12"><a href="#cb55-12" aria-hidden="true"></a>    bs                  <span class="ot">=</span> b1s <span class="op">++</span> b2s <span class="op">++</span> [(v, <span class="dt">Prim2</span> o v1 v2 l)]</span>
+<span id="cb55-13"><a href="#cb55-13" aria-hidden="true"></a></span>
+<span id="cb55-14"><a href="#cb55-14" aria-hidden="true"></a>imm i e<span class="op">@</span>(<span class="dt">If</span> _ _ _  l)   <span class="ot">=</span> immExp i e</span>
+<span id="cb55-15"><a href="#cb55-15" aria-hidden="true"></a></span>
+<span id="cb55-16"><a href="#cb55-16" aria-hidden="true"></a>imm i e<span class="op">@</span>(<span class="dt">Let</span> _ _ _ l)   <span class="ot">=</span> immExp i e</span>
+<span id="cb55-17"><a href="#cb55-17" aria-hidden="true"></a></span>
+<span id="cb55-18"><a href="#cb55-18" aria-hidden="true"></a><span class="ot">immExp ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">BareE</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, [(<span class="dt">Id</span>, <span class="dt">AnfE</span>)], <span class="dt">ImmE</span>)</span>
+<span id="cb55-19"><a href="#cb55-19" aria-hidden="true"></a>immExp i e l  <span class="ot">=</span> (i'', bs, <span class="dt">Var</span> v ())</span>
+<span id="cb55-20"><a href="#cb55-20" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb55-21"><a href="#cb55-21" aria-hidden="true"></a>    (i' , e') <span class="ot">=</span> anf i e</span>
+<span id="cb55-22"><a href="#cb55-22" aria-hidden="true"></a>    (i'', v)  <span class="ot">=</span> fresh i'</span>
+<span id="cb55-23"><a href="#cb55-23" aria-hidden="true"></a>    bs        <span class="ot">=</span> [(v, e')]</span></code></pre></div>
 <p>where now, the <code>fresh</code> function returns a <em>new counter</em> and a variable</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true"></a><span class="ot">fresh ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Id</span>)</span>
-<span id="cb54-2"><a href="#cb54-2" aria-hidden="true"></a>fresh n <span class="ot">=</span> (n<span class="op">+</span><span class="dv">1</span>, <span class="st">&quot;t&quot;</span> <span class="op">++</span> <span class="fu">show</span> n)</span></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true"></a><span class="ot">fresh ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> (<span class="dt">Int</span>, <span class="dt">Id</span>)</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true"></a>fresh n <span class="ot">=</span> (n<span class="op">+</span><span class="dv">1</span>, <span class="st">&quot;t&quot;</span> <span class="op">++</span> <span class="fu">show</span> n)</span></code></pre></div>
 <p><strong>Note</strong> this is super clunky. There <em>is</em> a really slick way to write the above code without the clutter of the <code>i</code> but thats too much of a digression, <a href="https://cseweb.ucsd.edu/classes/wi12/cse230-a/lectures/monads.html">but feel free to look it up yourself</a></p>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="recap-and-summary">Recap and Summary</h2>

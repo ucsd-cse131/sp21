@@ -243,6 +243,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <li><strong>Tagged Representations</strong></li>
 <li><strong>Calling Conventions</strong></li>
 </ul>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="plan">Plan</h2>
 <p>Our plan will be to (start with <code>boa</code>) and add the following features:</p>
 <ol type="1">
@@ -251,25 +252,29 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <li><p><strong>Arithmetic Comparisons</strong></p></li>
 <li><p><strong>Dynamic Checking</strong> (to ensure operators are well behaved)</p></li>
 </ol>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="representation">1. Representation</h2>
 <h3 id="motivation-why-booleans">Motivation: Why booleans?</h3>
-<p>In the year 2018, its a bit silly to use</p>
+<p>In the year 2021, its a bit silly to use</p>
 <ul>
 <li><code>0</code> for <code>false</code> and</li>
 <li>non-zero for <code>true</code>.</li>
 </ul>
+<p><br> <br> <br> <br> <br> <br> <br></p>
 <p>But really, <code>boolean</code> is a stepping stone to other data</p>
 <ul>
-<li>Pointers,</li>
-<li>Tuples,</li>
-<li>Structures,</li>
-<li>Closures.</li>
+<li>Pointers</li>
+<li>Tuples</li>
+<li>Structures</li>
+<li>Closures</li>
 </ul>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="the-key-issue">The Key Issue</h3>
 <p>How to <em>distinguish</em> numbers from booleans?</p>
 <ul>
 <li>Need to store some <em>extra</em> information to mark values as <code>number</code> or <code>bool</code>.</li>
 </ul>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="option-1-use-two-words">Option 1: Use <em>Two</em> Words</h3>
 <p>First word is <code>0</code> means <code>bool</code>, is <code>1</code> means <code>number</code>, <code>2</code> means pointer etc.</p>
 <table>
@@ -316,6 +321,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <li>Operators <code>+</code>, <code>-</code> do <em>two</em> memory reads <code>[eax]</code>, <code>[eax - 4]</code>.</li>
 </ul>
 <p>In short, rather wasteful. Don’t need <em>so many</em> types.</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="option-2-use-a-tag-bit">Option 2: Use a <em>Tag Bit</em></h3>
 <p>Can distinguish <em>two</em> types with a <em>single bit</em>.</p>
 <p><em>Least Significant Bit</em> (LSB) is</p>
@@ -324,6 +330,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <li><code>1</code> for <code>boolean</code></li>
 </ul>
 <p>(Hmm, why not <code>0</code> for <code>boolean</code> and <code>1</code> for <code>number</code>?)</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="tag-bit-numbers">Tag Bit: Numbers</h3>
 <p>So <code>number</code> is the binary representation shifted left by 1 bit</p>
 <ul>
@@ -384,6 +391,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 </tr>
 </tbody>
 </table>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="tag-bit-booleans">Tag Bit: Booleans</h3>
 <p><em>Most Significant Bit</em> (MSB) is</p>
 <ul>
@@ -428,6 +436,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 </tr>
 </tbody>
 </table>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="types">Types</h3>
 <p>Lets extend our source types with <code>boolean</code> constants</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Expr</span> a</span>
@@ -472,6 +481,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 </tr>
 </tbody>
 </table>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="transforms">Transforms</h3>
 <p>Next, lets update our implementation</p>
 <figure>
@@ -479,6 +489,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 </figure>
 <p>The <code>parse</code>, <code>anf</code> and <code>tag</code> stages are straightforward.</p>
 <p>Lets focus on the <code>compile</code> function.</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h4 id="a-typeclass-for-representing-constants">A TypeClass for Representing Constants</h4>
 <p>Its convenient to introduce a type class describing Haskell types that can be <em>represented</em> as x86 arguments:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">class</span> <span class="dt">Repr</span> a <span class="kw">where</span></span>
@@ -490,13 +501,15 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a><span class="kw">instance</span> <span class="dt">Repr</span> <span class="dt">Bool</span> <span class="kw">where</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a>  repr <span class="dt">False</span> <span class="ot">=</span> <span class="dt">HexConst</span> <span class="bn">0x00000001</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a>  repr <span class="dt">True</span>  <span class="ot">=</span> <span class="dt">HexConst</span> <span class="bn">0x80000001</span></span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h4 id="immediate-values-to-arguments">Immediate Values to Arguments</h4>
 <p><code>Boolean b</code> is an <em>immediate</em> value (like <code>Number n</code>).</p>
-<p>Lets extend <code>immArg</code> that tranforms an immediate expression to an x86 argument.</p>
+<p>Lets extend <code>immArg</code> that transforms an immediate expression to an x86 argument.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="ot">immArg ::</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> <span class="dt">ImmTag</span> <span class="ot">-&gt;</span> <span class="dt">Arg</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>immArg (<span class="dt">Var</span>    x _)  <span class="ot">=</span> <span class="op">...</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>immArg (<span class="dt">Number</span> n _)  <span class="ot">=</span> repr n</span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a>immArg (<span class="dt">Boolean</span> b _) <span class="ot">=</span> repr b</span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h4 id="compiling-constants">Compiling Constants</h4>
 <p>Finally, we can easily update the <code>compile</code> function as:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="ot">compileEnv ::</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> <span class="dt">AnfTagE</span> <span class="ot">-&gt;</span> <span class="dt">Asm</span></span>
@@ -504,17 +517,17 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a>compileEnv _ e<span class="op">@</span>(<span class="dt">Boolean</span> _ _) <span class="ot">=</span> [<span class="dt">IMov</span> (<span class="dt">Reg</span> <span class="dt">EAX</span>) (immArg env e)]</span></code></pre></div>
 <p>(The other cases remain unchanged.)</p>
 <p>Lets run some tests to double check.</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="quiz">QUIZ</h3>
 <p>What is the result of:</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a>ghci<span class="op">&gt;</span> exec <span class="st">&quot;15&quot;</span></span></code></pre></div>
-<ul>
-<li><strong>A</strong> Error</li>
-<li><strong>B</strong> <code>0</code></li>
-<li><strong>C</strong> <code>15</code></li>
-<li><strong>D</strong> <code>30</code></li>
-</ul>
+<p><strong>A.</strong> Error</p>
+<p><strong>B.</strong> <code>0</code></p>
+<p><strong>C.</strong> <code>15</code></p>
+<p><strong>D.</strong> <code>30</code></p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="output-representation">Output Representation</h3>
-<p>Say what?! Ah. Need to update our run-time printer in <code>main.c</code></p>
+<p>Say what?! Need to update our run-time printer in <code>main.c</code></p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode c"><code class="sourceCode c"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="dt">void</span> print(<span class="dt">int</span> val){</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a>  <span class="cf">if</span> (val == CONST_TRUE)</span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a>    printf(<span class="st">&quot;true&quot;</span>);</span>
@@ -530,34 +543,31 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <h3 id="quiz-1">QUIZ</h3>
 <p>What is the result of</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a>ghci<span class="op">&gt;</span> exec <span class="st">&quot;let x = 15 in x&quot;</span></span></code></pre></div>
-<ul>
-<li><strong>A</strong> Error</li>
-<li><strong>B</strong> <code>0</code></li>
-<li><strong>C</strong> <code>15</code></li>
-<li><strong>D</strong> <code>30</code></li>
-</ul>
+<p><strong>A.</strong> Error</p>
+<p><strong>B.</strong> <code>0</code></p>
+<p><strong>C.</strong> <code>15</code></p>
+<p><strong>D.</strong> <code>30</code></p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="quiz-2">QUIZ</h3>
 <p>What is the result of</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a>ghci<span class="op">&gt;</span> exec <span class="st">&quot;if 3: 12 else: 49&quot;</span></span></code></pre></div>
-<ul>
-<li><strong>A</strong> Error</li>
-<li><strong>B</strong> <code>0</code></li>
-<li><strong>C</strong> <code>12</code></li>
-<li><strong>D</strong> <code>49</code></li>
-</ul>
+<p><strong>A.</strong> Error</p>
+<p><strong>B.</strong> <code>0</code></p>
+<p><strong>C.</strong> <code>12</code></p>
+<p><strong>D.</strong> <code>49</code></p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="arithmetic-operations">2. Arithmetic Operations</h2>
 <p>Constants like <code>2</code>, <code>29</code>, <code>false</code> are only useful if we can perform computations with them.</p>
 <p>First lets see what happens with our arithmetic operators.</p>
 <h3 id="quiz-addition">QUIZ: Addition</h3>
 <p>What will be the result of:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a>ghci<span class="op">&gt;</span> exec <span class="st">&quot;12 + 4&quot;</span></span></code></pre></div>
-<ol type="1">
-<li>Does not compile</li>
-<li>Run-time error (e.g. segmentation fault)</li>
-<li><code>16</code></li>
-<li><code>32</code></li>
-<li><code>0</code></li>
-</ol>
+<p><strong>A.</strong> Does not compile</p>
+<p><strong>B.</strong> Run-time error (e.g. segmentation fault)</p>
+<p><strong>C.</strong> <code>16</code></p>
+<p><strong>D.</strong> <code>32</code></p>
+<p><strong>E.</strong> <code>0</code></p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="shifted-representation-and-addition">Shifted Representation and Addition</h3>
 <p>We are <em>representing</em> a number <code>n</code> by <strong>shifting it left by 1</strong></p>
 <blockquote>
