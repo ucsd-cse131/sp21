@@ -43,7 +43,6 @@ headerImg: books.jpg
 [lec5]: lectures/05-cobra.html
 [md5]:  http://github.com/ucsd-progsys/131-web/blob/master/lectures/05-cobra.md
 [cod5]: https://github.com/ucsd-cse131-fa18/03-cobra
-[pdf5]: static/img/cobra-notes.pdf
 
 [lec6]: lectures/06-diamond.html
 [md6]:  http://github.com/ucsd-progsys/131-web/blob/master/lectures/06-diamond.md
