@@ -12,6 +12,7 @@ headerImg: books.jpg
 | 4/8        | "" | "" | [pdf][pdf4b] | "" |
 | 4/13       | "" | "" | [pdf][pdf4c] | "" |
 | 4/15       | Data Representation           | [html][lec5] [md][md5] | [pdf][pdf5a] | [code][cod5]   |
+| 4/22       | Functions                     | [html][lec6] [md][md6] | [pdf][pdf6]  | [code][cod6]   |
 
 <!-- 
 | 11/5       | Functions                     | [html][lec6] [md][md6] |             | [code][cod6]   |
@@ -46,6 +47,7 @@ headerImg: books.jpg
 [lec6]: lectures/06-diamond.html
 [md6]:  http://github.com/ucsd-progsys/131-web/blob/master/lectures/06-diamond.md
 [cod6]: https://github.com/ucsd-cse131/04-diamondback
+[pdf6]: static/img/06-diamondback.pdf
 
 [lec7]: lectures/07-egg-eater.html
 [md7]: http://github.com/ucsd-progsys/131-web/blob/master/lectures/07-egg-eater.md

@@ -909,7 +909,7 @@ We need a co-ordinated strategy for _definitions_ and _calls_.
 
 ## Strategy: The Stack
 
-![Stack Frames](/static/img/stack-frames.png)
+![Stack Frames](/static/img/stack-frames-64.png)
 
 We will use our old friend, _the stack_ to
 
@@ -933,7 +933,7 @@ We will use our old friend, _the stack_ to
 We are using the [x86-64 calling convention](https://aaronbloomfield.github.io/pdr/book/x86-64bit-ccc-chapter.pdf), 
 that ensures the following stack layout:
 
-![Stack Layout](/static/img/stack-layout.png)
+![Stack Layout](/static/img/stack-layout-64.png)
 
 Suppose we have a function `foo` defined as
 
@@ -1165,7 +1165,9 @@ compileDecl f xs body =
  -- 0. Label for start of function
     [ ILabel (DefFun (bindId f)) ]
  -- 1. Setup  stack frame RBP/RSP
- ++ funEntry n 
+ ++ funEntry n
+ -- label the 'body' for tail-calls
+ ++ [ ILabel (DefFunBody (bindId f)) ]
  -- 2. Copy parameters into stack slots
  ++ copyArgs xs
  -- 3. Execute 'body' with result in RAX
@@ -1334,8 +1336,6 @@ which _should_ generate the equivalent of the assembly:
 <br>
 
 
-<!-- HEREHEREHEREHEREHEREHEREHEREHEREHEREHEREHEREHERE -->
-
 ## 4. Compiling Tail Calls
 
 Our language doesn't have _loops_. While recursion is more general,
@@ -1372,7 +1372,18 @@ sumTo(10000)
 * Requires `10000` stack frames ...
 * One for `fac(10000)`, one for `fac(9999)` etc.
 
-### Tail Recursion
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Tail Recursion
 
 Fortunately, we can do much better.
 
@@ -1401,11 +1412,21 @@ def sumTo(n):
 sumTo(10000)
 ```
 
-### Visualizing Tail Calls
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Visualizing Tail Calls
 
 Lets compare the execution of the two versions of `sumTo`
 
-#### Plain Recursion
+### Plain Recursion
 
 ```python
 sumTo(5)
@@ -1435,7 +1456,7 @@ sumTo(5)
 * Each call **pushes a frame** onto the call-stack;
 * The results are **popped off** and _added_ to the parameter at that frame.
 
-#### Tail Recursion
+### Tail Recursion
 
 ```python
 sumTo(5)
@@ -1454,42 +1475,73 @@ sumTo(5)
 No need to use call-stack, can make recursive call **in place**.
 * Tail recursive calls can be _compiled into loops_!
 
-### Tail Recursion Strategy
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Tail Recursion Strategy
 
 Instead of using `call` to make the call, simply:
 
-1. **Move** the _call's_ arguments to the (same) stack position (as current args),
-2. **Free** current stack space by resetting `esp` and `ebp` (as just prior to `ret` c.f. `exitCode`),
-3. **Jump** to the _start_ of the function.
+1. **Copy** the _call's_ arguments to the (same) stack position (as current args),
+  - first six in `rdi`, `rsi` etc. and rest in `[rbp+16]`, `[rbp+18]`...
+
+2. **Jump** to the _start_ of the function
+  - but _after_ the bit where setup the stack frame (to not do it again!)
 
 That is, here's what a _naive_ implementation would look like:
 
 ```nasm
-push [ebp - 8]        # push ii
-push [ebp - 4]        # push rr
+mov rdi, [rbp - 8]        # push rr
+mov rsi, [rbp - 16]       # push ii
 call def_loop
 ```
 
 but a _tail-recursive_ call can instead be compiled as:
 
 ```nasm
-mov eax , [ebp - 8]  # overwrite i with ii
-mov [ebp + 12], eax  
-mov eax, [ebp - 4]   # overwrite r with rr
-mov [ebp + 8], eax   
-mov esp, ebp         # "free" stack frame (as before `ret`)
-pop ebp
-jmp def_loop         # jump to function start
+mov rdi, [rbp - 8]        # push rr
+mov rsi, [rbp - 16]       # push ii
+jmp def_loop_body
 ```
 
 which has the effect of executing `loop` _literally_ as if it were a while-loop!
 
-#### Requirements
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Requirements
 
 To _implement_ the above strategy, we need a way to:
 
 1. **Identify** tail calls in the source `Expr` (AST),
 2. **Compile** the tail calls following the above strategy.
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ### Types
 
@@ -1508,7 +1560,17 @@ type AnfTagP   = Program (SourceSpan, Tag)          -- ^ each sub-expression has
 type AnfTagTlP = Program ((SourceSpan, Tag), Bool)  -- ^ each call is marked as "tail" or not
 ```
 
-### Transforms
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Transforms
 
 Thus, to implement tail-call optimization, we need to write _two_ transforms:
 
@@ -1518,9 +1580,19 @@ Thus, to implement tail-call optimization, we need to write _two_ transforms:
 tails :: Program a -> Program (a, Bool)
 ```
 
-**2. To Compile** tail calls, by extending `compileExpr`
+**2. To Compile** tail calls, by extending `compileEnv`
 
-#### Labeling Tail Calls
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Labeling Tail Calls
 
 ![Which Calls are Tail Calls?](/static/img/tail-rec-code-and-type.png)
 
@@ -1582,16 +1654,27 @@ tails = go True                                         -- initially flag is Tru
 How could we modify the above to _only_ mark **tail-recursive**
 calls, i.e. to the _same_ function (whose declaration is being compiled?)
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-#### Compiling Tail Calls
+### Compiling Tail Calls
 
 Finally, to generate code, we need only add a special case to `compileExpr`
 
 ```haskell
 compileExpr :: Env -> AnfTagTlE -> [Instruction]
 compileExpr env (App f vs l)
-  | isTail l                 = tailcall (DefFun f) [param env v | v <- vs]
-  | otherwise                = call     (DefFun f) [param env v | v <- vs]
+  | isTail l  = tailcall (DefFun f)     [immArg env v | v <- vs]
+  | otherwise = call     (DefFunBody f) [immArg env v | v <- vs]
 ```
 
 That is, _if_ the call is _not labeled_ as a tail call,
@@ -1600,16 +1683,22 @@ implements our [tail recursion strategy](#tail-recursion-strategy)
 
 ```haskell
 tailcall :: Label -> [Arg] -> [Instruction]
-tailcall f args
-  = moveArgs args   -- overwrite current param stack-slots with call args
- ++ exitCode        -- restore ebp and esp
- ++ [IJmp f]        -- jump to start
+tailcall l args
+  = copyRegArgs       regArgs     -- copy into RDI, RSI,...
+ ++ copyTailStackArgs stkArgs     -- copy into [RBP + 16], [RBP + 24] ...
+ ++ [IJmp l]                      -- jump to start label
+ where
+    (regArgs, stkArgs) = splitAt 6 args
 ```
 
-**EXERCISE**
-
-Does the above strategy work _always_? Can you think of situations where it may
-go horribly wrong?
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ## Recap
 

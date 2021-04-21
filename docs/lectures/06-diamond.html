@@ -671,7 +671,7 @@ tests/input/err-fac.diamond:(8:11)-(9:1): Wrong arity of arguments at call of fa
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="strategy-the-stack">Strategy: The Stack</h2>
 <figure>
-<img src="../static/img/stack-frames.png" alt /><figcaption>Stack Frames</figcaption>
+<img src="../static/img/stack-frames-64.png" alt /><figcaption>Stack Frames</figcaption>
 </figure>
 <p>We will use our old friend, <em>the stack</em> to</p>
 <ul>
@@ -682,7 +682,7 @@ tests/input/err-fac.diamond:(8:11)-(9:1): Wrong arity of arguments at call of fa
 <h2 id="x86-64-calling-convention">X86-64 Calling Convention</h2>
 <p>We are using the <a href="https://aaronbloomfield.github.io/pdr/book/x86-64bit-ccc-chapter.pdf">x86-64 calling convention</a>, that ensures the following stack layout:</p>
 <figure>
-<img src="../static/img/stack-layout.png" alt /><figcaption>Stack Layout</figcaption>
+<img src="../static/img/stack-layout-64.png" alt /><figcaption>Stack Layout</figcaption>
 </figure>
 <p>Suppose we have a function <code>foo</code> defined as</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true"></a><span class="kw">def</span> foo(x1,x2,...):</span>
@@ -774,16 +774,18 @@ into stack-slots <code>1</code>,<code>2</code>,… so we can access them in the 
 <span id="cb35-3"><a href="#cb35-3" aria-hidden="true"></a> <span class="co">-- 0. Label for start of function</span></span>
 <span id="cb35-4"><a href="#cb35-4" aria-hidden="true"></a>    [ <span class="dt">ILabel</span> (<span class="dt">DefFun</span> (bindId f)) ]</span>
 <span id="cb35-5"><a href="#cb35-5" aria-hidden="true"></a> <span class="co">-- 1. Setup  stack frame RBP/RSP</span></span>
-<span id="cb35-6"><a href="#cb35-6" aria-hidden="true"></a> <span class="op">++</span> funEntry n </span>
-<span id="cb35-7"><a href="#cb35-7" aria-hidden="true"></a> <span class="co">-- 2. Copy parameters into stack slots</span></span>
-<span id="cb35-8"><a href="#cb35-8" aria-hidden="true"></a> <span class="op">++</span> copyArgs xs</span>
-<span id="cb35-9"><a href="#cb35-9" aria-hidden="true"></a> <span class="co">-- 3. Execute 'body' with result in RAX</span></span>
-<span id="cb35-10"><a href="#cb35-10" aria-hidden="true"></a> <span class="op">++</span> compileEnv initEnv body </span>
-<span id="cb35-11"><a href="#cb35-11" aria-hidden="true"></a> <span class="co">-- 4. Teardown stack frame &amp; return</span></span>
-<span id="cb35-12"><a href="#cb35-12" aria-hidden="true"></a> <span class="op">++</span> funExit n </span>
-<span id="cb35-13"><a href="#cb35-13" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb35-14"><a href="#cb35-14" aria-hidden="true"></a>    n       <span class="ot">=</span> countVars body</span>
-<span id="cb35-15"><a href="#cb35-15" aria-hidden="true"></a>    initEnv <span class="ot">=</span> paramsEnv xs</span></code></pre></div>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true"></a> <span class="op">++</span> funEntry n</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true"></a> <span class="co">-- label the 'body' for tail-calls</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true"></a> <span class="op">++</span> [ <span class="dt">ILabel</span> (<span class="dt">DefFunBody</span> (bindId f)) ]</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true"></a> <span class="co">-- 2. Copy parameters into stack slots</span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true"></a> <span class="op">++</span> copyArgs xs</span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true"></a> <span class="co">-- 3. Execute 'body' with result in RAX</span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true"></a> <span class="op">++</span> compileEnv initEnv body </span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true"></a> <span class="co">-- 4. Teardown stack frame &amp; return</span></span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true"></a> <span class="op">++</span> funExit n </span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb35-16"><a href="#cb35-16" aria-hidden="true"></a>    n       <span class="ot">=</span> countVars body</span>
+<span id="cb35-17"><a href="#cb35-17" aria-hidden="true"></a>    initEnv <span class="ot">=</span> paramsEnv xs</span></code></pre></div>
 <p><br></p>
 <h3 id="setup-and-tear-down-stack-frame">Setup and Tear Down Stack Frame</h3>
 <p>(As in <code>cobra</code>)</p>
@@ -860,7 +862,6 @@ into stack-slots <code>1</code>,<code>2</code>,… so we can access them in the 
 <span id="cb45-2"><a href="#cb45-2" aria-hidden="true"></a>  <span class="kw">mov</span>  <span class="kw">rsi</span> <span class="dv">14</span></span>
 <span id="cb45-3"><a href="#cb45-3" aria-hidden="true"></a>  <span class="kw">call</span> label_def_add2</span></code></pre></div>
 <p><br> <br> <br> <br> <br> <br></p>
-<!-- HEREHEREHEREHEREHEREHEREHEREHEREHEREHEREHEREHERE -->
 <h2 id="compiling-tail-calls">4. Compiling Tail Calls</h2>
 <p>Our language doesn’t have <em>loops</em>. While recursion is more general, it is more <em>expensive</em> because it uses up stack space (and requires all the attendant management overhead). For example (the <code>python</code> program):</p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true"></a><span class="kw">def</span> sumTo(n):</span>
@@ -888,7 +889,8 @@ into stack-slots <code>1</code>,<code>2</code>,… so we can access them in the 
 <li>Requires <code>10000</code> stack frames …</li>
 <li>One for <code>fac(10000)</code>, one for <code>fac(9999)</code> etc.</li>
 </ul>
-<h3 id="tail-recursion">Tail Recursion</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="tail-recursion">Tail Recursion</h2>
 <p>Fortunately, we can do much better.</p>
 <p>A <strong>tail recursive</strong> function is one where the recursive call is the <em>last</em> operation done by the function, i.e. where the value returned by the function is the <em>same</em> as the value returned by the recursive call.</p>
 <p>We can rewrite <code>sumTo</code> using a tail-recursive <code>loop</code> function:</p>
@@ -905,9 +907,10 @@ into stack-slots <code>1</code>,<code>2</code>,… so we can access them in the 
 <span id="cb48-11"><a href="#cb48-11" aria-hidden="true"></a>  loop(<span class="dv">0</span>, n)</span>
 <span id="cb48-12"><a href="#cb48-12" aria-hidden="true"></a></span>
 <span id="cb48-13"><a href="#cb48-13" aria-hidden="true"></a>sumTo(<span class="dv">10000</span>)</span></code></pre></div>
-<h3 id="visualizing-tail-calls">Visualizing Tail Calls</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="visualizing-tail-calls">Visualizing Tail Calls</h2>
 <p>Lets compare the execution of the two versions of <code>sumTo</code></p>
-<h4 id="plain-recursion">Plain Recursion</h4>
+<h3 id="plain-recursion">Plain Recursion</h3>
 <div class="sourceCode" id="cb49"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true"></a>sumTo(<span class="dv">5</span>)</span>
 <span id="cb49-2"><a href="#cb49-2" aria-hidden="true"></a><span class="op">==&gt;</span> <span class="dv">5</span> <span class="op">+</span> sumTo(<span class="dv">4</span>)</span>
 <span id="cb49-3"><a href="#cb49-3" aria-hidden="true"></a>        <span class="op">^^^^^^^^</span></span>
@@ -934,7 +937,7 @@ into stack-slots <code>1</code>,<code>2</code>,… so we can access them in the 
 <li>Each call <strong>pushes a frame</strong> onto the call-stack;</li>
 <li>The results are <strong>popped off</strong> and <em>added</em> to the parameter at that frame.</li>
 </ul>
-<h4 id="tail-recursion-1">Tail Recursion</h4>
+<h3 id="tail-recursion-1">Tail Recursion</h3>
 <div class="sourceCode" id="cb50"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true"></a>sumTo(<span class="dv">5</span>)</span>
 <span id="cb50-2"><a href="#cb50-2" aria-hidden="true"></a><span class="op">==&gt;</span> loop(<span class="dv">0</span>, <span class="dv">5</span>)</span>
 <span id="cb50-3"><a href="#cb50-3" aria-hidden="true"></a><span class="op">==&gt;</span> loop(<span class="dv">5</span>, <span class="dv">4</span>)</span>
@@ -948,32 +951,38 @@ into stack-slots <code>1</code>,<code>2</code>,… so we can access them in the 
 <li>Each call returns its result <em>without further computation</em></li>
 </ul>
 <p>No need to use call-stack, can make recursive call <strong>in place</strong>. * Tail recursive calls can be <em>compiled into loops</em>!</p>
-<h3 id="tail-recursion-strategy">Tail Recursion Strategy</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="tail-recursion-strategy">Tail Recursion Strategy</h2>
 <p>Instead of using <code>call</code> to make the call, simply:</p>
 <ol type="1">
-<li><strong>Move</strong> the <em>call’s</em> arguments to the (same) stack position (as current args),</li>
-<li><strong>Free</strong> current stack space by resetting <code>esp</code> and <code>ebp</code> (as just prior to <code>ret</code> c.f. <code>exitCode</code>),</li>
-<li><strong>Jump</strong> to the <em>start</em> of the function.</li>
+<li><strong>Copy</strong> the <em>call’s</em> arguments to the (same) stack position (as current args),</li>
 </ol>
+<ul>
+<li>first six in <code>rdi</code>, <code>rsi</code> etc. and rest in <code>[rbp+16]</code>, <code>[rbp+18]</code>…</li>
+</ul>
+<ol start="2" type="1">
+<li><strong>Jump</strong> to the <em>start</em> of the function</li>
+</ol>
+<ul>
+<li>but <em>after</em> the bit where setup the stack frame (to not do it again!)</li>
+</ul>
 <p>That is, here’s what a <em>naive</em> implementation would look like:</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true"></a><span class="kw">push</span> [<span class="kw">ebp</span> - <span class="dv">8</span>]        # <span class="kw">push</span> ii</span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true"></a><span class="kw">push</span> [<span class="kw">ebp</span> - <span class="dv">4</span>]        # <span class="kw">push</span> rr</span>
+<div class="sourceCode" id="cb51"><pre class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true"></a><span class="kw">mov</span> <span class="kw">rdi</span>, [<span class="kw">rbp</span> - <span class="dv">8</span>]        # <span class="kw">push</span> rr</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true"></a><span class="kw">mov</span> <span class="kw">rsi</span>, [<span class="kw">rbp</span> - <span class="dv">16</span>]       # <span class="kw">push</span> ii</span>
 <span id="cb51-3"><a href="#cb51-3" aria-hidden="true"></a><span class="kw">call</span> def_loop</span></code></pre></div>
 <p>but a <em>tail-recursive</em> call can instead be compiled as:</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true"></a><span class="kw">mov</span> <span class="kw">eax</span> , [<span class="kw">ebp</span> - <span class="dv">8</span>]  # overwrite i with ii</span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true"></a><span class="kw">mov</span> [<span class="kw">ebp</span> + <span class="dv">12</span>], <span class="kw">eax</span>  </span>
-<span id="cb52-3"><a href="#cb52-3" aria-hidden="true"></a><span class="kw">mov</span> <span class="kw">eax</span>, [<span class="kw">ebp</span> - <span class="dv">4</span>]   # overwrite r with rr</span>
-<span id="cb52-4"><a href="#cb52-4" aria-hidden="true"></a><span class="kw">mov</span> [<span class="kw">ebp</span> + <span class="dv">8</span>], <span class="kw">eax</span>   </span>
-<span id="cb52-5"><a href="#cb52-5" aria-hidden="true"></a><span class="kw">mov</span> <span class="kw">esp</span>, <span class="kw">ebp</span>         # <span class="st">&quot;free&quot;</span> stack frame (as before `ret`)</span>
-<span id="cb52-6"><a href="#cb52-6" aria-hidden="true"></a><span class="kw">pop</span> <span class="kw">ebp</span></span>
-<span id="cb52-7"><a href="#cb52-7" aria-hidden="true"></a><span class="kw">jmp</span> def_loop         # jump to function start</span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true"></a><span class="kw">mov</span> <span class="kw">rdi</span>, [<span class="kw">rbp</span> - <span class="dv">8</span>]        # <span class="kw">push</span> rr</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true"></a><span class="kw">mov</span> <span class="kw">rsi</span>, [<span class="kw">rbp</span> - <span class="dv">16</span>]       # <span class="kw">push</span> ii</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true"></a><span class="kw">jmp</span> def_loop_body</span></code></pre></div>
 <p>which has the effect of executing <code>loop</code> <em>literally</em> as if it were a while-loop!</p>
-<h4 id="requirements">Requirements</h4>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="requirements">Requirements</h2>
 <p>To <em>implement</em> the above strategy, we need a way to:</p>
 <ol type="1">
 <li><strong>Identify</strong> tail calls in the source <code>Expr</code> (AST),</li>
 <li><strong>Compile</strong> the tail calls following the above strategy.</li>
 </ol>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="types-2">Types</h3>
 <p>We can do the above in a single step, i.e., we could identify the tail calls <em>during</em> the code generation, but its cleaner to separate the steps into:</p>
 <figure>
@@ -984,12 +993,14 @@ into stack-slots <code>1</code>,<code>2</code>,… so we can access them in the 
 <span id="cb53-2"><a href="#cb53-2" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">AnfP</span>      <span class="ot">=</span> <span class="dt">Program</span> <span class="dt">SourceSpan</span>                 <span class="co">-- ^ each function body in ANF</span></span>
 <span id="cb53-3"><a href="#cb53-3" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">AnfTagP</span>   <span class="ot">=</span> <span class="dt">Program</span> (<span class="dt">SourceSpan</span>, <span class="dt">Tag</span>)          <span class="co">-- ^ each sub-expression has unique tag</span></span>
 <span id="cb53-4"><a href="#cb53-4" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">AnfTagTlP</span> <span class="ot">=</span> <span class="dt">Program</span> ((<span class="dt">SourceSpan</span>, <span class="dt">Tag</span>), <span class="dt">Bool</span>)  <span class="co">-- ^ each call is marked as &quot;tail&quot; or not</span></span></code></pre></div>
-<h3 id="transforms-1">Transforms</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="transforms-1">Transforms</h2>
 <p>Thus, to implement tail-call optimization, we need to write <em>two</em> transforms:</p>
 <p><strong>1. To Label</strong> each call with <code>True</code> (if it is a <em>tail call</em>) or <code>False</code> otherwise:</p>
 <div class="sourceCode" id="cb54"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true"></a><span class="ot">tails ::</span> <span class="dt">Program</span> a <span class="ot">-&gt;</span> <span class="dt">Program</span> (a, <span class="dt">Bool</span>)</span></code></pre></div>
-<p><strong>2. To Compile</strong> tail calls, by extending <code>compileExpr</code></p>
-<h4 id="labeling-tail-calls">Labeling Tail Calls</h4>
+<p><strong>2. To Compile</strong> tail calls, by extending <code>compileEnv</code></p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="labeling-tail-calls">Labeling Tail Calls</h2>
 <figure>
 <img src="../static/img/tail-rec-code-and-type.png" alt /><figcaption>Which Calls are Tail Calls?</figcaption>
 </figure>
@@ -1041,20 +1052,22 @@ into stack-slots <code>1</code>,<code>2</code>,… so we can access them in the 
 <span id="cb55-25"><a href="#cb55-25" aria-hidden="true"></a>      <span class="kw">where</span></span>
 <span id="cb55-26"><a href="#cb55-26" aria-hidden="true"></a>        es'                <span class="ot">=</span> go <span class="dt">False</span> <span class="op">&lt;$&gt;</span> es            <span class="co">-- &quot;call args&quot; are non-tail</span></span></code></pre></div>
 <p><strong>EXERCISE:</strong> How could we modify the above to <em>only</em> mark <strong>tail-recursive</strong> calls, i.e. to the <em>same</em> function (whose declaration is being compiled?)</p>
-<h4 id="compiling-tail-calls-1">Compiling Tail Calls</h4>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h3 id="compiling-tail-calls-1">Compiling Tail Calls</h3>
 <p>Finally, to generate code, we need only add a special case to <code>compileExpr</code></p>
 <div class="sourceCode" id="cb56"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true"></a><span class="ot">compileExpr ::</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> <span class="dt">AnfTagTlE</span> <span class="ot">-&gt;</span> [<span class="dt">Instruction</span>]</span>
 <span id="cb56-2"><a href="#cb56-2" aria-hidden="true"></a>compileExpr env (<span class="dt">App</span> f vs l)</span>
-<span id="cb56-3"><a href="#cb56-3" aria-hidden="true"></a>  <span class="op">|</span> isTail l                 <span class="ot">=</span> tailcall (<span class="dt">DefFun</span> f) [param env v <span class="op">|</span> v <span class="ot">&lt;-</span> vs]</span>
-<span id="cb56-4"><a href="#cb56-4" aria-hidden="true"></a>  <span class="op">|</span> <span class="fu">otherwise</span>                <span class="ot">=</span> call     (<span class="dt">DefFun</span> f) [param env v <span class="op">|</span> v <span class="ot">&lt;-</span> vs]</span></code></pre></div>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true"></a>  <span class="op">|</span> isTail l  <span class="ot">=</span> tailcall (<span class="dt">DefFun</span> f)     [immArg env v <span class="op">|</span> v <span class="ot">&lt;-</span> vs]</span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true"></a>  <span class="op">|</span> <span class="fu">otherwise</span> <span class="ot">=</span> call     (<span class="dt">DefFunBody</span> f) [immArg env v <span class="op">|</span> v <span class="ot">&lt;-</span> vs]</span></code></pre></div>
 <p>That is, <em>if</em> the call is <em>not labeled</em> as a tail call, generate code as before. Otherwise, use <code>tailcall</code> which implements our <a href="#tail-recursion-strategy">tail recursion strategy</a></p>
 <div class="sourceCode" id="cb57"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true"></a><span class="ot">tailcall ::</span> <span class="dt">Label</span> <span class="ot">-&gt;</span> [<span class="dt">Arg</span>] <span class="ot">-&gt;</span> [<span class="dt">Instruction</span>]</span>
-<span id="cb57-2"><a href="#cb57-2" aria-hidden="true"></a>tailcall f args</span>
-<span id="cb57-3"><a href="#cb57-3" aria-hidden="true"></a>  <span class="ot">=</span> moveArgs args   <span class="co">-- overwrite current param stack-slots with call args</span></span>
-<span id="cb57-4"><a href="#cb57-4" aria-hidden="true"></a> <span class="op">++</span> exitCode        <span class="co">-- restore ebp and esp</span></span>
-<span id="cb57-5"><a href="#cb57-5" aria-hidden="true"></a> <span class="op">++</span> [<span class="dt">IJmp</span> f]        <span class="co">-- jump to start</span></span></code></pre></div>
-<p><strong>EXERCISE</strong></p>
-<p>Does the above strategy work <em>always</em>? Can you think of situations where it may go horribly wrong?</p>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true"></a>tailcall l args</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true"></a>  <span class="ot">=</span> copyRegArgs       regArgs     <span class="co">-- copy into RDI, RSI,...</span></span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true"></a> <span class="op">++</span> copyTailStackArgs stkArgs     <span class="co">-- copy into [RBP + 16], [RBP + 24] ...</span></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true"></a> <span class="op">++</span> [<span class="dt">IJmp</span> l]                      <span class="co">-- jump to start label</span></span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true"></a> <span class="kw">where</span></span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true"></a>    (regArgs, stkArgs) <span class="ot">=</span> <span class="fu">splitAt</span> <span class="dv">6</span> args</span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="recap">Recap</h2>
 <p>We just saw how to add support for <strong>first-class function</strong></p>
 <ul>
