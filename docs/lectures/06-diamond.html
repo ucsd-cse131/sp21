@@ -237,12 +237,13 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <ul>
 <li><strong>User-Defined Functions</strong></li>
 </ul>
-<p>In the process of doing so, we will learn abou t</p>
+<p>In the process of doing so, we will learn about</p>
 <ul>
 <li><strong>Static Checking</strong></li>
 <li><strong>Calling Conventions</strong></li>
 <li><strong>Tail Recursion</strong></li>
 </ul>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="plan">Plan</h2>
 <ol type="1">
 <li><strong>Defining</strong> Functions</li>
@@ -250,17 +251,20 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <li><strong>Compiling</strong> Functions</li>
 <li><strong>Compiling</strong> Tail Calls</li>
 </ol>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="defining-functions">1. Defining Functions</h2>
 <p>First, lets add functions to our language.</p>
 <p>As always, lets look at some examples.</p>
-<h3 id="example-increment">Example: Increment</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="example-increment">Example: Increment</h2>
 <p>For example, a function that increments its input:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">def</span> incr(x):</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>  x <span class="op">+</span> <span class="dv">1</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a>incr(<span class="dv">10</span>)</span></code></pre></div>
-<p>We have a function definition followed by a single “main” expression, which is evaluated to yield the program’s result, which, in this case, is <code>11</code>.</p>
-<h3 id="example-factorial">Example: Factorial</h3>
+<p>We have a function definition followed by a single “main” expression, which is evaluated to yield the program’s result <code>11</code>.</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="example-factorial">Example: Factorial</h2>
 <p>Here’s a somewhat more interesting example:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="kw">def</span> fac(n):</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>  let t <span class="op">=</span> <span class="bu">print</span>(n) <span class="kw">in</span></span>
@@ -303,7 +307,8 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 24
 120
 120</code></pre>
-<h3 id="example-mutually-recursive-functions">Example: Mutually Recursive Functions</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="example-mutually-recursive-functions">Example: Mutually Recursive Functions</h2>
 <p>For this language, <strong>the function definitions are global</strong> * any function can call any other function.</p>
 <p>This lets us write <em>mutually recursive</em> functions like:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="kw">def</span> even(n):</span>
@@ -331,14 +336,17 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <li><code>false false false false 0</code></li>
 <li><code>true  true  true  true  0</code></li>
 </ol>
-<h3 id="types">Types</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="types">Types</h2>
 <p>Lets add some new types to represent programs.</p>
-<h4 id="bindings">Bindings</h4>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="bindings">Bindings</h2>
 <p>Lets create a special type that represents places where <strong>variables are bound</strong>,</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Bind</span> a <span class="ot">=</span> <span class="dt">Bind</span> <span class="dt">Id</span> a</span></code></pre></div>
-<p>A <code>Bind</code> is basically just an <code>Id</code> <em>decorated with</em> an <code>a</code> which will let us save extra <em>metadata</em> like <strong>tags</strong> or <strong>source positions</strong></p>
+<p>A <code>Bind</code> is an <code>Id</code> <em>decorated with</em> an <code>a</code></p>
 <ul>
-<li>The metadata will make it easy to report errors.</li>
+<li><p>to save extra <em>metadata</em> like <strong>tags</strong> or <strong>source positions</strong></p></li>
+<li><p>to make it easy to report errors.</p></li>
 </ul>
 <p>We will use <code>Bind</code> at two places:</p>
 <ol type="1">
@@ -348,13 +356,15 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <p>It will be helpful to have a function to extract the <code>Id</code> corresponding to a <code>Bind</code></p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="ot">bindId ::</span> <span class="dt">Bind</span> a <span class="ot">-&gt;</span> <span class="dt">Id</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a>bindId (<span class="dt">Bind</span> x _) <span class="ot">=</span> x</span></code></pre></div>
-<h4 id="programs">Programs</h4>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="programs">Programs</h2>
 <p>A <strong>program</strong> is a list of declarations and <em>main</em> expression.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Program</span> a <span class="ot">=</span> <span class="dt">Prog</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a>  {<span class="ot"> pDecls ::</span> [<span class="dt">Decl</span> a]    <span class="co">-- ^ function declarations</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a>  ,<span class="ot"> pBody  ::</span> <span class="op">!</span>(<span class="dt">Expr</span> a)   <span class="co">-- ^ &quot;main&quot; expression</span></span>
 <span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a>  }</span></code></pre></div>
-<h4 id="declarations">Declarations</h4>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="declarations">Declarations</h2>
 <p>Each <strong>function</strong> lives is its own <strong>declaration</strong>,</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Decl</span> a <span class="ot">=</span> <span class="dt">Decl</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a>  {<span class="ot"> fName  ::</span> (<span class="dt">Bind</span> a)    <span class="co">-- ^ name</span></span>
@@ -362,7 +372,8 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true"></a>  ,<span class="ot"> fBody  ::</span> (<span class="dt">Expr</span> a)    <span class="co">-- ^ body expression</span></span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true"></a>  ,<span class="ot"> fLabel ::</span> a           <span class="co">-- ^ metadata/tag</span></span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true"></a>  }</span></code></pre></div>
-<h4 id="expressions">Expressions</h4>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="expressions">Expressions</h2>
 <p>Finally, lets add <em>function application</em> (calls) to the source expressions:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Expr</span> a</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a>  <span class="ot">=</span> <span class="op">...</span></span>
@@ -375,9 +386,10 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <li>a metadata/tag value of type <code>a</code>.</li>
 </ul>
 <p>(<strong>Note:</strong> that we are now using <code>Bind</code> instead of plain <code>Id</code> at a <code>Let</code>.)</p>
-<h4 id="examples-revisited">Examples Revisited</h4>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="examples-revisited">Examples Revisited</h2>
 <p>Lets see how the examples above are represented:</p>
-<pre class="ghc"><code>ghci&gt; parseFile &quot;tests/input/incr.diamond&quot;
+<pre class="ghc"><code>&gt;&gt;&gt; parseFile &quot;tests/input/incr.diamond&quot;
 Prog {pDecls = [Decl { fName = Bind &quot;incr&quot; ()
                      , fArgs = [Bind &quot;n&quot; ()]
                      , fBody = Prim2 Plus (Id &quot;n&quot; ()) (Number 1 ()) ()
@@ -386,7 +398,7 @@ Prog {pDecls = [Decl { fName = Bind &quot;incr&quot; ()
      , pBody = App &quot;incr&quot; [Number 5 ()] ()
      }
 
-ghci&gt; parseFile &quot;tests/input/fac.diamond&quot;
+&gt;&gt;&gt; parseFile &quot;tests/input/fac.diamond&quot;
 Prog { pDecls = [ Decl {fName = Bind &quot;fac&quot; ()
                 , fArgs = [Bind &quot;n&quot; ()]
                 , fBody = Let (Bind &quot;t&quot; ()) (Prim1 Print (Id &quot;n&quot; ()) ())
@@ -399,19 +411,21 @@ Prog { pDecls = [ Decl {fName = Bind &quot;fac&quot; ()
                 ]
      , pBody  = App &quot;fac&quot; [Number 5 ()] ()
      }</code></pre>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="static-checking">2. Static Checking</h2>
 <p>Next, we will look at an <em>increasingly important</em> aspect of compilation, <strong>pointing out bugs in the code at compile time</strong></p>
-<p>Called <strong>Static Checking</strong> because we do this <em>without</em> (i.e. <em>before</em>) compiling and running (“dynamicking”) the code.</p>
+<p>Called <strong>Static Checking</strong> because we do this <em>without</em> (i.e. <em>before</em>) compiling and running the code.</p>
 <p>There is a huge spectrum of checks possible:</p>
 <ul>
 <li>Code Linting <a href="http://jshint.com/">jslint</a>, <a href="https://hackage.haskell.org/package/hlint">hlint</a></li>
 <li>Static Typing</li>
 <li>Static Analysis</li>
 <li>Contract Checking</li>
-<li>Dependent or Refinement Typing</li>
+<li>Dependent or <a href="https://ucsd-progsys.github.io/liquidhaskell-blog/">Refinement Typing</a></li>
 </ul>
 <p>Increasingly, <em>this</em> is the most important phase of a compiler, and modern compiler engineering is built around making these checks lightning fast. For more, see <a href="https://www.infoq.com/news/2016/05/anders-hejlsberg-compiler">this interview of Anders Hejlsberg</a> the architect of the C# and TypeScript compilers.</p>
-<h3 id="static-well-formedness-checking">Static Well-formedness Checking</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="static-well-formedness-checking">Static Well-formedness Checking</h2>
 <p>We will look at code linting and, later in the quarter, type systems in 131.</p>
 <p>For the former, suppose you tried to compile:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a><span class="kw">def</span> fac(n):</span>
@@ -448,11 +462,12 @@ tests/input/err-fac.diamond:(8:11)-(9:1): Wrong arity of arguments at call of fa
 <li>The call <code>fac</code> has the wrong number of arguments.</li>
 </ol>
 <p>Next, lets see how to update the architecture of our compiler to support these and other kinds of errors.</p>
-<h3 id="types-1">Types</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="types-an-error-reporting-api">Types: An Error Reporting API</h2>
 <p>An <em>error message</em> type:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">UserError</span> <span class="ot">=</span> <span class="dt">Error</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true"></a>  {<span class="ot"> eMsg  ::</span> <span class="op">!</span><span class="dt">Text</span></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true"></a>  ,<span class="ot"> eSpan ::</span> <span class="op">!</span><span class="dt">SourceSpan</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true"></a>  {<span class="ot"> eMsg  ::</span> <span class="op">!</span><span class="dt">Text</span>          <span class="co">-- ^ error message</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true"></a>  ,<span class="ot"> eSpan ::</span> <span class="op">!</span><span class="dt">SourceSpan</span>    <span class="co">-- ^ source position</span></span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true"></a>  }</span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true"></a>  <span class="kw">deriving</span> (<span class="dt">Show</span>, <span class="dt">Typeable</span>)</span></code></pre></div>
 <p>We make it an <em>exception</em> (that can be <em>thrown</em>):</p>
@@ -467,42 +482,43 @@ tests/input/err-fac.diamond:(8:11)-(9:1): Wrong arity of arguments at call of fa
 <div class="sourceCode" id="cb19"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true"></a><span class="ot">renderErrors ::</span> [<span class="dt">UserError</span>] <span class="ot">-&gt;</span> <span class="dt">IO</span> <span class="dt">Text</span></span></code></pre></div>
 <p>which takes something like:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true"></a><span class="dt">Error</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true"></a> <span class="st">&quot;Unbound variable 'm'&quot;</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true"></a> { file      <span class="ot">=</span> <span class="st">&quot;tests/input/err-fac&quot;</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true"></a> , startLine <span class="ot">=</span> <span class="dv">8</span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true"></a> , startCol  <span class="ot">=</span> <span class="dv">1</span></span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true"></a> , endLine   <span class="ot">=</span> <span class="dv">8</span></span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true"></a> , endCol    <span class="ot">=</span> <span class="dv">9</span></span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true"></a> }</span></code></pre></div>
-<p>and produce a pretty message (that requires reading the source file),</p>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true"></a>  <span class="st">&quot;Unbound variable 'm'&quot;</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true"></a>  { file      <span class="ot">=</span> <span class="st">&quot;tests/input/err-fac&quot;</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true"></a>  , startLine <span class="ot">=</span> <span class="dv">8</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true"></a>  , startCol  <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true"></a>  , endLine   <span class="ot">=</span> <span class="dv">8</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true"></a>  , endCol    <span class="ot">=</span> <span class="dv">9</span></span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true"></a>  }</span></code></pre></div>
+<p>and produces a <strong>contextual message</strong> (that requires reading the source file),</p>
 <pre><code>tests/input/err-fac.diamond:6:13-14: Unbound variable 'm'
 
          6|      n * fac(m - 1)
                          ^</code></pre>
 <p>We can put it all together by</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a><span class="ot">main ::</span> <span class="dt">IO</span> ()</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true"></a>main <span class="ot">=</span> runCompiler <span class="ot">`catch`</span> esHandle</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true"></a></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true"></a><span class="ot">esHandle ::</span> [<span class="dt">UserError</span>] <span class="ot">-&gt;</span> <span class="dt">IO</span> ()</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true"></a>esHandle es <span class="ot">=</span> renderErrors es <span class="op">&gt;&gt;=</span> hPutStrLn stderr <span class="op">&gt;&gt;</span> exitFailure</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a><span class="co">-- bin/Main.hs</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true"></a><span class="ot">main ::</span> <span class="dt">IO</span> ()</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true"></a>main <span class="ot">=</span> runCompiler <span class="ot">`catch`</span> esHandle</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true"></a><span class="ot">esHandle ::</span> [<span class="dt">UserError</span>] <span class="ot">-&gt;</span> <span class="dt">IO</span> ()</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true"></a>esHandle es <span class="ot">=</span> renderErrors es <span class="op">&gt;&gt;=</span> hPutStrLn stderr <span class="op">&gt;&gt;</span> exitFailure</span></code></pre></div>
 <p>Which runs the compiler and if any <code>UserError</code> are thrown, <code>catch</code>-es and renders the result.</p>
-<h3 id="transforms">Transforms</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="transforms">Transforms</h2>
 <p>Next, lets insert a <code>checker</code> phase into our pipeline:</p>
 <figure>
 <img src="../static/img/compiler-pipeline-functions-check.png" alt /><figcaption>Compiler Pipeline with Checking Phase</figcaption>
 </figure>
 <p>In the above, we have defined the types:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">BareP</span>   <span class="ot">=</span> <span class="dt">Program</span> <span class="dt">SourceSpan</span>        <span class="co">-- ^ each sub-expression has source position metadata</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">AnfP</span>    <span class="ot">=</span> <span class="dt">Program</span> <span class="dt">SourceSpan</span>        <span class="co">-- ^ each function body in ANF</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">AnfTagP</span> <span class="ot">=</span> <span class="dt">Program</span> (<span class="dt">SourceSpan</span>, <span class="dt">Tag</span>) <span class="co">-- ^ each sub-expression has unique tag</span></span></code></pre></div>
-<h3 id="catching-multiple-errors">Catching Multiple Errors</h3>
-<p>To make using a language and compiler pleasant, we should return <em>as many errors as possible</em> in each run.</p>
-<ul>
-<li>Its rather irritating to get errors one-by-one.</li>
-</ul>
+<div class="sourceCode" id="cb23"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">BareP</span>   <span class="ot">=</span> <span class="dt">Program</span> <span class="dt">SourceSpan</span>        <span class="co">-- ^ source position metadata</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">AnfP</span>    <span class="ot">=</span> <span class="dt">Program</span> <span class="dt">SourceSpan</span>        <span class="co">-- ^ sub-exprs in ANF</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">AnfTagP</span> <span class="ot">=</span> <span class="dt">Program</span> (<span class="dt">SourceSpan</span>, <span class="dt">Tag</span>) <span class="co">-- ^ sub-exprs have unique tag</span></span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="catching-multiple-errors">Catching Multiple Errors</h2>
+<p>Its rather irritating to get errors one-by-one.</p>
+<p>To make using a language and compiler pleasant, lets return <em>as many errors as possible</em> in each run.</p>
 <p>We will implement this by writing the functions</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true"></a><span class="ot">wellFormed  ::</span> <span class="dt">BareProgram</span> <span class="ot">-&gt;</span> [<span class="dt">UserError</span>]</span></code></pre></div>
-<p>which will <em>recursively walk over</em> the entire program, declaration and expression and return the <em>list of all errors</em>.</p>
+<p>which will <em>recursively traverse</em> the entire program, declaration and expression and return the <em>list of all errors</em>.</p>
 <ul>
 <li>If this list is empty, we just return the source unchanged,</li>
 <li>Otherwise, we <code>throw</code> the list of found errors (and exit.)</li>
@@ -512,7 +528,8 @@ tests/input/err-fac.diamond:(8:11)-(9:1): Wrong arity of arguments at call of fa
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true"></a>check p <span class="ot">=</span> <span class="kw">case</span> wellFormed p <span class="kw">of</span></span>
 <span id="cb25-3"><a href="#cb25-3" aria-hidden="true"></a>            [] <span class="ot">-&gt;</span> p</span>
 <span id="cb25-4"><a href="#cb25-4" aria-hidden="true"></a>            es <span class="ot">-&gt;</span> throw es</span></code></pre></div>
-<h3 id="well-formed-programs-declarations-and-expressions">Well-formed Programs, Declarations and Expressions</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="well-formed-programs-declarations-and-expressions">Well-formed Programs, Declarations and Expressions</h2>
 <p>The bulk of the work is done by:</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true"></a><span class="ot">wellFormed ::</span> <span class="dt">BareProgram</span> <span class="ot">-&gt;</span> [<span class="dt">UserError</span>]</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true"></a>wellFormed (<span class="dt">Prog</span> ds e)</span>
@@ -528,8 +545,9 @@ tests/input/err-fac.diamond:(8:11)-(9:1): Wrong arity of arguments at call of fa
 <li><strong>computes</strong> the errors for each declaration (given functions in <code>fEnv</code>),</li>
 <li><strong>concatenates</strong> the resulting lists of errors.</li>
 </ol>
-<h3 id="traversals">Traversals</h3>
-<p>Lets look at how we might find three types of errors:</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="traversals">Traversals</h2>
+<p>Lets look at how we might find two types of errors:</p>
 <ol type="1">
 <li>“unbound variables”</li>
 <li>“undefined functions”</li>
@@ -540,7 +558,12 @@ tests/input/err-fac.diamond:(8:11)-(9:1): Wrong arity of arguments at call of fa
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true"></a>wellFormedD fEnv (<span class="dt">Decl</span> _ xs e _) <span class="ot">=</span> wellFormedE fEnv vEnv e</span>
 <span id="cb27-3"><a href="#cb27-3" aria-hidden="true"></a>  <span class="kw">where</span></span>
 <span id="cb27-4"><a href="#cb27-4" aria-hidden="true"></a>    vEnv                         <span class="ot">=</span> addsEnv xs emptyEnv</span></code></pre></div>
-<p>The helper function <code>wellFormedE</code> starts with the input <code>vEnv0</code> (which has just) the function parameters, and <code>fEnv</code> that has the defined functions, and traverses the expression:</p>
+<p>The helper function <code>wellFormedE</code> starts with the input</p>
+<ul>
+<li><code>vEnv0</code> which has the function parameters, and</li>
+<li><code>fEnv</code> that has the defined functions,</li>
+</ul>
+<p>and traverses the expression:</p>
 <ul>
 <li>At each <strong>definition</strong> <code>Let x e1 e2</code>, the variable <code>x</code> is added to the environment used to check <code>e2</code>,</li>
 <li>At each <strong>use</strong> <code>Id x</code> we check if <code>x</code> is in <code>vEnv</code> and if not, create a suitable <code>UserError</code></li>
@@ -561,7 +584,8 @@ tests/input/err-fac.diamond:(8:11)-(9:1): Wrong arity of arguments at call of fa
 <span id="cb28-13"><a href="#cb28-13" aria-hidden="true"></a>    go vEnv (<span class="dt">App</span> f es      l) <span class="ot">=</span> unboundFunErrors fEnv f l</span>
 <span id="cb28-14"><a href="#cb28-14" aria-hidden="true"></a>                             <span class="op">++</span> gos vEnv es</span></code></pre></div>
 <p>You should understand the above and be able to easily add extra error checks.</p>
-<p><strong>QUIZ</strong> Which function(s) would we have to modify to add <em>large number errors</em> (i.e. errors for numeric literals that may cause overflow)?</p>
+<h2 id="quiz">QUIZ</h2>
+<p>Which function(s) would we have to modify to add <em>large number errors</em> (i.e. errors for numeric literals that may cause overflow)?</p>
 <ol type="1">
 <li><code>wellFormed  :: BareProgram -&gt; [UserError]</code></li>
 <li><code>wellFormedD :: FunEnv -&gt; BareDecl -&gt; [UserError]</code></li>
@@ -569,7 +593,9 @@ tests/input/err-fac.diamond:(8:11)-(9:1): Wrong arity of arguments at call of fa
 <li><code>1</code> and <code>2</code></li>
 <li><code>2</code> and <code>3</code></li>
 </ol>
-<p><strong>QUIZ</strong> Which function(s) would we have to modify to add <em>variable shadowing errors</em> ?</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="quiz-1">QUIZ</h2>
+<p>Which function(s) would we have to modify to add <em>variable shadowing errors</em> ?</p>
 <ol type="1">
 <li><code>wellFormed  :: BareProgram -&gt; [UserError]</code></li>
 <li><code>wellFormedD :: FunEnv -&gt; BareDecl -&gt; [UserError]</code></li>
@@ -577,7 +603,9 @@ tests/input/err-fac.diamond:(8:11)-(9:1): Wrong arity of arguments at call of fa
 <li><code>1</code> and <code>2</code></li>
 <li><code>2</code> and <code>3</code></li>
 </ol>
-<p><strong>QUIZ</strong> Which function(s) would we have to modify to add <em>duplicate parameter errors</em> ?</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="quiz-2">QUIZ</h2>
+<p>Which function(s) would we have to modify to add <em>duplicate parameter errors</em> ?</p>
 <ol type="1">
 <li><code>wellFormed  :: BareProgram -&gt; [UserError]</code></li>
 <li><code>wellFormedD :: FunEnv -&gt; BareDecl -&gt; [UserError]</code></li>
@@ -585,7 +613,9 @@ tests/input/err-fac.diamond:(8:11)-(9:1): Wrong arity of arguments at call of fa
 <li><code>1</code> and <code>2</code></li>
 <li><code>2</code> and <code>3</code></li>
 </ol>
-<p><strong>QUIZ</strong> Which function(s) would we have to modify to add <em>duplicate function errors</em> ?</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="quiz-3">QUIZ</h2>
+<p>Which function(s) would we have to modify to add <em>duplicate function errors</em> ?</p>
 <ol type="1">
 <li><code>wellFormed  :: BareProgram -&gt; [UserError]</code></li>
 <li><code>wellFormedD :: FunEnv -&gt; BareDecl -&gt; [UserError]</code></li>
@@ -593,6 +623,7 @@ tests/input/err-fac.diamond:(8:11)-(9:1): Wrong arity of arguments at call of fa
 <li><code>1</code> and <code>2</code></li>
 <li><code>2</code> and <code>3</code></li>
 </ol>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="compiling-functions">3. Compiling Functions</h2>
 <figure>
 <img src="../static/img/compiler-pipeline-functions.png" alt /><figcaption>Compiler Pipeline for Functions</figcaption>
@@ -601,12 +632,13 @@ tests/input/err-fac.diamond:(8:11)-(9:1): Wrong arity of arguments at call of fa
 <div class="sourceCode" id="cb29"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">BareP</span>   <span class="ot">=</span> <span class="dt">Program</span> <span class="dt">SourceSpan</span>        <span class="co">-- ^ each sub-expression has source position metadata</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">AnfP</span>    <span class="ot">=</span> <span class="dt">Program</span> <span class="dt">SourceSpan</span>        <span class="co">-- ^ each function body in ANF</span></span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true"></a><span class="kw">type</span> <span class="dt">AnfTagP</span> <span class="ot">=</span> <span class="dt">Program</span> (<span class="dt">SourceSpan</span>, <span class="dt">Tag</span>) <span class="co">-- ^ each sub-expression has unique tag</span></span></code></pre></div>
-<h3 id="tagging">Tagging</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="tagging">Tagging</h2>
 <figure>
 <img src="../static/img/compiler-pipeline-functions-tag.png" alt /><figcaption>Compiler Pipeline ANF</figcaption>
 </figure>
 <p>The <code>tag</code> phase simply recursively tags each function body and the main expression</p>
-<h3 id="anf-conversion">ANF Conversion</h3>
+<h2 id="anf-conversion">ANF Conversion</h2>
 <figure>
 <img src="../static/img/compiler-pipeline-functions-anf.png" alt /><figcaption>Compiler Pipeline ANF</figcaption>
 </figure>
@@ -618,15 +650,26 @@ tests/input/err-fac.diamond:(8:11)-(9:1): Wrong arity of arguments at call of fa
 <ul>
 <li>from (<code>2</code> arguments) to <code>n</code>-arguments.</li>
 </ul>
-<h3 id="strategy">Strategy</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="strategy">Strategy</h2>
 <p>Now, lets look at <em>compiling</em> function <em>definitions</em> and <em>calls</em>.</p>
 <figure>
 <img src="../static/img/compiler-pipeline-functions-codegen.png" alt /><figcaption>Compiler Pipeline with Checking Phase</figcaption>
 </figure>
 <p>We need a co-ordinated strategy for <em>definitions</em> and <em>calls</em>.</p>
-<p><strong>Definitions</strong> * Each <em>definition</em> is compiled into a labeled block of <code>Asm</code> * That implements the <em>body</em> of the definitions. * (But what about the <em>parameters</em>)?</p>
-<p><strong>Calls</strong> * Each <em>call</em> of <code>f(args)</code> will execute the block labeled <code>f</code> * (But what about the <em>parameters</em>)?</p>
-<h3 id="strategy-the-stack">Strategy: The Stack</h3>
+<p><strong>Function Definitions</strong></p>
+<ul>
+<li>Each <em>definition</em> is compiled into a labeled block of <code>Asm</code></li>
+<li>That implements the <em>body</em> of the definitions.</li>
+<li>(But what about the <em>parameters</em>)?</li>
+</ul>
+<p><strong>Function Calls</strong></p>
+<ul>
+<li>Each <em>call</em> of <code>f(args)</code> will execute the block labeled <code>f</code></li>
+<li>(But what about the <em>parameters</em>)?</li>
+</ul>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="strategy-the-stack">Strategy: The Stack</h2>
 <figure>
 <img src="../static/img/stack-frames.png" alt /><figcaption>Stack Frames</figcaption>
 </figure>
@@ -635,110 +678,172 @@ tests/input/err-fac.diamond:(8:11)-(9:1): Wrong arity of arguments at call of fa
 <li>pass <em>parameters</em></li>
 <li>have <em>local variables</em> for called functions.</li>
 </ul>
-<p><strong>Calling Convention</strong></p>
-<p>Recall that we are using the <code>C</code> calling convention that ensures the following stack layout:</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="x86-64-calling-convention">X86-64 Calling Convention</h2>
+<p>We are using the <a href="https://aaronbloomfield.github.io/pdr/book/x86-64bit-ccc-chapter.pdf">x86-64 calling convention</a>, that ensures the following stack layout:</p>
 <figure>
 <img src="../static/img/stack-layout.png" alt /><figcaption>Stack Layout</figcaption>
 </figure>
-<h3 id="strategy-definitions">Strategy: Definitions</h3>
-<p>When the function body starts executing, the parameters <code>x1</code>, <code>x2</code>, … <code>xn</code> are at <code>[ebp + 4*2]</code>, <code>[ebp + 4*3]</code>, … <code>[ebp + 4*(n+1)]</code>.</p>
+<p>Suppose we have a function <code>foo</code> defined as</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true"></a><span class="kw">def</span> foo(x1,x2,...):</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true"></a>  e</span></code></pre></div>
+<p>When the function body <strong>starts</strong> executing</p>
+<ul>
+<li><p>the <strong>first 6</strong> parameters <code>x1</code>, <code>x2</code>, … <code>x6</code> are at <code>rdi</code>, <code>rsi</code>, <code>rdx</code>, <code>rcx</code>, <code>r8</code> and <code>r9</code></p></li>
+<li><p>the <strong>remaining</strong> <code>x7</code>, <code>x8</code> … are at <code>[rbp + 8*2]</code>, <code>[rbp + 8*3]</code>, …</p></li>
+</ul>
+<p>When the function <strong>exits</strong></p>
+<ul>
+<li>the <strong>return</strong> value is in <code>rax</code></li>
+</ul>
+<p><br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="pesky-detail-on-stack-alignment">Pesky detail on Stack Alignment</h2>
+<p>At both <em>definition</em> and <em>call</em>, you need to also respect the <a href="https://en.wikipedia.org/wiki/X86_calling_conventions">16-Byte Stack Alignment Invariant</a></p>
+<blockquote>
+<p>Ensure <code>rsp</code> is always a multiple of <code>16</code>.</p>
+</blockquote>
+<p>i.e. pad to ensure an <strong>even</strong> number of arguments on stack</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="strategy-definitions">Strategy: Definitions</h2>
+<p>Thus to compile each definition</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true"></a><span class="kw">def</span> foo(x1,x2,...):</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true"></a>  body </span></code></pre></div>
+<p>we must</p>
 <ol type="1">
-<li><p>Ensure that enough stack space is <em>allocated</em> i.e. that <code>esp</code> and <code>ebp</code> are <a href="../lectures/05-cobra.md/#managing-the-call-stack">properly managed</a></p></li>
-<li><p>Compile body with <em>initial</em> <code>Env</code> mapping parameters to <code>-2</code>, <code>-3</code>,…,<code>-(n+1)</code>.</p></li>
+<li><p><strong>Setup Frame</strong> to <em>allocate</em> space for local variables by ensuring that <code>rsp</code> and <code>rbp</code> are <a href="../lectures/05-cobra.md/#managing-the-call-stack">properly managed</a></p></li>
+<li><p><strong>Copy parameters</strong> <code>x1</code>,<code>x2</code>,… from the registers &amp; stack<br />
+into stack-slots <code>1</code>,<code>2</code>,… so we can access them in the <code>body</code></p></li>
+<li><p><strong>Compile Body</strong> <code>body</code> with initial <code>Env</code> mapping parameters <code>x1 =&gt; 1</code>, <code>x2 =&gt; 2</code>, …</p></li>
+<li><p><strong>Teardown Frame</strong> to <em>restore</em> the caller’s <code>rbp</code> and <code>rsp</code> prior to <code>ret</code>urn.</p></li>
 </ol>
-<h3 id="strategy-calls">Strategy: Calls</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="strategy-calls">Strategy: Calls</h2>
 <p><a href="../lectures/05-cobra.md/#in-the-caller">As before</a> we must ensure that the parameters actually live at the above address.</p>
 <ol type="1">
-<li><em>Before</em> the call, <code>push</code> the parameter values onto the stack in reverse order,</li>
-<li><em>Call</em> the appropriate function (using its label),</li>
-<li><em>After</em> the call, <em>clear</em> the stack by incrementing <code>esp</code> appropriately.</li>
+<li><p><strong>Push</strong> the parameter values into the registers &amp; stack,</p></li>
+<li><p><strong>Call</strong> the appropriate function (using its label),</p></li>
+<li><p><strong>Pop</strong> the arguments off the stack by incrementing <code>rsp</code> appropriately.</p></li>
 </ol>
-<p><strong>NOTE:</strong></p>
-<p>At both <em>definition</em> and <em>call</em>, if you are compiling on MacOS, you need to also respect the <a href="http://www.fabiensanglard.net/macosxassembly/index.php">16-Byte Stack Alignment Invariant</a></p>
-<h3 id="types-2">Types</h3>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="types-1">Types</h2>
 <p>We already have most of the machinery needed to compile calls.</p>
 <p>Lets just add a new kind of <code>Label</code> for each user-defined function:</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Label</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true"></a>  <span class="ot">=</span> <span class="op">...</span></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">DefFun</span> <span class="dt">Id</span></span></code></pre></div>
-<p>We will also extend the <code>Arg</code> type to include information about <a href="http://www.cs.virginia.edu/~evans/cs216/guides/x86.html">size directives</a></p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Arg</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true"></a>  <span class="ot">=</span> <span class="op">...</span></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">Sized</span> <span class="dt">Size</span> <span class="dt">Arg</span></span></code></pre></div>
-<p>We will often need to specify that an <code>Arg</code> is a <em>double word</em><br />
-(the other possibilities are – single <code>word</code> and <code>byte</code>) which we needn’t worry about.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Sized</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true"></a>  <span class="ot">=</span> <span class="dt">DWordPtr</span></span></code></pre></div>
-<h3 id="implementation">Implementation</h3>
+<div class="sourceCode" id="cb32"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Label</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true"></a>  <span class="ot">=</span> <span class="op">...</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">DefFun</span> <span class="dt">Id</span></span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="implementation">Implementation</h2>
 <p>Lets can refactor our <code>compile</code> functions into:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true"></a><span class="ot">compileProg ::</span>        <span class="dt">AnfTagP</span> <span class="ot">-&gt;</span> <span class="dt">Asm</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true"></a><span class="ot">compileDecl ::</span>        <span class="dt">AnfTagD</span> <span class="ot">-&gt;</span> <span class="dt">Asm</span></span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true"></a><span class="ot">compileExpr ::</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> <span class="dt">AnfTagE</span> <span class="ot">-&gt;</span> <span class="dt">Asm</span></span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true"></a><span class="co">-- Compile the whole program</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true"></a><span class="ot">compileProg ::</span> <span class="dt">AnfTagP</span> <span class="ot">-&gt;</span> <span class="dt">Asm</span></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true"></a></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true"></a><span class="co">-- Compile a single function declaration</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true"></a><span class="ot">compileDecl ::</span> <span class="dt">Bind</span> <span class="ot">-&gt;</span> [<span class="dt">Bind</span>] <span class="ot">-&gt;</span> <span class="dt">Expr</span> <span class="ot">-&gt;</span> <span class="dt">Asm</span></span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true"></a></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true"></a><span class="co">-- Compile a single expression</span></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true"></a><span class="ot">compileExpr ::</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> <span class="dt">AnfTagE</span> <span class="ot">-&gt;</span> <span class="dt">Asm</span></span></code></pre></div>
 <p>that respectively compile <code>Program</code>, <code>Decl</code> and <code>Expr</code>.</p>
-<p>In order to <strong>simplify stack managment</strong> <a href="../lectures/05-cobra.md/#4-stack-management">as in Cobra</a> lets have a helper function that compiles the <em>body</em> of each function:</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true"></a><span class="ot">compileBody ::</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> <span class="dt">AnfTagE</span> <span class="ot">-&gt;</span> <span class="dt">Asm</span></span></code></pre></div>
-<p><code>compileBody env e</code> will wrap the <code>Asm</code> generated by <code>compileExpr env e</code> with the code that manages <code>esp</code> and <code>ebp</code>.</p>
-<h4 id="compiling-programs">Compiling Programs</h4>
-<p>To compile a <code>Program</code> we compile each <code>Decl</code> and the main body expression</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true"></a>compileProg (<span class="dt">Prog</span> ds e)</span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true"></a>  <span class="ot">=</span>  compileBody emptyEnv e</span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true"></a>  <span class="op">++</span> <span class="fu">concatMap</span>   compileDecl ds</span></code></pre></div>
-<p><strong>QUIZ:</strong></p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="compiling-programs">Compiling Programs</h2>
+<p>To compile a <code>Program</code> we compile</p>
+<ul>
+<li>the <em>main</em> expression as <code>Decl</code> with no parameters and</li>
+<li>each <em>function</em> declaration</li>
+</ul>
+<div class="sourceCode" id="cb34"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true"></a>compileProg (<span class="dt">Prog</span> ds e) <span class="ot">=</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true"></a>     compileDecl (<span class="dt">Bind</span> <span class="st">&quot;&quot;</span> ()) [] e</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true"></a>  <span class="op">++</span> <span class="fu">concat</span> [ compileDecl f xs e <span class="op">|</span> (<span class="dt">Decl</span> f xs e _) <span class="ot">&lt;-</span> ds ]</span></code></pre></div>
+<h3 id="quiz-4">QUIZ</h3>
 <p>Does it matter whether we put the code for <code>e</code> before <code>ds</code>?</p>
-<ol type="1">
-<li>Yes</li>
-<li>No</li>
-</ol>
-<p><strong>QUIZ:</strong></p>
+<p><strong>1.</strong> Yes</p>
+<p><strong>2.</strong> No</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h3 id="quiz-5">QUIZ</h3>
 <p>Does it matter what order we compile the <code>ds</code> ?</p>
-<ol type="1">
-<li>Yes</li>
-<li>No</li>
-</ol>
-<h4 id="compiling-declarations">Compiling Declarations</h4>
+<p><strong>1.</strong> Yes</p>
+<p><strong>2.</strong> No</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="compiling-declarations">Compiling Declarations</h2>
 <p>To compile a single <code>Decl</code> we</p>
 <ol type="1">
-<li>Create a block starting with a label for the function’s name (so we know where to <code>call</code>),</li>
+<li><strong>Create a block</strong> starting with a label for the function’s name (so we know where to <code>call</code>),</li>
 <li>Invoke <code>compileBody</code> to fill in the assembly code for the body, using the initial <code>Env</code> obtained from the function’s formal parameters.</li>
 </ol>
-<div class="sourceCode" id="cb36"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true"></a><span class="ot">compileDecl ::</span> <span class="dt">ADcl</span> <span class="ot">-&gt;</span> [<span class="dt">Instruction</span>]</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true"></a>compileDecl (<span class="dt">Decl</span> f xs e _)</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true"></a>  <span class="ot">=</span> <span class="dt">ILabel</span> (<span class="dt">DefFun</span> (bindId f))</span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true"></a>  <span class="op">:</span> compileBody (paramsEnv xs) e</span></code></pre></div>
-<p>The initial <code>Env</code> is created by <code>paramsEnv</code> which returns an <code>Env</code> mapping each <a href="#strategy-definitions">parameter to its stack position</a></p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true"></a><span class="ot">paramsEnv ::</span> [<span class="dt">Bind</span> a] <span class="ot">-&gt;</span> <span class="dt">Env</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true"></a>paramsEnv xs <span class="ot">=</span> fromListEnv (<span class="fu">zip</span> xids [<span class="op">-</span><span class="dv">2</span>, <span class="op">-</span><span class="dv">3</span><span class="op">..</span>])</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true"></a>    xids     <span class="ot">=</span> <span class="fu">map</span> bindId xs</span></code></pre></div>
-<p>(Recall that <code>bindId</code> <a href="#bindings">extracts</a> the <code>Id</code> from each <code>Bind</code>)</p>
-<p>Finally, as in cobra, <code>compileBody env e</code> wraps the assmbly for <code>e</code> with the code that manages <code>esp</code> and <code>ebp</code>.</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true"></a><span class="ot">compileBody ::</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> <span class="dt">AnfTagE</span> <span class="ot">-&gt;</span> <span class="dt">Asm</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true"></a>compileBody env e <span class="ot">=</span> entryCode e</span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true"></a>                 <span class="op">++</span> compileExpr env e</span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true"></a>                 <span class="op">++</span> exitCode e</span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true"></a>                 <span class="op">++</span> [<span class="dt">IRet</span>]</span>
+<div class="sourceCode" id="cb35"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true"></a><span class="ot">compileDecl ::</span> <span class="dt">Bind</span> a <span class="ot">-&gt;</span> [<span class="dt">Bind</span> a] <span class="ot">-&gt;</span> <span class="dt">AExp</span> <span class="ot">-&gt;</span> [<span class="dt">Instruction</span>]</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true"></a>compileDecl f xs body <span class="ot">=</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true"></a> <span class="co">-- 0. Label for start of function</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true"></a>    [ <span class="dt">ILabel</span> (<span class="dt">DefFun</span> (bindId f)) ]</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true"></a> <span class="co">-- 1. Setup  stack frame RBP/RSP</span></span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true"></a> <span class="op">++</span> funEntry n </span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true"></a> <span class="co">-- 2. Copy parameters into stack slots</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true"></a> <span class="op">++</span> copyArgs xs</span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true"></a> <span class="co">-- 3. Execute 'body' with result in RAX</span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true"></a> <span class="op">++</span> compileEnv initEnv body </span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true"></a> <span class="co">-- 4. Teardown stack frame &amp; return</span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true"></a> <span class="op">++</span> funExit n </span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true"></a>    n       <span class="ot">=</span> countVars body</span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true"></a>    initEnv <span class="ot">=</span> paramsEnv xs</span></code></pre></div>
+<p><br></p>
+<h3 id="setup-and-tear-down-stack-frame">Setup and Tear Down Stack Frame</h3>
+<p>(As in <code>cobra</code>)</p>
+<p><strong>Setup frame</strong></p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true"></a><span class="ot">funEntry ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [<span class="dt">Instruction</span>]</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true"></a>funEntry n <span class="ot">=</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true"></a>   [ <span class="dt">IPush</span> (<span class="dt">Reg</span> <span class="dt">RBP</span>)                       <span class="co">-- save caller's RBP</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true"></a>   , <span class="dt">IMov</span>  (<span class="dt">Reg</span> <span class="dt">RBP</span>) (<span class="dt">Reg</span> <span class="dt">RSP</span>)             <span class="co">-- set callee's RBP</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true"></a>   , <span class="dt">ISub</span>  (<span class="dt">Reg</span> <span class="dt">RSP</span>) (<span class="dt">Const</span> (argBytes n))  <span class="co">-- allocate n local-vars</span></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true"></a>   ]</span></code></pre></div>
+<p><strong>Teardown frame</strong></p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true"></a><span class="ot">funExit ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> [<span class="dt">Instruction</span>]</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true"></a>funExit n <span class="ot">=</span></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true"></a>   [ <span class="dt">IAdd</span> (<span class="dt">Reg</span> <span class="dt">RSP</span>) (<span class="dt">Const</span> (argBytes n))    <span class="co">-- un-allocate n local-vars</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true"></a>   , <span class="dt">IPop</span> (<span class="dt">Reg</span> <span class="dt">RBP</span>)                         <span class="co">-- restore callee's RBP </span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true"></a>   , <span class="dt">IRet</span>                                   <span class="co">-- return to caller</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true"></a>   ] </span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br></p>
+<h3 id="copy-parameters-into-frame">Copy Parameters into Frame</h3>
+<p><code>copyArgs xs</code> returns the instructions needed to copy the parameter values</p>
+<ul>
+<li><p><strong>From</strong> the combination of <code>rdi</code>, <code>rsi</code>, …</p></li>
+<li><p><strong>To</strong> this function’s frame, <code>rdi -&gt; [rbp - 8]</code>, <code>rsi -&gt; [rbp - 16]</code>,…</p></li>
+</ul>
+<div class="sourceCode" id="cb38"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true"></a><span class="ot">copyArgs ::</span> [a] <span class="ot">-&gt;</span> <span class="dt">Asm</span> </span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true"></a>copyArgs xs    <span class="ot">=</span> copyRegArgs   rXs <span class="co">-- copy upto 6 register args</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true"></a>              <span class="op">++</span> copyStackArgs sXs <span class="co">-- copy remaining stack args</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true"></a>    (rXs, sXs) <span class="ot">=</span> <span class="fu">splitAt</span> <span class="dv">6</span> xs</span>
 <span id="cb38-6"><a href="#cb38-6" aria-hidden="true"></a></span>
-<span id="cb38-7"><a href="#cb38-7" aria-hidden="true"></a><span class="ot">entryCode ::</span> <span class="dt">AnfTagE</span> <span class="ot">-&gt;</span> <span class="dt">Asm</span></span>
-<span id="cb38-8"><a href="#cb38-8" aria-hidden="true"></a>entryCode e <span class="ot">=</span> [ <span class="dt">IPush</span> (<span class="dt">Reg</span> <span class="dt">EBP</span>)</span>
-<span id="cb38-9"><a href="#cb38-9" aria-hidden="true"></a>              , <span class="dt">IMov</span>  (<span class="dt">Reg</span> <span class="dt">EBP</span>) (<span class="dt">Reg</span> <span class="dt">ESP</span>)</span>
-<span id="cb38-10"><a href="#cb38-10" aria-hidden="true"></a>              , <span class="dt">ISub</span>  (<span class="dt">Reg</span> <span class="dt">ESP</span>) (<span class="dt">Const</span> <span class="dv">4</span> <span class="op">*</span> n)</span>
-<span id="cb38-11"><a href="#cb38-11" aria-hidden="true"></a>              ]</span>
-<span id="cb38-12"><a href="#cb38-12" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb38-13"><a href="#cb38-13" aria-hidden="true"></a>    n       <span class="ot">=</span> countVars e</span>
-<span id="cb38-14"><a href="#cb38-14" aria-hidden="true"></a></span>
-<span id="cb38-15"><a href="#cb38-15" aria-hidden="true"></a><span class="ot">exitCode ::</span> <span class="dt">AnfTagE</span> <span class="ot">-&gt;</span> <span class="dt">Asm</span></span>
-<span id="cb38-16"><a href="#cb38-16" aria-hidden="true"></a>exitCode <span class="ot">=</span> [ <span class="dt">IMov</span> (<span class="dt">Reg</span> <span class="dt">ESP</span>) (<span class="dt">Reg</span> <span class="dt">EBP</span>)</span>
-<span id="cb38-17"><a href="#cb38-17" aria-hidden="true"></a>           , <span class="dt">IPop</span> (<span class="dt">Reg</span> <span class="dt">EBP</span>)</span>
-<span id="cb38-18"><a href="#cb38-18" aria-hidden="true"></a>           ]</span></code></pre></div>
-<h4 id="compiling-calls">Compiling Calls</h4>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true"></a><span class="co">-- Copy upto 6 args from registers into offsets 1..</span></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true"></a><span class="ot">copyRegArgs ::</span> [a] <span class="ot">-&gt;</span> <span class="dt">Asm</span> </span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true"></a>copyRegArgs xs <span class="ot">=</span> [ <span class="dt">IMov</span> (stackVar i) (<span class="dt">Reg</span> r) <span class="op">|</span> (_,r,i) <span class="ot">&lt;-</span> <span class="fu">zipWith3</span> xs regs [<span class="dv">1</span><span class="op">..</span>] ]</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true"></a>  <span class="kw">where</span> regs   <span class="ot">=</span> [<span class="dt">RDI</span>, <span class="dt">RSI</span>, <span class="dt">RDX</span>, <span class="dt">RCX</span>, <span class="dt">R8</span>, <span class="dt">R9</span>]</span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true"></a></span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true"></a><span class="co">-- Copy remaining args from stack into offsets 7..</span></span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true"></a><span class="ot">copyStackArgs ::</span> [a] <span class="ot">-&gt;</span> <span class="dt">Asm</span> </span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true"></a>copyStackArgs xs <span class="ot">=</span> <span class="fu">concat</span> [ copyArg src dst <span class="op">|</span> (_,src,dst) <span class="ot">&lt;-</span> <span class="fu">zip3</span> xs [<span class="op">-</span><span class="dv">2</span>,<span class="op">-</span><span class="dv">3</span><span class="op">..</span>] [<span class="dv">7</span><span class="op">..</span>] ]</span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true"></a>  </span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true"></a><span class="co">-- Copy from RBP-offset-src to RBP-offset-dst</span></span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true"></a><span class="ot">copyArg ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Asm</span></span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true"></a>copyArg src dst <span class="ot">=</span> </span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true"></a>  [ <span class="dt">IMov</span> (<span class="dt">Reg</span> <span class="dt">RAX</span>) (stackVar src)</span>
+<span id="cb38-20"><a href="#cb38-20" aria-hidden="true"></a>  , <span class="dt">IMov</span> (stackVar dst) (<span class="dt">Reg</span> <span class="dt">RAX</span>)</span>
+<span id="cb38-21"><a href="#cb38-21" aria-hidden="true"></a>  ]</span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br></p>
+<h3 id="execute-function-body">Execute Function Body</h3>
+<p>(As in cobra)</p>
+<p><code>compileEnv initEnv body</code> generates the assembly for <code>e</code> using <code>initEnv</code>, the initial <code>Env</code> created by <code>paramsEnv</code></p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true"></a><span class="ot">paramsEnv ::</span> [<span class="dt">Bind</span> a] <span class="ot">-&gt;</span> <span class="dt">Env</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true"></a>paramsEnv xs <span class="ot">=</span> fromListEnv (<span class="fu">zip</span> xids [<span class="dv">1</span><span class="op">..</span>])</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true"></a>    xids     <span class="ot">=</span> <span class="fu">map</span> bindId xs</span></code></pre></div>
+<p><code>paramsEnv xs</code> returns an <code>Env</code> mapping each <a href="#strategy-definitions">parameter to its stack position</a></p>
+<p>(Recall that <code>bindId</code> <a href="#bindings">extracts</a> the <code>Id</code> from each <code>Bind</code>)</p>
+<p><br> <br> <br> <br> <br> <br></p>
+<h2 id="compiling-calls">Compiling Calls</h2>
 <p>Finally, lets extend code generation to account for calls:</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true"></a><span class="ot">compileExpr ::</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> <span class="dt">AnfTagE</span> <span class="ot">-&gt;</span> [<span class="dt">Instruction</span>]</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true"></a>compileExpr env (<span class="dt">App</span> f vs _)</span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true"></a>  <span class="ot">=</span> call (<span class="dt">DefFun</span> f) [param env v <span class="op">|</span> v <span class="ot">&lt;-</span> vs]</span></code></pre></div>
-<p>The function <code>param</code> converts an <strong>immediate expressions</strong> (corresponding to function arguments)</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true"></a><span class="ot">param ::</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> <span class="dt">ImmE</span> <span class="ot">-&gt;</span> <span class="dt">Arg</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true"></a>param env v <span class="ot">=</span> <span class="dt">Sized</span> <span class="dt">DWordPtr</span> (immArg env v)</span></code></pre></div>
-<p>The <code>Sized DWordPtr</code> specifies that each argument will occupy a double word (i.e. 4 bytes) on the stack.</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true"></a><span class="ot">compileEnv ::</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> <span class="dt">AnfTagE</span> <span class="ot">-&gt;</span> [<span class="dt">Instruction</span>]</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true"></a>compileEnv env (<span class="dt">App</span> f vs _) <span class="ot">=</span> call (<span class="dt">DefFun</span> f) [immArg env v <span class="op">|</span> v <span class="ot">&lt;-</span> vs]</span></code></pre></div>
 <p><strong>EXERCISE</strong> The hard work in compiling calls is done by:</p>
 <div class="sourceCode" id="cb41"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true"></a><span class="ot">call ::</span> <span class="dt">Label</span> <span class="ot">-&gt;</span> [<span class="dt">Arg</span>] <span class="ot">-&gt;</span> [<span class="dt">Instruction</span>]</span></code></pre></div>
 <p>which <a href="#strategy-calls">implements the strategy for calls</a>. Fill in the implementation of <code>call</code> yourself. As an example, of its behavior, consider the (source) program:</p>
@@ -751,10 +856,11 @@ tests/input/err-fac.diamond:(8:11)-(9:1): Wrong arity of arguments at call of fa
 <p>The code for the above call is generated by</p>
 <div class="sourceCode" id="cb44"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true"></a>call (<span class="dt">DefFun</span> <span class="st">&quot;add2&quot;</span>) [arg <span class="dv">12</span>, arg <span class="dv">7</span>]</span></code></pre></div>
 <p>where <code>arg</code> <a href="../lectures/05-cobra.md/a-typeclass-for-representing-constants">converts source values into assembly <code>Arg</code></a> which <em>should</em> generate the equivalent of the assembly:</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true"></a>  <span class="kw">push</span> <span class="dt">DWORD</span> <span class="dv">14</span></span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true"></a>  <span class="kw">push</span> <span class="dt">DWORD</span> <span class="dv">24</span></span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true"></a>  <span class="kw">call</span> label_def_add2</span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true"></a>  <span class="kw">add</span> <span class="kw">esp</span>, <span class="dv">8</span></span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true"></a>  <span class="kw">mov</span>  <span class="kw">rdi</span> <span class="dv">24</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true"></a>  <span class="kw">mov</span>  <span class="kw">rsi</span> <span class="dv">14</span></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true"></a>  <span class="kw">call</span> label_def_add2</span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br></p>
+<!-- HEREHEREHEREHEREHEREHEREHEREHEREHEREHEREHEREHERE -->
 <h2 id="compiling-tail-calls">4. Compiling Tail Calls</h2>
 <p>Our language doesn’t have <em>loops</em>. While recursion is more general, it is more <em>expensive</em> because it uses up stack space (and requires all the attendant management overhead). For example (the <code>python</code> program):</p>
 <div class="sourceCode" id="cb46"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true"></a><span class="kw">def</span> sumTo(n):</span>
@@ -868,7 +974,7 @@ tests/input/err-fac.diamond:(8:11)-(9:1): Wrong arity of arguments at call of fa
 <li><strong>Identify</strong> tail calls in the source <code>Expr</code> (AST),</li>
 <li><strong>Compile</strong> the tail calls following the above strategy.</li>
 </ol>
-<h3 id="types-3">Types</h3>
+<h3 id="types-2">Types</h3>
 <p>We can do the above in a single step, i.e., we could identify the tail calls <em>during</em> the code generation, but its cleaner to separate the steps into:</p>
 <figure>
 <img src="../static/img/compiler-pipeline-tails.png" alt /><figcaption>Labeling <code>Expr</code> with Tail Calls</figcaption>

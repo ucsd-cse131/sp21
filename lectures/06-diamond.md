@@ -1,6 +1,6 @@
 ---
 title: Functions
-date: 2016-10-26
+date: 2021-4-22
 headerImg: diamond.jpg
 ---
 
@@ -8,11 +8,24 @@ Next, we'll build **diamondback** which adds support for
 
 * **User-Defined Functions**
 
-In the process of doing so, we will learn abou  t
+In the process of doing so, we will learn about
 
 * **Static Checking**
 * **Calling Conventions**
 * **Tail Recursion**
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ## Plan
 
@@ -21,13 +34,41 @@ In the process of doing so, we will learn abou  t
 3. **Compiling** Functions
 4. **Compiling** Tail Calls
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
 ## 1. Defining Functions
 
 First, lets add functions to our language.
 
 As always, lets look at some examples.
 
-### Example: Increment
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+## Example: Increment
 
 For example, a function that increments its input:
 
@@ -39,10 +80,21 @@ incr(10)
 ```
 
 We have a function definition followed by a single "main"
-expression, which is evaluated to yield the program's result, which, in this case, is `11`.
+expression, which is evaluated to yield the program's result `11`.
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-### Example: Factorial
+## Example: Factorial
 
 Here's a somewhat more interesting example:
 
@@ -102,7 +154,20 @@ we should now get:
 120
 ```
 
-### Example: Mutually Recursive Functions
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Example: Mutually Recursive Functions
 
 For this language, **the function definitions are global**
 * any function can call any other function.
@@ -137,11 +202,37 @@ in
 3. `false false false false 0`
 4. `true  true  true  true  0`
 
-### Types
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Types
 
 Lets add some new types to represent programs.
 
-#### Bindings
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Bindings
 
 Lets create a special type that represents places
 where **variables are bound**,
@@ -150,11 +241,11 @@ where **variables are bound**,
 data Bind a = Bind Id a
 ```
 
-A `Bind` is basically just an `Id` _decorated with_
-an `a` which will let us save extra _metadata_
-like **tags** or **source positions**
+A `Bind` is an `Id` _decorated with_ an `a` 
 
-* The metadata will make it easy to report errors.
+- to save extra _metadata_ like **tags** or **source positions**
+
+- to make it easy to report errors.
 
 We will use `Bind` at two places:
 
@@ -169,7 +260,17 @@ bindId :: Bind a -> Id
 bindId (Bind x _) = x
 ```
 
-#### Programs
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Programs
 
 A **program** is a list of declarations and _main_ expression.
 
@@ -180,7 +281,17 @@ data Program a = Prog
   }
 ```
 
-#### Declarations
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Declarations
 
 Each **function** lives is its own **declaration**,
 
@@ -193,7 +304,18 @@ data Decl a = Decl
   }
 ```
 
-#### Expressions
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Expressions
 
 Finally, lets add  _function application_ (calls) to the source expressions:
 
@@ -212,12 +334,23 @@ An _application_ or _call_ comprises
 
 (**Note:** that we are now using `Bind` instead of plain `Id` at a `Let`.)
 
-#### Examples Revisited
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Examples Revisited
 
 Lets see how the examples above are represented:
 
 ```ghc
-ghci> parseFile "tests/input/incr.diamond"
+>>> parseFile "tests/input/incr.diamond"
 Prog {pDecls = [Decl { fName = Bind "incr" ()
                      , fArgs = [Bind "n" ()]
                      , fBody = Prim2 Plus (Id "n" ()) (Number 1 ()) ()
@@ -226,7 +359,7 @@ Prog {pDecls = [Decl { fName = Bind "incr" ()
      , pBody = App "incr" [Number 5 ()] ()
      }
 
-ghci> parseFile "tests/input/fac.diamond"
+>>> parseFile "tests/input/fac.diamond"
 Prog { pDecls = [ Decl {fName = Bind "fac" ()
                 , fArgs = [Bind "n" ()]
                 , fBody = Let (Bind "t" ()) (Prim1 Print (Id "n" ()) ())
@@ -241,13 +374,27 @@ Prog { pDecls = [ Decl {fName = Bind "fac" ()
      }
 ```
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 ## 2. Static Checking
 
 Next, we will look at an _increasingly important_ aspect
 of compilation, **pointing out bugs in the code at compile time**
 
 Called **Static Checking** because we do this _without_ (i.e. _before_)
-compiling and running ("dynamicking") the code.
+compiling and running the code.
 
 There is a huge spectrum of checks possible:
 
@@ -255,14 +402,27 @@ There is a huge spectrum of checks possible:
 * Static Typing
 * Static Analysis
 * Contract Checking
-* Dependent or Refinement Typing
+* Dependent or [Refinement Typing](https://ucsd-progsys.github.io/liquidhaskell-blog/)
 
 Increasingly, _this_ is the most important phase of a compiler,
 and modern compiler engineering is built around making these
 checks lightning fast. For more, see [this interview of Anders Hejlsberg][hejlsberg-interview]
 the architect of the C# and TypeScript compilers.
 
-### Static Well-formedness Checking
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Static Well-formedness Checking
 
 We will look at code linting and, later in the quarter, type systems in 131.
 
@@ -311,14 +471,27 @@ We get _multiple_ errors:
 Next, lets see how to update the architecture of our
 compiler to support these and other kinds of errors.
 
-### Types
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Types: An Error Reporting API
 
 An _error message_ type:
 
 ```haskell
 data UserError = Error
-  { eMsg  :: !Text
-  , eSpan :: !SourceSpan
+  { eMsg  :: !Text          -- ^ error message
+  , eSpan :: !SourceSpan    -- ^ source position
   }
   deriving (Show, Typeable)
 ```
@@ -353,16 +526,16 @@ which takes something like:
 
 ```haskell
 Error
- "Unbound variable 'm'"
- { file      = "tests/input/err-fac"
- , startLine = 8
- , startCol  = 1
- , endLine   = 8
- , endCol    = 9
- }
+  "Unbound variable 'm'"
+  { file      = "tests/input/err-fac"
+  , startLine = 8
+  , startCol  = 1
+  , endLine   = 8
+  , endCol    = 9
+  }
 ```
 
-and produce a pretty message (that requires reading the source file),
+and produces a **contextual message** (that requires reading the source file),
 
 ```
 tests/input/err-fac.diamond:6:13-14: Unbound variable 'm'
@@ -374,6 +547,7 @@ tests/input/err-fac.diamond:6:13-14: Unbound variable 'm'
 We can put it all together by
 
 ```haskell
+-- bin/Main.hs
 main :: IO ()
 main = runCompiler `catch` esHandle
 
@@ -384,7 +558,20 @@ esHandle es = renderErrors es >>= hPutStrLn stderr >> exitFailure
 Which runs the compiler and if any `UserError` are thrown, `catch`-es and
 renders the result.
 
-### Transforms
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Transforms
 
 Next, lets insert a `checker` phase into our pipeline:
 
@@ -393,17 +580,28 @@ Next, lets insert a `checker` phase into our pipeline:
 In the above, we have defined the types:
 
 ```haskell
-type BareP   = Program SourceSpan        -- ^ each sub-expression has source position metadata
-type AnfP    = Program SourceSpan        -- ^ each function body in ANF
-type AnfTagP = Program (SourceSpan, Tag) -- ^ each sub-expression has unique tag
+type BareP   = Program SourceSpan        -- ^ source position metadata
+type AnfP    = Program SourceSpan        -- ^ sub-exprs in ANF
+type AnfTagP = Program (SourceSpan, Tag) -- ^ sub-exprs have unique tag
 ```
 
-### Catching Multiple Errors
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Catching Multiple Errors
+
+Its rather irritating to get errors one-by-one.
 
 To make using a language and compiler pleasant,
-we should return _as many errors as possible_ in each run.
+lets return _as many errors as possible_ in each run.
 
-* Its rather irritating to get errors one-by-one.
 
 We will implement this by writing the functions
 
@@ -411,7 +609,7 @@ We will implement this by writing the functions
 wellFormed  :: BareProgram -> [UserError]
 ```
 
-which will _recursively walk over_ the entire
+which will _recursively traverse_ the entire
 program, declaration and expression and
 return the _list of all errors_.
 
@@ -427,7 +625,21 @@ check p = case wellFormed p of
             es -> throw es
 ```
 
-### Well-formed Programs, Declarations and Expressions
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Well-formed Programs, Declarations and Expressions
 
 The bulk of the work is done by:
 
@@ -448,9 +660,19 @@ This function,
 2. **computes** the errors for each declaration (given functions in `fEnv`),
 3. **concatenates** the resulting lists of errors.
 
-### Traversals
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-Lets look at how we might find three types of errors:
+## Traversals
+
+Lets look at how we might find two types of errors:
 
 1. "unbound variables"
 2. "undefined functions"
@@ -469,9 +691,12 @@ wellFormedD fEnv (Decl _ xs e _) = wellFormedE fEnv vEnv e
     vEnv                         = addsEnv xs emptyEnv
 ```
 
-The helper function `wellFormedE` starts with the input `vEnv0` (which has just)
-the function parameters, and `fEnv` that has the defined functions, and traverses
-the expression:
+The helper function `wellFormedE` starts with the input 
+
+- `vEnv0` which has the function parameters, and 
+- `fEnv` that has the defined functions, 
+
+and traverses the expression:
 
 * At each **definition** `Let x e1 e2`, the variable `x`
   is added to the environment used to check `e2`,
@@ -499,7 +724,9 @@ wellFormedE fEnv vEnv0 e      = go vEnv0 e
 
 You should understand the above and be able to easily add extra error checks.
 
-**QUIZ** Which function(s) would we have to modify to
+## QUIZ 
+
+Which function(s) would we have to modify to
 add _large number errors_ (i.e. errors for numeric literals
 that may cause overflow)?
 
@@ -509,7 +736,19 @@ that may cause overflow)?
 4. `1` and `2`
 5. `2` and `3`
 
-**QUIZ** Which function(s) would we have to modify to
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## QUIZ
+
+Which function(s) would we have to modify to
 add _variable shadowing errors_ ?
 
 1. `wellFormed  :: BareProgram -> [UserError]`
@@ -518,7 +757,22 @@ add _variable shadowing errors_ ?
 4. `1` and `2`
 5. `2` and `3`
 
-**QUIZ** Which function(s) would we have to modify to
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## QUIZ
+
+Which function(s) would we have to modify to
 add _duplicate parameter errors_ ?
 
 1. `wellFormed  :: BareProgram -> [UserError]`
@@ -527,7 +781,22 @@ add _duplicate parameter errors_ ?
 4. `1` and `2`
 5. `2` and `3`
 
-**QUIZ** Which function(s) would we have to modify to
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## QUIZ 
+
+Which function(s) would we have to modify to
 add _duplicate function errors_ ?
 
 1. `wellFormed  :: BareProgram -> [UserError]`
@@ -535,6 +804,19 @@ add _duplicate function errors_ ?
 3. `wellFormedE :: FunEnv -> Env -> Bare -> [UserError]`
 4. `1` and `2`
 5. `2` and `3`
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ## 3. Compiling Functions
 
@@ -547,14 +829,26 @@ type BareP   = Program SourceSpan        -- ^ each sub-expression has source pos
 type AnfP    = Program SourceSpan        -- ^ each function body in ANF
 type AnfTagP = Program (SourceSpan, Tag) -- ^ each sub-expression has unique tag
 ```
-### Tagging
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Tagging
 
 ![Compiler Pipeline ANF](/static/img/compiler-pipeline-functions-tag.png)
 
 The `tag` phase simply recursively tags each
 function body and the main expression
 
-### ANF Conversion
+## ANF Conversion
 
 ![Compiler Pipeline ANF](/static/img/compiler-pipeline-functions-anf.png)
 
@@ -568,8 +862,21 @@ Generalize the [strategy for _binary_ operators](04-boa.md/#anf-implementation)
 
 * from (`2` arguments) to `n`-arguments.
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-### Strategy
+
+## Strategy
 
 Now, lets look at _compiling_ function _definitions_ and _calls_.
 
@@ -577,16 +884,30 @@ Now, lets look at _compiling_ function _definitions_ and _calls_.
 
 We need a co-ordinated strategy for _definitions_ and _calls_.
 
-**Definitions**
+**Function Definitions**
+
 * Each _definition_ is compiled into a labeled block of `Asm`
 * That implements the _body_ of the definitions.
 * (But what about the _parameters_)?
 
-**Calls**
+**Function Calls**
+
 * Each _call_ of `f(args)` will execute the block labeled `f`
 * (But what about the _parameters_)?
 
-### Strategy: The Stack
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Strategy: The Stack
 
 ![Stack Frames](/static/img/stack-frames.png)
 
@@ -595,40 +916,135 @@ We will use our old friend, _the stack_ to
 * pass _parameters_
 * have _local variables_ for called functions.
 
-**Calling Convention**
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-Recall that we are using the `C` calling convention that ensures
-the following stack layout:
+
+## X86-64 Calling Convention
+
+We are using the [x86-64 calling convention](https://aaronbloomfield.github.io/pdr/book/x86-64bit-ccc-chapter.pdf), 
+that ensures the following stack layout:
 
 ![Stack Layout](/static/img/stack-layout.png)
 
-### Strategy: Definitions
+Suppose we have a function `foo` defined as
 
-When the function body starts executing,
-the parameters `x1`, `x2`, ... `xn` are at
-`[ebp + 4*2]`, `[ebp + 4*3]`, ... `[ebp + 4*(n+1)]`.
+```python
+def foo(x1,x2,...):
+  e
+```
 
-1. Ensure that enough stack space is _allocated_ i.e.
-   that `esp` and `ebp` are [properly managed](/lectures/05-cobra.md/#managing-the-call-stack)
+When the function body **starts** executing 
 
-2. Compile body with _initial_ `Env` mapping parameters
-   to `-2`, `-3`,...,`-(n+1)`.
+- the **first 6** parameters `x1`, `x2`, ... `x6` are at
+  `rdi`, `rsi`, `rdx`, `rcx`, `r8` and `r9`
 
-### Strategy: Calls
+- the **remaining** `x7`, `x8` ... are at 
+  `[rbp + 8*2]`, `[rbp + 8*3]`, ... 
+
+When the function **exits** 
+
+- the **return** value is in `rax`
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Pesky detail on Stack Alignment
+
+
+At both _definition_ and _call_, you need to also respect the [16-Byte Stack Alignment Invariant](https://en.wikipedia.org/wiki/X86_calling_conventions)
+
+> Ensure `rsp` is always a multiple of `16`.
+
+i.e. pad to ensure an **even** number of arguments on stack
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Strategy: Definitions
+
+Thus to compile each definition 
+
+```python
+def foo(x1,x2,...):
+  body 
+```
+
+we must
+
+1. **Setup Frame** to _allocate_ space for local variables by 
+   ensuring that `rsp` and `rbp` are [properly managed](/lectures/05-cobra.md/#managing-the-call-stack)
+
+2. **Copy parameters** `x1`,`x2`,... from the registers & stack  
+   into stack-slots `1`,`2`,... so we can access them in the `body`
+
+3. **Compile Body** `body` with initial `Env` mapping parameters
+   `x1 => 1`, `x2 => 2`, ...
+
+4. **Teardown Frame** to _restore_ the caller's `rbp` and `rsp` prior to `ret`urn. 
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Strategy: Calls
 
 [As before](/lectures/05-cobra.md/#in-the-caller) we must ensure
 that the parameters actually live at the above address.
 
-1. _Before_ the call, `push` the parameter values onto the stack in reverse order,
-2. _Call_ the appropriate function (using its label),
-3. _After_ the call, _clear_ the stack by incrementing `esp` appropriately.
+1. **Push** the parameter values into the registers & stack,
 
-**NOTE:**
+2. **Call** the appropriate function (using its label),
 
-At both _definition_ and _call_, if you are compiling on MacOS,
-you need to also respect the [16-Byte Stack Alignment Invariant][mac-os-stack-alignment]
+3. **Pop** the arguments off the stack by incrementing `rsp` appropriately.
 
-### Types
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Types
 
 We already have most of the machinery needed to compile calls.
 
@@ -640,146 +1056,237 @@ data Label
   | DefFun Id
 ```
 
-We will also extend the `Arg` type to include information
-about [size directives][evans-x86-guide]
-
-```haskell
-data Arg
-  = ...
-  | Sized Size Arg
-```
-
-We will often need to specify that an `Arg` is a _double word_  
-(the other possibilities are -- single `word` and `byte`) which
-we needn't worry about.
-
-```haskell
-data Sized
-  = DWordPtr
-```
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 
-### Implementation
+## Implementation
 
 Lets can refactor our `compile` functions into:
 
 ```haskell
-compileProg ::        AnfTagP -> Asm
-compileDecl ::        AnfTagD -> Asm
+-- Compile the whole program
+compileProg :: AnfTagP -> Asm
+
+-- Compile a single function declaration
+compileDecl :: Bind -> [Bind] -> Expr -> Asm
+
+-- Compile a single expression
 compileExpr :: Env -> AnfTagE -> Asm
 ```
 
 that respectively compile `Program`, `Decl` and `Expr`.
 
-In order to **simplify stack managment**
-[as in Cobra](/lectures/05-cobra.md/#4-stack-management)
-lets have a helper function that compiles the _body_ of
-each function:
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Compiling Programs
+
+To compile a `Program` we compile
+
+- the *main* expression as `Decl` with no parameters and 
+- each *function* declaration
 
 ```haskell
-compileBody :: Env -> AnfTagE -> Asm
+compileProg (Prog ds e) =
+     compileDecl (Bind "" ()) [] e
+  ++ concat [ compileDecl f xs e | (Decl f xs e _) <- ds ]
 ```
 
-`compileBody env e` will wrap the `Asm` generated by
-`compileExpr env e` with the code that manages `esp` and `ebp`.
-
-#### Compiling Programs
-
-To compile a `Program` we compile each `Decl` and the main body expression
-
-```haskell
-compileProg (Prog ds e)
-  =  compileBody emptyEnv e
-  ++ concatMap   compileDecl ds
-```
-
-**QUIZ:**
+### QUIZ
 
 Does it matter whether we put the code for `e` before `ds`?
 
-1. Yes
-2. No
+**1.** Yes
 
+**2.** No
 
-**QUIZ:**
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+### QUIZ
 
 Does it matter what order we compile the `ds` ?
 
-1. Yes
-2. No
+**1.** Yes
 
-#### Compiling Declarations  
+**2.** No
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Compiling Declarations  
 
 To compile a single `Decl` we
 
-1. Create a block starting with a label for the function's name
+1. **Create a block** starting with a label for the function's name
    (so we know where to `call`),
 2. Invoke `compileBody` to fill in the assembly code for the body,
    using the initial `Env` obtained from the function's formal parameters.
 
 ```haskell
-compileDecl :: ADcl -> [Instruction]
-compileDecl (Decl f xs e _)
-  = ILabel (DefFun (bindId f))
-  : compileBody (paramsEnv xs) e
+compileDecl :: Bind a -> [Bind a] -> AExp -> [Instruction]
+compileDecl f xs body =
+ -- 0. Label for start of function
+    [ ILabel (DefFun (bindId f)) ]
+ -- 1. Setup  stack frame RBP/RSP
+ ++ funEntry n 
+ -- 2. Copy parameters into stack slots
+ ++ copyArgs xs
+ -- 3. Execute 'body' with result in RAX
+ ++ compileEnv initEnv body 
+ -- 4. Teardown stack frame & return
+ ++ funExit n 
+  where
+    n       = countVars body
+    initEnv = paramsEnv xs
 ```
 
-The initial `Env` is created by `paramsEnv` which returns an `Env`
-mapping each [parameter to its stack position](#strategy-definitions)
+<br>
+
+### Setup and Tear Down Stack Frame 
+
+(As in `cobra`)
+
+**Setup frame**
+
+```haskell
+funEntry :: Int -> [Instruction]
+funEntry n =
+   [ IPush (Reg RBP)                       -- save caller's RBP
+   , IMov  (Reg RBP) (Reg RSP)             -- set callee's RBP
+   , ISub  (Reg RSP) (Const (argBytes n))  -- allocate n local-vars
+   ]
+```
+
+**Teardown frame**
+
+```haskell
+funExit :: Int -> [Instruction]
+funExit n =
+   [ IAdd (Reg RSP) (Const (argBytes n))    -- un-allocate n local-vars
+   , IPop (Reg RBP)                         -- restore callee's RBP 
+   , IRet                                   -- return to caller
+   ] 
+```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+### Copy Parameters into Frame
+
+`copyArgs xs` returns the instructions needed to copy the parameter values
+
+- **From** the combination of `rdi`, `rsi`, ... 
+
+- **To** this function's frame, `rdi -> [rbp - 8]`, `rsi -> [rbp - 16]`,...
+
+```haskell
+copyArgs :: [a] -> Asm 
+copyArgs xs    = copyRegArgs   rXs -- copy upto 6 register args
+              ++ copyStackArgs sXs -- copy remaining stack args
+  where
+    (rXs, sXs) = splitAt 6 xs
+
+-- Copy upto 6 args from registers into offsets 1..
+copyRegArgs :: [a] -> Asm 
+copyRegArgs xs = [ IMov (stackVar i) (Reg r) | (_,r,i) <- zipWith3 xs regs [1..] ]
+  where regs   = [RDI, RSI, RDX, RCX, R8, R9]
+
+-- Copy remaining args from stack into offsets 7..
+copyStackArgs :: [a] -> Asm 
+copyStackArgs xs = concat [ copyArg src dst | (_,src,dst) <- zip3 xs [-2,-3..] [7..] ]
+  
+-- Copy from RBP-offset-src to RBP-offset-dst
+copyArg :: Int -> Int -> Asm
+copyArg src dst = 
+  [ IMov (Reg RAX) (stackVar src)
+  , IMov (stackVar dst) (Reg RAX)
+  ]
+```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+### Execute Function Body
+
+(As in cobra) 
+
+`compileEnv initEnv body` generates the assembly for `e` using `initEnv`, the initial `Env` created by `paramsEnv` 
 
 ```haskell
 paramsEnv :: [Bind a] -> Env
-paramsEnv xs = fromListEnv (zip xids [-2, -3..])
+paramsEnv xs = fromListEnv (zip xids [1..])
   where
     xids     = map bindId xs
 ```
 
+`paramsEnv xs` returns an `Env` mapping each [parameter to its stack position](#strategy-definitions)
+
 (Recall that `bindId` [extracts](#bindings) the `Id` from each `Bind`)
 
-Finally, as in cobra, `compileBody env e` wraps the assmbly for `e`
-with the code that manages `esp` and `ebp`.
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-```haskell
-compileBody :: Env -> AnfTagE -> Asm
-compileBody env e = entryCode e
-                 ++ compileExpr env e
-                 ++ exitCode e
-                 ++ [IRet]
 
-entryCode :: AnfTagE -> Asm
-entryCode e = [ IPush (Reg EBP)
-              , IMov  (Reg EBP) (Reg ESP)
-              , ISub  (Reg ESP) (Const 4 * n)
-              ]
-  where
-    n       = countVars e
 
-exitCode :: AnfTagE -> Asm
-exitCode = [ IMov (Reg ESP) (Reg EBP)
-           , IPop (Reg EBP)
-           ]
-```
 
-#### Compiling Calls
+## Compiling Calls
 
 Finally, lets extend code generation to account for calls:
 
 ```haskell
-compileExpr :: Env -> AnfTagE -> [Instruction]
-compileExpr env (App f vs _)
-  = call (DefFun f) [param env v | v <- vs]
+compileEnv :: Env -> AnfTagE -> [Instruction]
+compileEnv env (App f vs _) = call (DefFun f) [immArg env v | v <- vs]
 ```
-
-The function `param` converts an **immediate expressions**
-(corresponding to function arguments)
-
-```haskell
-param :: Env -> ImmE -> Arg
-param env v = Sized DWordPtr (immArg env v)
-```
-
-The `Sized DWordPtr` specifies that each argument will occupy
-a double word (i.e. 4 bytes) on the stack.
 
 **EXERCISE** The hard work in compiling calls is done by:
 
@@ -814,11 +1321,20 @@ where `arg` [converts source values into assembly `Arg`](/lectures/05-cobra.md/a
 which _should_ generate the equivalent of the assembly:
 
 ```nasm
-  push DWORD 14
-  push DWORD 24
+  mov  rdi 24
+  mov  rsi 14
   call label_def_add2
-  add esp, 8
 ```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+<!-- HEREHEREHEREHEREHEREHEREHEREHEREHEREHEREHEREHERE -->
 
 ## 4. Compiling Tail Calls
 
