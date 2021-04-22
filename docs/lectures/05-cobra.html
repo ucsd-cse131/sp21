@@ -998,6 +998,9 @@ ELSE
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="managing-the-call-stack">Managing the Call Stack</h2>
 <p>To properly call into C functions (like <code>error</code>), we must play by the rules of the <a href="https://aaronbloomfield.github.io/pdr/book/x86-64bit-ccc-chapter.pdf">C calling convention</a></p>
+<figure>
+<img src="../static/img/stack-frames-64.png" alt /><figcaption>Stack Layout</figcaption>
+</figure>
 <ol type="1">
 <li>The <em>local variables</em> of an (executing) function are saved in its <em>stack frame</em>.</li>
 <li>The <em>start</em> of the stack frame is saved in register <code>rbp</code>,</li>

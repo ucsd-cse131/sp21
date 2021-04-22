@@ -1235,9 +1235,12 @@ What happened ?
 To properly call into C functions (like `error`), we must play by the rules of
 the [C calling convention](https://aaronbloomfield.github.io/pdr/book/x86-64bit-ccc-chapter.pdf)
 
+![Stack Layout](/static/img/stack-frames-64.png)
+
 1. The _local variables_ of an (executing) function are saved in its _stack frame_.
 2. The _start_ of the stack frame is saved in register `rbp`,
 3. The _start_ of the _next_ frame is saved in register `rsp`.
+
 
 <br>
 <br>
