@@ -12,7 +12,8 @@ headerImg: books.jpg
 | 4/8        | "" | "" | [pdf][pdf4b] | "" |
 | 4/13       | "" | "" | [pdf][pdf4c] | "" |
 | 4/15       | Data Representation           | [html][lec5] [md][md5] | [pdf][pdf5a] | [code][cod5]   |
-| 4/22       | Functions                     | [html][lec6] [md][md6] | [pdf][pdf6]  | [code][cod6]   |
+| 4/22       | "" | "" | [pdf][pdf5b]  | ""   |
+| 4/27       | Functions                     | [html][lec6] [md][md6] | [pdf][pdf6]  | [code][cod6]   |
 
 <!-- 
 | 11/5       | Functions                     | [html][lec6] [md][md6] |             | [code][cod6]   |
@@ -43,6 +44,7 @@ headerImg: books.jpg
 [md5]:  http://github.com/ucsd-cse131/sp21/blob/main/lectures/05-cobra.md
 [cod5]: https://github.com/ucsd-cse131/03-cobra
 [pdf5a]: static/img/05-cobra-A.pdf
+[pdf5b]: static/img/05-cobra-B.pdf
 
 [lec6]: lectures/06-diamond.html
 [md6]:  http://github.com/ucsd-progsys/131-web/blob/master/lectures/06-diamond.md
