@@ -170,7 +170,8 @@ we should now get:
 ## Example: Mutually Recursive Functions
 
 For this language, **the function definitions are global**
-* any function can call any other function.
+
+> any function can call any other function.
 
 This lets us write _mutually recursive_ functions like:
 
@@ -249,8 +250,8 @@ A `Bind` is an `Id` _decorated with_ an `a`
 
 We will use `Bind` at two places:
 
-1. Let-bindings,
-2. Function parameters.
+1. **Let**-bindings,
+2. Function **parameters**.
 
 It will be helpful to have a function to extract
 the `Id` corresponding to a `Bind`
@@ -641,24 +642,48 @@ check p = case wellFormed p of
 
 ## Well-formed Programs, Declarations and Expressions
 
-The bulk of the work is done by:
+The bulk of the work is done by three functions
+
+```haskell
+-- Check a whole program
+wellFormed  ::                  BareProgram -> [UserError]
+
+-- Check a single declaration
+wellFormedD :: FunEnv ->        BareDecl    -> [UserError]
+
+-- Check a single expression 
+wellFormedE :: FunEnv -> Env -> Bare        -> [UserError]
+```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Well-formed Programs
+
+To check the whole program
 
 ```haskell
 wellFormed :: BareProgram -> [UserError]
 wellFormed (Prog ds e)
-  =  duplicateFunErrors ds
-  ++ concatMap (wellFormedD fEnv) ds
+  =  concat [wellFormedD fEnv d | d <- ds]
   ++ wellFormedE fEnv emptyEnv e
   where
-    fEnv  = fromListEnv [(bindId f, length xs)
+    fEnv = funEnv ds
+
+funEnv :: [Decl] -> FunEnv
+funEnv ds = fromListEnv [(bindId f, length xs)
                           | Decl f xs _ _ <- ds]
 ```
 
 This function,
 
-1. **creates** `fEnv`, a map from _function-names_ to the _function-arity_ (number of params),
-2. **computes** the errors for each declaration (given functions in `fEnv`),
-3. **concatenates** the resulting lists of errors.
+1. **Creates** `FunEnv`, a map from _function-names_ to the _function-arity_ (number of params),
+2. **Computes** the errors for each declaration (given functions in `fEnv`),
+3. **Concatenates** the resulting lists of errors.
 
 <br>
 <br>
@@ -669,60 +694,6 @@ This function,
 <br>
 <br>
 <br>
-
-## Traversals
-
-Lets look at how we might find two types of errors:
-
-1. "unbound variables"
-2. "undefined functions"
-
-(In your assignment, you will look for many more.)
-
-The helper function `wellFormedD` creates an _initial_
-variable environment `vEnv` containing the functions
-parameters, and uses that (and `fEnv`) to walk over
-the body-expressions.
-
-```haskell
-wellFormedD :: FunEnv -> BareDecl -> [UserError]
-wellFormedD fEnv (Decl _ xs e _) = wellFormedE fEnv vEnv e
-  where
-    vEnv                         = addsEnv xs emptyEnv
-```
-
-The helper function `wellFormedE` starts with the input 
-
-- `vEnv0` which has the function parameters, and 
-- `fEnv` that has the defined functions, 
-
-and traverses the expression:
-
-* At each **definition** `Let x e1 e2`, the variable `x`
-  is added to the environment used to check `e2`,
-* At each **use** `Id x` we check if `x` is in `vEnv`
-  and if not, create a suitable `UserError`
-* At each **call** `App f es` we check if `f` is in `fEnv`
-  and if not, create a suitable `UserError`.
-
-```haskell
-wellFormedE :: FunEnv -> Env -> Bare -> [UserError]
-wellFormedE fEnv vEnv0 e      = go vEnv0 e
-  where
-    gos vEnv es               = concatMap (go vEnv) es
-    go _    (Boolean {})      = []
-    go _    (Number  n     l) = []
-    go vEnv (Id      x     l) = unboundVarErrors vEnv x l
-    go vEnv (Prim1 _ e     _) = go  vEnv e
-    go vEnv (Prim2 _ e1 e2 _) = gos vEnv [e1, e2]
-    go vEnv (If   e1 e2 e3 _) = gos vEnv [e1, e2, e3]
-    go vEnv (Let x e1 e2   _) = go vEnv e1
-                             ++ go (addEnv x vEnv) e2
-    go vEnv (App f es      l) = unboundFunErrors fEnv f l
-                             ++ gos vEnv es
-```
-
-You should understand the above and be able to easily add extra error checks.
 
 ## QUIZ 
 
@@ -804,6 +775,73 @@ add _duplicate function errors_ ?
 3. `wellFormedE :: FunEnv -> Env -> Bare -> [UserError]`
 4. `1` and `2`
 5. `2` and `3`
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Traversals
+
+Lets look at how we might check for two types of errors:
+
+1. "unbound variables"
+2. "undefined functions"
+
+(In your assignment, you will look for **many** more.)
+
+The helper function `wellFormedD` creates an _initial_
+variable environment `vEnv` containing the functions
+parameters, and uses that (and `fEnv`) to walk over
+the body-expressions.
+
+```haskell
+wellFormedD :: FunEnv -> BareDecl -> [UserError]
+wellFormedD fEnv (Decl _ xs e _) = wellFormedE fEnv vEnv e
+  where
+    vEnv                         = addsEnv xs emptyEnv
+```
+
+The helper function `wellFormedE` starts with the input 
+
+- `vEnv0` which has the function parameters, and 
+- `fEnv` that has the defined functions, 
+
+and traverses the expression:
+
+* At each **definition** `Let x e1 e2`, the variable `x`
+  is added to the environment used to check `e2`,
+* At each **use** `Id x` we check if `x` is in `vEnv`
+  and if not, create a suitable `UserError`
+* At each **call** `App f es` we check if `f` is in `fEnv`
+  and if not, create a suitable `UserError`.
+
+```haskell
+wellFormedE :: FunEnv -> Env -> Bare -> [UserError]
+wellFormedE fEnv vEnv0 e      = go vEnv0 e
+  where
+    gos vEnv es               = concatMap (go vEnv) es
+    go _    (Boolean {})      = []
+    go _    (Number  n     l) = []
+    go vEnv (Id      x     l) = unboundVarErrors vEnv x l
+    go vEnv (Prim1 _ e     _) = go  vEnv e
+    go vEnv (Prim2 _ e1 e2 _) = gos vEnv [e1, e2]
+    go vEnv (If   e1 e2 e3 _) = gos vEnv [e1, e2, e3]
+    go vEnv (Let x e1 e2   _) = go vEnv e1
+                             ++ go (addEnv x vEnv) e2
+    go vEnv (App f es      l) = unboundFunErrors fEnv f l
+                             ++ gos vEnv es
+```
+
+You should understand the above and be able to easily add extra error checks.
 
 <br>
 <br>
