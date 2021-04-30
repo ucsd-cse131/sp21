@@ -22,6 +22,11 @@ headerImg: beach.jpg
 
 - **Synchronized Final (35%)** :
   Will be held on **Tuesday June 8th, from 8:00 -- 11:00am**.
+ 
+- Since the final is cumulative, your midterm grade will be calculated as 
+  `midterm > 0 ?  max(final, midterm) : 0`. This means that you get a second 
+  chance if you don’t do well on the midterm but you must turn in both the 
+  midterm and the final.
 
 Exams **must** be taken at the scheduled time.
 They are open book, notes, computer etc. but 
