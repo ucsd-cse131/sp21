@@ -33,14 +33,25 @@ They are open book, notes, computer etc. but
 you cannot collaborate with **anyone** in person 
 or online sites like stack overflow etc.
 
+## Regrade Requests for Programming Assignments
 
-## Regrade Requests
+When submitting regrade (or "have not received grade") queries for the 
+programming assignments, please use the following protocol to help us 
+track the requests.
+
+1. Make a (private, if you like) post on PIAZZA 
+2. Label your post with `regrade` and `hwX` (i.e. `hw1` or `hw2` etc as appropriate)
+3. Add your github username AND your ucsd-email to the request.
+
+All programming assignment requests **must by made within 7 working days** of the scores first being announced.
+
+
+## Regrade Requests for Exams
 
 When submitting regrade requests e.g. for midterm or final, 
 please follow these guidelines for us to consider your request.
 
-1. First, all requests *must be* submitted **within 48 hours** (not including weekends) 
-   of the scores being published.
+1. First, all requests **must be submitted within 2 working days** of the scores being published.
 
 2. Formatted as follows, or else we may *take away points* from your score
 
