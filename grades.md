@@ -32,3 +32,21 @@ Exams **must** be taken at the scheduled time.
 They are open book, notes, computer etc. but 
 you cannot collaborate with **anyone** in person 
 or online sites like stack overflow etc.
+
+
+## Regrade Requests
+
+When submitting regrade requests e.g. for midterm or final, 
+please follow these guidelines for us to consider your request.
+
+1. First, all requests *must be* submitted **within 48 hours** (not including weekends) 
+   of the scores being published.
+
+2. Formatted as follows, or else we may *take away points* from your score
+
+```
+(1) The correct answer is: XYZ 
+(2) My answer was: ABC 
+(3) Here is why I think I was incorrectly graded ...
+```
+

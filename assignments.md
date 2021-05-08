@@ -12,6 +12,7 @@ atomic units over the entire quarter. By *atomic* I mean, for example, that
 - [HW #1](https://classroom.github.com/a/u3GDJ7Gf), due Friday April 9  by 23:59pm
 - [HW #2](https://classroom.github.com/a/vhkrvt2B), due Friday April 16 by 23:59pm
 - [HW #3](https://classroom.github.com/a/gyX03w2g), due Friday April 30 by 23:59pm
+- [HW #4](https://classroom.github.com/a/kmjfQjUM), due Friday May   14 by 23:59pm
 
 <!--
 - [HW #4][hw4-git], due Mon 11/19 by 23:59pm
