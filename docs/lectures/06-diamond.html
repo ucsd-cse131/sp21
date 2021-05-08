@@ -801,8 +801,9 @@ into stack-slots <code>1</code>,<code>2</code>,… so we can access them in the 
 <span id="cb36-13"><a href="#cb36-13" aria-hidden="true"></a> <span class="co">-- 4. Teardown stack frame &amp; return</span></span>
 <span id="cb36-14"><a href="#cb36-14" aria-hidden="true"></a> <span class="op">++</span> funExit n </span>
 <span id="cb36-15"><a href="#cb36-15" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb36-16"><a href="#cb36-16" aria-hidden="true"></a>    n       <span class="ot">=</span> countVars body</span>
-<span id="cb36-17"><a href="#cb36-17" aria-hidden="true"></a>    initEnv <span class="ot">=</span> paramsEnv xs</span></code></pre></div>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true"></a>              <span class="co">-- space for params + locals</span></span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true"></a>    n       <span class="ot">=</span> <span class="fu">length</span> xs <span class="op">+</span> countVars body</span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true"></a>    initEnv <span class="ot">=</span> paramsEnv xs</span></code></pre></div>
 <p><br></p>
 <h3 id="setup-and-tear-down-stack-frame">Setup and Tear Down Stack Frame</h3>
 <p>(As in <code>cobra</code>)</p>

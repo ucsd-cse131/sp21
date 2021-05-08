@@ -1213,7 +1213,8 @@ compileDecl f xs body =
  -- 4. Teardown stack frame & return
  ++ funExit n 
   where
-    n       = countVars body
+              -- space for params + locals
+    n       = length xs + countVars body
     initEnv = paramsEnv xs
 ```
 
