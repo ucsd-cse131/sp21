@@ -1,6 +1,6 @@
 ---
 title: Data on the Heap
-date: 2018-11-19
+date: 2021-05-13
 headerImg: egg-eater.jpg
 ---
 
@@ -11,7 +11,22 @@ Next, lets add support for
 In the process of doing so, we will learn about
 
 * **Heap Allocation**
+
 * **Run-time Tags**
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ## Creating Heap Data Structures
 
@@ -27,35 +42,61 @@ we could add several more of course, e.g.
 
 * `Char`
 * `Double` or `Float`
-* `Long`   or `Short`
 
 etc. (you should do it!)
 
 However, for all of those, the same principle applies, more or less
 
-* As long as the data fits into a single word (4-bytes)
+* As long as the data fits into a single word (8-bytes)
 
-Instead, we're going to look at how to make **unbounded data structures**
+Instead, lets learn how to make **unbounded data structures**
 
 * Lists
 * Trees
+* ...
 
-which require us to put data on the **heap** (not just the _stack_) that
-we've used so far.
+which require us to put data on the **heap** 
+
+> not just the _stack_ that we've used so far.
 
 ![Stack vs. Heap](/static/img/memory-layout.png)
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ## Pairs
 
 While our _goal_ is to get to lists and trees,
-the journey of a thousand miles, etc., and so,
-we will _begin_ with the humble **pair**.
+the journey of a thousand miles begins with a single step...
 
-### Semantics (Behavior)
+So! we will _begin_ with the humble **pair**.
 
-First, lets ponder what exactly we're trying to
-achieve. We want to enrich our language with _two_
-new constructs:
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Pairs: Semantics (Behavior)
+
+First, lets ponder what exactly we're trying to achieve. 
+
+We want to enrich our language with _two_ new constructs:
 
 * **Constructing** pairs, with a new expression of the
   form `(e0, e1)` where `e0` and `e1` are expressions.
@@ -73,6 +114,17 @@ let t = (2, 3) in
 
 should evaluate to `5`.
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 ## Strategy
 
 Next, lets informally develop a strategy for extending our language
@@ -83,7 +135,18 @@ strategies for:
 2. **Constructing** pairs (i.e. implementing `(e0, e1)` in assembly),
 3. **Accessing** pairs (i.e. implementing `e[0]` and `e[1]` in assembly).
 
-### 1. Representation
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## 1. Representation
 
 Recall that we [represent all values:](05-cobra.md/#option-2-use-a-tag-bit)
 
@@ -92,10 +155,18 @@ Recall that we [represent all values:](05-cobra.md/#option-2-use-a-tag-bit)
 
 as a **single word** either
 
-* 4 bytes on the stack, or
-* a single register `eax`.
+* 8 bytes on the stack, or
+* a single register `rax`, `rbx` etc.
 
-**EXERCISE**
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## EXERCISE
 
 What kinds of problems do you think might arise if
 we represent a pair `(2, 3)` on the _stack_ as:
@@ -111,7 +182,19 @@ we represent a pair `(2, 3)` on the _stack_ as:
 -------
 ```
 
-**QUIZ**
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## QUIZ
 
 How many words would we need to store the tuple
 
@@ -124,6 +207,17 @@ How many words would we need to store the tuple
 3. `3` words
 4. `4` words
 5. `5` words
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 <!--  
 ### Pairs vs. Primitive Values
@@ -144,18 +238,16 @@ all the data into a fixed number of 1- or 2- word slots.
 
 ### Pointers
 
-> Every problem in computing can be solved
-> by adding a level of indirection.
+> Every problem in computing can be solved by adding a level of indirection.
 
-We will **represent a pair** by a **pointer** to a block
-of **two adjacent words** of memory.
+We will **represent a pair** by a **pointer** to a block of **two adjacent words** of memory.
 
 ![Pairs on the heap](/static/img/heap-pairs.png)
 
 The above shows how the pair `(2, (3, (4, 5)))` and its sub-pairs
 can be stored in the **heap** using pointers.
 
-`(4,5)` is stored by adjacent words storing
+`(4, 5)` is stored by adjacent words storing
 
 * `4` and
 * `5`
@@ -170,7 +262,19 @@ can be stored in the **heap** using pointers.
 * `2` and
 * a **pointer** to a heap location storing `(3, (4, 5))`.
 
-### A Problem: Numbers vs. Pointers?
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## A Problem: Numbers vs. Pointers?
 
 How will we tell the difference between _numbers_ and _pointers_?
 
@@ -186,7 +290,20 @@ Each of the above corresponds to a _different_ tuple
 
 so its pretty crucial that we have a way of knowing _which_ value it is.
 
-### Tagging Pointers
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Tagging Pointers
 
 As you might have guessed, we can extend our [tagging mechanism](05-cobra.md/#option-2-use-a-tag-bit)
 to account for _pointers_.
@@ -205,28 +322,57 @@ That is, for
 
 (We have 3-bits worth for tags, so have wiggle room for other primitive types.)
 
-### Address Alignment
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-As we have a **3 bit tag**, leaving **32 - 3 = 29 bits**
-for the actual address. This means, our actual available
-addresses, written in binary are of the form
 
-|  Binary    |  Decimal |
-|-----------:|---------:|
-| 0b00000000 |        0 |
-| 0b00001000 |        8 |
-| 0b00010000 |       16 |
-| 0b00011000 |       24 |
-| 0b00100000 |       32 |
-| ...        |          |
+## Address Alignment
+
+As we have a **3 bit tag**
+
+* leaving **64 - 3 = 61 bits** for the actual address
+
+So actual addresses, written in binary, omitting trailing zeros, are of the form
+
+|  Binary      |  Decimal |
+|-------------:|---------:|
+| `0b00000000` |        0 |
+| `0b00001000` |        8 |
+| `0b00010000` |       16 |
+| `0b00011000` |       24 |
+| `0b00100000` |       32 |
+| ...          |          |
 
 
 That is, the addresses are **8-byte aligned**.
-Which is great because at each address, we have
-a pair, i.e. a **2-word = 8-byte block**, so the _next_
-allocated address will also fall on an 8-byte boundary.
 
-### 2. Construction
+Which is great because at each address, we have
+a pair, i.e. a **2-word = 16-byte block**, so the 
+_next_ allocated address will *also* fall on an 8-byte boundary.
+
+* But ... what if we had 3-tuples? or 5-tuples? ...
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## 2. Construction
 
 Next, lets look at how to implement pair **construction**
 that is, generate the assembly for expressions like:
@@ -237,50 +383,71 @@ that is, generate the assembly for expressions like:
 
 To **construct** a pair `(e1, e2)` we
 
-1. **Allocate** a new 2-word block, and getting the starting address at `eax`,
-2. **Copy** the value of `e1` (resp. `e2`) into `[eax]` (resp. `[eax + 4]`).
-3. **Tag** the last bit of `eax` with `1`.
+1. **Allocate** a new 2-word block, and getting the starting address at `rax`,
+2. **Copy** the value of `e1` (resp. `e2`) into `[rax]` (resp. `[rax + 8]`).
+3. **Tag** the last bit of `rax` with `1`.
 
 The resulting `eax` is the **value of the pair**
 
-* The last step ensures that the value carries the proper tag.
+* The _last step_ ensures that the value carries the proper tag.
 
-ANF will ensure that `e1` and `e2` are both [immediate expressions](04-boa.md/#idea-immediate-expressions)
-which will make the second step above straightforward.
+ANF will ensure that `e1` and `e2` are [immediate expressions](04-boa.md/#idea-immediate-expressions)
+
+* will make the second step above straightforward.
 
 **EXERCISE** How will we do ANF conversion for `(e1, e2)`?
 
-### Allocating Addresses
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-We will use a **global** register `esi` to maintain the address
-of the **next free block** on the heap. Every time we need a new
-block, we will:
 
-1. **Copy** the current `esi` into `eax`
-  + set the last bit to `1` to ensure proper tagging.
-  + `eax` will be used to fill in the values
+## Allocating Addresses
 
-2. **Increment** the value of `esi` by `8`
-  + thereby "allocating" 8 bytes (= 2 words) at the address in `eax`
+Lets use a **global** register `r15` to maintain 
+the address of the **next free block** on the heap. 
 
-Note that _if_
+Every time we need a _new_ block, we will:
 
-* we _start_ our blocks at an 8-byte boundary, and
-* we _allocate_ 8 bytes at a time,
+**1. Copy** the current `r15` into `rax`
 
-_then_
++ Set the last bit to `1` to ensure proper tagging.
++ `rax` will be used to fill in the values
 
-* each address used to store a pair will fall on
-  an 8-byte boundary (i.e. have last three bits set to `0`).
+**2. Increment** the value of `r15` by `16`
 
-So we can safely turn the address in `eax` into a `pointer`
-+ by setting the last bit to `1`.
++ Thus _allocating_ 8 bytes (= 2 words) at the address in `rax`
 
-**NOTE:** In your assignment, we will have blocks
-of varying sizes so you will have to take care
-to _maintain_ the 8-byte alignment, by "padding".
+Note that addresses stay 8-byte aligned (last 3 bits = 0) if we  
 
-### Example: Allocation
+* _Start_ our blocks at an 8-byte boundary, and
+* _Allocate_ 16 bytes at a time,
+
+
+**NOTE:** Your assignment will have *blocks of varying sizes* 
+
+* You will have to _maintain_ the 8-byte alignment by _padding_
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Example: Allocation
 
 In the figure below, we have
 
@@ -289,11 +456,21 @@ In the figure below, we have
 
 ![Example of Pairs](/static/img/example-pair-code.png)
 
-The figure below shows the how the heap and `esi` evolve at points 1, 2 and 3:
+The figure below shows the how the heap and `r15` evolve at points 1, 2 and 3:
 
 ![Allocating Pairs on the Heap](/static/img/example-pair-heaps.png)
 
-**QUIZ**
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## QUIZ
 
 In the ANF version, `p` is the _second (local) variable_ stored
 in the stack frame. What _value_ gets moved into the _second stack slot_

@@ -1512,6 +1512,7 @@ sumTo(5)
 * Each call returns its result _without further computation_
 
 No need to use call-stack, can make recursive call **in place**.
+
 * Tail recursive calls can be _compiled into loops_!
 
 <br>
@@ -1525,6 +1526,10 @@ No need to use call-stack, can make recursive call **in place**.
 <br>
 <br>
 <br>
+
+## Tail Recursion Strategy
+
+Here's the code for `sumTo`
 
 ## Tail Recursion Strategy
 
@@ -1748,7 +1753,7 @@ We just saw how to add support for **first-class function**
 
 and a way in which an important class of
 
-* **Tail Recursive** functions can be compiled as **loops**.
+> **Tail Recursive** functions can be compiled as **loops**.
 
 Later, we'll see how to represent **functions as values** using **closures**.
 
