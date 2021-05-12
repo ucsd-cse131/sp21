@@ -14,9 +14,9 @@ headerImg: books.jpg
 | 4/15       | Data Representation           | [html][lec5] [md][md5] | [pdf][pdf5a] | [code][cod5]   |
 | 4/22       | "" | "" | [pdf][pdf5b]  | ""   |
 | 4/27       | Functions                     | [html][lec6] [md][md6] | [pdf][pdf6]  | [code][cod6]   |
+| 5/13       | Heap Data  | [html][lec7] [md][md7] | [pdf][pdf7]  | [code][cod7]   |
 
 <!-- 
-| 11/5       | Functions                     | [html][lec6] [md][md6] |             | [code][cod6]   |
 | 11/19      | Heap Data                     | [html][lec7] [md][md7] |             | [code][cod7]   |
 | 11/28      | Garbage Collection            | [html][lec8] [md][md8] | [pdf][pdf8] | [code][cod8]   |
 -->

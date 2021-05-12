@@ -968,9 +968,14 @@ into stack-slots <code>1</code>,<code>2</code>,… so we can access them in the 
 <li>Accumulation happens in the parameter (not with the output),</li>
 <li>Each call returns its result <em>without further computation</em></li>
 </ul>
-<p>No need to use call-stack, can make recursive call <strong>in place</strong>. * Tail recursive calls can be <em>compiled into loops</em>!</p>
+<p>No need to use call-stack, can make recursive call <strong>in place</strong>.</p>
+<ul>
+<li>Tail recursive calls can be <em>compiled into loops</em>!</li>
+</ul>
 <p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="tail-recursion-strategy">Tail Recursion Strategy</h2>
+<p>Here’s the code for <code>sumTo</code></p>
+<h2 id="tail-recursion-strategy-1">Tail Recursion Strategy</h2>
 <p>Instead of using <code>call</code> to make the call, simply:</p>
 <ol type="1">
 <li><strong>Copy</strong> the <em>call’s</em> arguments to the (same) stack position (as current args),</li>
@@ -1093,9 +1098,9 @@ into stack-slots <code>1</code>,<code>2</code>,… so we can access them in the 
 <li><strong>Calls</strong></li>
 </ul>
 <p>and a way in which an important class of</p>
-<ul>
-<li><strong>Tail Recursive</strong> functions can be compiled as <strong>loops</strong>.</li>
-</ul>
+<blockquote>
+<p><strong>Tail Recursive</strong> functions can be compiled as <strong>loops</strong>.</p>
+</blockquote>
 <p>Later, we’ll see how to represent <strong>functions as values</strong> using <strong>closures</strong>.</p>	
                 <hr>
             </div>
