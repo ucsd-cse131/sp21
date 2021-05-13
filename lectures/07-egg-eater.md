@@ -547,9 +547,9 @@ As usual, lets continue with our recipe:
 2. Types
 3. Transforms
 
-We've already built up intuition of the _strategy_ for
-implementing tuples. Next, lets look at how to implement
-each of the above.
+We've already built up intuition of the _strategy_ for implementing tuples. 
+
+Next, lets look at how to implement each of the above.
 
 <br>
 <br>
@@ -566,6 +566,17 @@ each of the above.
 ## Run-Time
 
 We need to extend the run-time (`c-bits/main.c`) in two ways.
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 1. **Allocate** a chunk of space on the heap and pass in
    start address to `our_code`.
