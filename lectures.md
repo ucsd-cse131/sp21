@@ -49,7 +49,7 @@ headerImg: books.jpg
 [lec6]: lectures/06-diamond.html
 [md6]:  http://github.com/ucsd-progsys/131-web/blob/master/lectures/06-diamond.md
 [cod6]: https://github.com/ucsd-cse131/04-diamondback
-[pdf6]: static/img/06-diamondback.pdf
+[pdf6]: static/img/06-diamond.pdf
 
 [lec7]: lectures/07-egg-eater.html
 [md7]: http://github.com/ucsd-progsys/131-web/blob/master/lectures/07-egg-eater.md
