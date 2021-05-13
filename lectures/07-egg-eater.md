@@ -460,16 +460,6 @@ The figure below shows the how the heap and `r15` evolve at points 1, 2 and 3:
 
 ![Allocating Pairs on the Heap](/static/img/example-pair-heaps.png)
 
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-<br>
-
 ## QUIZ
 
 In the ANF version, `p` is the _second (local) variable_ stored
