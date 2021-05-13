@@ -468,7 +468,7 @@ when evaluating the above program?
 
 1. `0x3`
 2. `(3, (4, 5))`
-3. `0x6`
+3. `0x11`
 4. `0x9`
 5. `0x10`
 
