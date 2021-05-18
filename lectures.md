@@ -14,7 +14,8 @@ headerImg: books.jpg
 | 4/15       | Data Representation           | [html][lec5] [md][md5] | [pdf][pdf5a] | [code][cod5]   |
 | 4/22       | "" | "" | [pdf][pdf5b]  | ""   |
 | 4/27       | Functions                     | [html][lec6] [md][md6] | [pdf][pdf6]  | [code][cod6]   |
-| 5/13       | Heap Data  | [html][lec7] [md][md7] | [pdf][pdf7]  | [code][cod7]   |
+| 5/13       | Heap Data  | [html][lec7] [md][md7] | [pdf][pdf7a]  | [code][cod7]   |
+| 5/18       | ""         | ""                     | [pdf][pdf7b]  | ""             |
 
 <!-- 
 | 11/19      | Heap Data                     | [html][lec7] [md][md7] |             | [code][cod7]   |
@@ -54,7 +55,8 @@ headerImg: books.jpg
 [lec7]: lectures/07-egg-eater.html
 [md7]: http://github.com/ucsd-progsys/131-web/blob/master/lectures/07-egg-eater.md
 [cod7]: https://github.com/ucsd-cse131/05-egg-eater
-[pdf7]: static/img/egg-eater-notes.pdf
+[pdf7a]: static/img/07-egg-A.pdf
+[pdf7b]: static/img/07-egg-B.pdf
 
 [lec8]: lectures/08-fox.html
 [md8]: http://github.com/ucsd-progsys/131-web/blob/master/lectures/08-fox.md 
