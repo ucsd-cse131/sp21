@@ -1,17 +1,13 @@
 ---
 title: First Class Functions
-date: 2016-11-14
+date: 2021-5-20
 headerImg: fer-de-lance.jpg
 ---
 
 
 ## Functions as Values
 
-We have functions, but they are *second-class* entities
-in our languages: they don't have the same *abilities*
-as other values.
-
-For example, the following is rejected:
+Consider the following `egg` program
 
 ```python
 def f(it):
@@ -23,7 +19,26 @@ def incr(x):
 f(incr)
 ```
 
-with a multiple error messages:
+What will be the result of compiling/running?
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+We have functions, but they are *second-class* entities
+in our languages: they don't have the same *abilities*
+as other values.
+
+So, we get multiple error messages:
 
 ```
 Errors found!
@@ -45,15 +60,49 @@ This is because the `Env` only holds
 
 and **not** function definitions.
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+## Functions as Values
+
 But for the many reasons we saw in CSE 130 -- we *want* to treat functions
 like values. For example, if you run the above in Python you get:
 
 ```python
 >>> def f(it): return it(5)
+
 >>> def incr(x): return x + 1
+
 >>> f(incr)
 6
 ```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ## Flashback: How do we _compile_ `incr`?
 
@@ -67,31 +116,33 @@ def incr(x):
 incr(5)
 ```
 
-becomes:
+becomes, for `incr`
 
 ```nasm
 label_def_incr_start:
-  push ebp                      # setup stack frame
-  mov ebp, esp
+  push rbp                 # setup stack frame
+  mov rbp, rsp
 
-  mov eax, [ebp + 8]            # grab param
-  mov ebx, 2                    # incr by 1
-  add eax, ebx
+  mov rax, rdi             # grab param
+  add rax, 2               # incr by 1
 
-  mov esp, ebp                  # undo stack frame
-  pop ebp
-  ret                           # buh-bye
+  mov rsp, rbp             # undo stack frame
+  pop rbp
+  ret                      # buh-bye
+```
 
+for the main expression
+
+```nasm
 our_code_starts_here:         
-  push ebp
-  mov ebp, esp
+  push rbp
+  mov rbp, rsp
 
-  push DWORD 10                 # push arg '5'
-  call label_def_incr_start     # call function
-  add esp, 4                    # pop  arg from stack
+  mov  rdi 10                 # push arg '5'
+  call label_def_incr_start   # call function
 
-  mov esp, ebp
-  pop  ebp
+  mov rsp, rbp
+  pop  rbp
   ret
 ```
 
@@ -109,30 +160,77 @@ def incr(x):
 f(incr)
 ```
 
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
 ## Attempt 1: What is the value of the parameter `it` ?
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 **IDEA:** Use the **label** where `incr` lives!
 
 ```nasm
 label_def_f_start:
-  push ebp
-  mov  ebp, esp
+  push rbp
+  mov  rbp, rsp
 
-  mov eax, [ebp + 8]            # grab function-address
-  push DWORD 10                 # push arg '5'
-  call eax                      # call function!
-  add esp, 4                    # pop arg from stack
+  mov rax, rdi       # grab function-address
+  mov rdi, 10        # push arg '5'
+  call rax           # call function!
 
-  mov esp, ebp
-  pop ebp
+  mov rsp, rbp
+  pop rbp
   ret
 ```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ## How to pass the value of the parameter ?
 
 So now the `main` expression
 
-```
+```python
 f(incr)
 ```
 
@@ -140,15 +238,14 @@ can be compiled to:
 
 ```nasm
 our_code_starts_here:         
-  push ebp
-  mov ebp, esp
+  push rbp
+  mov rbp, rsp
 
-  push ?1         # push arg
+  mov rdi, ?1     # push arg
   call ?2         # call function
-  add esp, 4      # pop  arg
 
-  mov esp, ebp
-  pop  ebp
+  mov rsp, rbp
+  pop rbp
   ret
 ```
 
@@ -156,17 +253,64 @@ our_code_starts_here:
 
 |        | `?1`                   |   `?2`                 |
 |-------:|:-----------------------|:-----------------------|
-| **A**  | `label_def_incr_start` | `labal_def_f_start`    |
-| **B**  | `label_def_f_start`    | `labal_def_incr_start` |
-| **C**  | `label_def_f_start`    | `labal_def_f_start`    |
-| **D**  | `label_def_incr_start` | `labal_def_incr_start` |
+| **A**  | `label_def_incr_start` | `label_def_f_start`    |
+| **B**  | `label_def_f_start`    | `label_def_incr_start` |
+| **C**  | `label_def_f_start`    | `label_def_f_start`    |
+| **D**  | `label_def_incr_start` | `label_def_incr_start` |
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 
 ## Strategy Progression
 
 1. **Representation** = `Start-Label`
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
     - **Problem:** How to do run-time checks of valid args?
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 
 ## Yay, that was easy! How should the following behave?
 
@@ -180,7 +324,20 @@ def add(x, y):
 f(incr)
 ```
 
-Lets cheat and see what Python does:
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+Lets see what Python does:
 
 ```python
 >>> def f(it): return it(5)
@@ -191,6 +348,19 @@ Traceback (most recent call last):
   File "<stdin>", line 1, in f
 TypeError: add() takes exactly 2 arguments (1 given)
 ```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ## Problem: Ensure Valid Number of Arguments?
 
@@ -204,10 +374,36 @@ With **proper run-time error**?
 1. **Where** does the run-time check happen?
 2. **What** information is needed for the check?
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
 **Key:** Need to _also_ store the function's **arity**
 
 - The **number of arguments** required by the function
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ## Strategy Progression
 
@@ -217,22 +413,98 @@ With **proper run-time error**?
 
 2. **Representation** = `(Arity, Start-Label)`
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ## Attempt 2: What is the value of the parameter `it` ?
 
-**IDEA:** Use a **tuple of** `(arity, label)`
+```python
+def f(it):
+  it(5)
+
+def incr(x):
+  x + 1
+
+f(incr)
+```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+**IDEA:** Represent a *function* with a **tuple of** 
+
+```
+(arity, function_start_label)
+```
+
+<br>
+<br>
+<br>
 
 We can now compile a call
 
 ```
-  e(x1,...,xn)
+e(x1,...,xn)
 ```
 
 via the following strategy:
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
 1. **Evaluate** the tuple `e`
 2. **Check** that `e[0]` is equal to `n` (else arity mismatch error)
 3. **Call** the function at `e[1]`
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
 
 ### Example
 
@@ -258,6 +530,20 @@ to **the tuple**
 
 But **where** will we store this information?
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
 ## Strategy Progression
 
 1. **Representation** = `Start-Label`
@@ -269,6 +555,20 @@ But **where** will we store this information?
     - **Problem:** How to map function **names** to tuples?
 
 3. **Lambda Terms** Make functions just another expression!
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 
 ## Attempt 3: Lambda Terms
 
@@ -285,6 +585,19 @@ So far, we could only define functions at **top-level**
 | JS           | `(x1,...,xn) => { return e }` |
 | C++          | `[&](x1,...,xn){ return e }`  |
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 
 ### Example: Lambda Terms
 
@@ -296,6 +609,19 @@ let f    = (lambda (it): it(5))
 in
   f(incr)
 ```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ### Implementation
 
@@ -315,6 +641,19 @@ As always, to the details! Lets figure out:
 1. Update `tag` and `ANF`
 2. Update `checker`
 3. Update `compile`
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ### Implementation: Representation
 
@@ -350,6 +689,21 @@ Crucially, we can **get** `0`-th, or `1`-st elements from tuple.
 
 **Question:** Why not use _plain tuples_?
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
 ### Implementation: Types
 
 First, lets look at the  new `Expr` type
@@ -375,9 +729,38 @@ and a **function call** as:
 App e [e1,...,en]
 ```
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
 ### Transforms: Tag
 
 This is pretty straight forward (do it yourself)
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 
 ### Transforms: ANF
 
@@ -393,6 +776,19 @@ Does `e` need to be
 * **B** ANF
 * **C** None of the above
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 
 ### Transforms: ANF
 
@@ -407,6 +803,20 @@ Do `es` need to be
 * **A** Immediate  
 * **B** ANF
 * **C** None of the above
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 
 
 ### Transforms: ANF
@@ -425,6 +835,20 @@ anf i (App e es)   = (i', stitch bs (App v vs))
     (i', bs, v:vs) = imms i (e:es)
 ```
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
 
 ### Transforms: ANF
 
@@ -440,6 +864,20 @@ Does `e` need to be
 * **B** ANF
 * **C** None of the above
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
 
 ### Transforms: ANF
 
@@ -452,6 +890,20 @@ anf i (Lam xs e) = (i', Lam xs e')
   where
     (i', e')     = anf i e
 ```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 
 ### Transforms: Checker
 
@@ -481,6 +933,20 @@ wellFormed = go emptyEnv
 
 * How shall we implement `?3` ?
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
 
 ### Transforms: Compiler
 
@@ -494,7 +960,7 @@ Finally, lets see how to convert `Expr` into `Asm`, two separate cases:
 
 ```haskell
 compileEnv :: Env -> AExp -> [Instruction]
-compileEnv env (Lam xs e l)
+compileEnv env (Lam xs e l) 
   = IJmp   end              -- Why?
   : ILabel start            -- Function start
   : compileDecl l xs e      -- Function code (like Decl)
@@ -517,6 +983,19 @@ lamTuple arity start
   ++ [ IOr  (Reg EAX) (typeTag TClosure) ]   -- set the tag bits
 ```
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
 ### Transforms: Compiler: `App`
 
 **Recall! IDEA:** Use a **tuple of** `(arity, label)`
@@ -529,9 +1008,33 @@ We can now compile a call
 
 via the following strategy:
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 1. **Evaluate** the tuple `e`
 2. **Check** that `e[0]` is equal to `n` (else arity mismatch error)
 3. **Call** the function at `e[1]`
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ```haskell
 compileEnv env (App vE vXs)

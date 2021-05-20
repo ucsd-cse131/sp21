@@ -234,8 +234,7 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
         <div class="row">
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 			<h2 id="functions-as-values">Functions as Values</h2>
-<p>We have functions, but they are <em>second-class</em> entities in our languages: they don’t have the same <em>abilities</em> as other values.</p>
-<p>For example, the following is rejected:</p>
+<p>Consider the following <code>egg</code> program</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">def</span> f(it):</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a>  it(<span class="dv">5</span>)</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a></span>
@@ -243,7 +242,10 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>  x <span class="op">+</span> <span class="dv">1</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>f(incr)</span></code></pre></div>
-<p>with a multiple error messages:</p>
+<p>What will be the result of compiling/running?</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<p>We have functions, but they are <em>second-class</em> entities in our languages: they don’t have the same <em>abilities</em> as other values.</p>
+<p>So, we get multiple error messages:</p>
 <pre><code>Errors found!
 tests/input/hof.diamond:(2:3)-(4:1): Function 'it' is not defined
 
@@ -260,79 +262,83 @@ tests/input/hof.diamond:7:3-7: Unbound variable 'incr'
 <li>let-bound variables</li>
 </ul>
 <p>and <strong>not</strong> function definitions.</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="functions-as-values-1">Functions as Values</h2>
 <p>But for the many reasons we saw in CSE 130 – we <em>want</em> to treat functions like values. For example, if you run the above in Python you get:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> <span class="kw">def</span> f(it): <span class="cf">return</span> it(<span class="dv">5</span>)</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> <span class="kw">def</span> incr(x): <span class="cf">return</span> x <span class="op">+</span> <span class="dv">1</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> f(incr)</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a><span class="dv">6</span></span></code></pre></div>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> <span class="kw">def</span> incr(x): <span class="cf">return</span> x <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> f(incr)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a><span class="dv">6</span></span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="flashback-how-do-we-compile-incr">Flashback: How do we <em>compile</em> <code>incr</code>?</h2>
 <p>We compile each function down into a sequence of instructions corresponding to its body.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="kw">def</span> incr(x):</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>  x <span class="op">+</span> <span class="dv">1</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a>incr(<span class="dv">5</span>)</span></code></pre></div>
-<p>becomes:</p>
+<p>becomes, for <code>incr</code></p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="fu">label_def_incr_start:</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>  <span class="kw">push</span> <span class="kw">ebp</span>                      # setup stack frame</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>  <span class="kw">mov</span> <span class="kw">ebp</span>, <span class="kw">esp</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>  <span class="kw">push</span> <span class="kw">rbp</span>                 # setup stack frame</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>  <span class="kw">mov</span> <span class="kw">rbp</span>, <span class="kw">rsp</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>  <span class="kw">mov</span> <span class="kw">eax</span>, [<span class="kw">ebp</span> + <span class="dv">8</span>]            # grab param</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a>  <span class="kw">mov</span> <span class="kw">ebx</span>, <span class="dv">2</span>                    # incr by <span class="dv">1</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a>  <span class="kw">add</span> <span class="kw">eax</span>, <span class="kw">ebx</span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true"></a>  <span class="kw">mov</span> <span class="kw">esp</span>, <span class="kw">ebp</span>                  # undo stack frame</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true"></a>  <span class="kw">pop</span> <span class="kw">ebp</span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true"></a>  <span class="kw">ret</span>                           # buh-bye</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true"></a></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true"></a><span class="fu">our_code_starts_here:</span>         </span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true"></a>  <span class="kw">push</span> <span class="kw">ebp</span></span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true"></a>  <span class="kw">mov</span> <span class="kw">ebp</span>, <span class="kw">esp</span></span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true"></a></span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true"></a>  <span class="kw">push</span> <span class="dt">DWORD</span> <span class="dv">10</span>                 # <span class="kw">push</span> arg <span class="st">'5'</span></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true"></a>  <span class="kw">call</span> label_def_incr_start     # <span class="kw">call</span> function</span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true"></a>  <span class="kw">add</span> <span class="kw">esp</span>, <span class="dv">4</span>                    # <span class="kw">pop</span>  arg from stack</span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true"></a></span>
-<span id="cb5-21"><a href="#cb5-21" aria-hidden="true"></a>  <span class="kw">mov</span> <span class="kw">esp</span>, <span class="kw">ebp</span></span>
-<span id="cb5-22"><a href="#cb5-22" aria-hidden="true"></a>  <span class="kw">pop</span>  <span class="kw">ebp</span></span>
-<span id="cb5-23"><a href="#cb5-23" aria-hidden="true"></a>  <span class="kw">ret</span></span></code></pre></div>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>  <span class="kw">mov</span> <span class="kw">rax</span>, <span class="kw">rdi</span>             # grab param</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a>  <span class="kw">add</span> <span class="kw">rax</span>, <span class="dv">2</span>               # incr by <span class="dv">1</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a>  <span class="kw">mov</span> <span class="kw">rsp</span>, <span class="kw">rbp</span>             # undo stack frame</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true"></a>  <span class="kw">pop</span> <span class="kw">rbp</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true"></a>  <span class="kw">ret</span>                      # buh-bye</span></code></pre></div>
+<p>for the main expression</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="fu">our_code_starts_here:</span>         </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a>  <span class="kw">push</span> <span class="kw">rbp</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a>  <span class="kw">mov</span> <span class="kw">rbp</span>, <span class="kw">rsp</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a>  <span class="kw">mov</span>  <span class="kw">rdi</span> <span class="dv">10</span>                 # <span class="kw">push</span> arg <span class="st">'5'</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a>  <span class="kw">call</span> label_def_incr_start   # <span class="kw">call</span> function</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true"></a></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true"></a>  <span class="kw">mov</span> <span class="kw">rsp</span>, <span class="kw">rbp</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true"></a>  <span class="kw">pop</span>  <span class="kw">rbp</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true"></a>  <span class="kw">ret</span></span></code></pre></div>
 <h2 id="what-is-the-value-of-a-function">What is the <em>value</em> of a function?</h2>
 <p>So now, lets take a step back. Suppose we want to compile</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="kw">def</span> f(it):</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a>  it(<span class="dv">5</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a><span class="kw">def</span> incr(x):</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a>  x <span class="op">+</span> <span class="dv">1</span></span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a></span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true"></a>f(incr)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="kw">def</span> f(it):</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a>  it(<span class="dv">5</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a><span class="kw">def</span> incr(x):</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a>  x <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a>f(incr)</span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="attempt-1-what-is-the-value-of-the-parameter-it">Attempt 1: What is the value of the parameter <code>it</code> ?</h2>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <p><strong>IDEA:</strong> Use the <strong>label</strong> where <code>incr</code> lives!</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="fu">label_def_f_start:</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a>  <span class="kw">push</span> <span class="kw">ebp</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a>  <span class="kw">mov</span>  <span class="kw">ebp</span>, <span class="kw">esp</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a>  <span class="kw">mov</span> <span class="kw">eax</span>, [<span class="kw">ebp</span> + <span class="dv">8</span>]            # grab function-address</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a>  <span class="kw">push</span> <span class="dt">DWORD</span> <span class="dv">10</span>                 # <span class="kw">push</span> arg <span class="st">'5'</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a>  <span class="kw">call</span> <span class="kw">eax</span>                      # <span class="kw">call</span> function!</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true"></a>  <span class="kw">add</span> <span class="kw">esp</span>, <span class="dv">4</span>                    # <span class="kw">pop</span> arg from stack</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true"></a></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true"></a>  <span class="kw">mov</span> <span class="kw">esp</span>, <span class="kw">ebp</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true"></a>  <span class="kw">pop</span> <span class="kw">ebp</span></span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true"></a>  <span class="kw">ret</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="fu">label_def_f_start:</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a>  <span class="kw">push</span> <span class="kw">rbp</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a>  <span class="kw">mov</span>  <span class="kw">rbp</span>, <span class="kw">rsp</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true"></a>  <span class="kw">mov</span> <span class="kw">rax</span>, <span class="kw">rdi</span>       # grab function-address</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true"></a>  <span class="kw">mov</span> <span class="kw">rdi</span>, <span class="dv">10</span>        # <span class="kw">push</span> arg <span class="st">'5'</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true"></a>  <span class="kw">call</span> <span class="kw">rax</span>           # <span class="kw">call</span> function!</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true"></a>  <span class="kw">mov</span> <span class="kw">rsp</span>, <span class="kw">rbp</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true"></a>  <span class="kw">pop</span> <span class="kw">rbp</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true"></a>  <span class="kw">ret</span></span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="how-to-pass-the-value-of-the-parameter">How to pass the value of the parameter ?</h2>
 <p>So now the <code>main</code> expression</p>
-<pre><code>f(incr)</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a>f(incr)</span></code></pre></div>
 <p>can be compiled to:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="fu">our_code_starts_here:</span>         </span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a>  <span class="kw">push</span> <span class="kw">ebp</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a>  <span class="kw">mov</span> <span class="kw">ebp</span>, <span class="kw">esp</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true"></a>  <span class="kw">push</span> ?<span class="dv">1</span>         # <span class="kw">push</span> arg</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true"></a>  <span class="kw">call</span> ?<span class="dv">2</span>         # <span class="kw">call</span> function</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true"></a>  <span class="kw">add</span> <span class="kw">esp</span>, <span class="dv">4</span>      # <span class="kw">pop</span>  arg</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true"></a></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true"></a>  <span class="kw">mov</span> <span class="kw">esp</span>, <span class="kw">ebp</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true"></a>  <span class="kw">pop</span>  <span class="kw">ebp</span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true"></a>  <span class="kw">ret</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode nasm"><code class="sourceCode nasm"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="fu">our_code_starts_here:</span>         </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a>  <span class="kw">push</span> <span class="kw">rbp</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a>  <span class="kw">mov</span> <span class="kw">rbp</span>, <span class="kw">rsp</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true"></a>  <span class="kw">mov</span> <span class="kw">rdi</span>, ?<span class="dv">1</span>     # <span class="kw">push</span> arg</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true"></a>  <span class="kw">call</span> ?<span class="dv">2</span>         # <span class="kw">call</span> function</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true"></a></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true"></a>  <span class="kw">mov</span> <span class="kw">rsp</span>, <span class="kw">rbp</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true"></a>  <span class="kw">pop</span> <span class="kw">rbp</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true"></a>  <span class="kw">ret</span></span></code></pre></div>
 <p><strong>QUIZ:</strong> What are suitable terms for <code>?1</code> and <code>?2</code> ?</p>
 <table>
 <thead>
@@ -346,48 +352,51 @@ tests/input/hof.diamond:7:3-7: Unbound variable 'incr'
 <tr class="odd">
 <td style="text-align: right;"><strong>A</strong></td>
 <td style="text-align: left;"><code>label_def_incr_start</code></td>
-<td style="text-align: left;"><code>labal_def_f_start</code></td>
+<td style="text-align: left;"><code>label_def_f_start</code></td>
 </tr>
 <tr class="even">
 <td style="text-align: right;"><strong>B</strong></td>
 <td style="text-align: left;"><code>label_def_f_start</code></td>
-<td style="text-align: left;"><code>labal_def_incr_start</code></td>
+<td style="text-align: left;"><code>label_def_incr_start</code></td>
 </tr>
 <tr class="odd">
 <td style="text-align: right;"><strong>C</strong></td>
 <td style="text-align: left;"><code>label_def_f_start</code></td>
-<td style="text-align: left;"><code>labal_def_f_start</code></td>
+<td style="text-align: left;"><code>label_def_f_start</code></td>
 </tr>
 <tr class="even">
 <td style="text-align: right;"><strong>D</strong></td>
 <td style="text-align: left;"><code>label_def_incr_start</code></td>
-<td style="text-align: left;"><code>labal_def_incr_start</code></td>
+<td style="text-align: left;"><code>label_def_incr_start</code></td>
 </tr>
 </tbody>
 </table>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="strategy-progression">Strategy Progression</h2>
 <ol type="1">
-<li><p><strong>Representation</strong> = <code>Start-Label</code></p>
-<ul>
-<li><strong>Problem:</strong> How to do run-time checks of valid args?</li>
-</ul></li>
+<li><strong>Representation</strong> = <code>Start-Label</code></li>
 </ol>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<pre><code>- **Problem:** How to do run-time checks of valid args?</code></pre>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="yay-that-was-easy-how-should-the-following-behave">Yay, that was easy! How should the following behave?</h2>
-<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="kw">def</span> f(it):</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a>  it(<span class="dv">5</span>)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true"></a><span class="kw">def</span> add(x, y):</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true"></a>  x <span class="op">+</span> y</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true"></a></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true"></a>f(incr)</span></code></pre></div>
-<p>Lets cheat and see what Python does:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> <span class="kw">def</span> f(it): <span class="cf">return</span> it(<span class="dv">5</span>)</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> <span class="kw">def</span> add(x,y): <span class="cf">return</span> x <span class="op">+</span> y</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> f(add)</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true"></a>Traceback (most recent call last):</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true"></a>  File <span class="st">&quot;&lt;stdin&gt;&quot;</span>, line <span class="dv">1</span>, <span class="kw">in</span> <span class="op">&lt;</span>module<span class="op">&gt;</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true"></a>  File <span class="st">&quot;&lt;stdin&gt;&quot;</span>, line <span class="dv">1</span>, <span class="kw">in</span> f</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true"></a><span class="pp">TypeError</span>: add() takes exactly <span class="dv">2</span> arguments (<span class="dv">1</span> given)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a><span class="kw">def</span> f(it):</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a>  it(<span class="dv">5</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true"></a><span class="kw">def</span> add(x, y):</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true"></a>  x <span class="op">+</span> y</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true"></a>f(incr)</span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<p>Lets see what Python does:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> <span class="kw">def</span> f(it): <span class="cf">return</span> it(<span class="dv">5</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> <span class="kw">def</span> add(x,y): <span class="cf">return</span> x <span class="op">+</span> y</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a><span class="op">&gt;&gt;&gt;</span> f(add)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true"></a>Traceback (most recent call last):</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true"></a>  File <span class="st">&quot;&lt;stdin&gt;&quot;</span>, line <span class="dv">1</span>, <span class="kw">in</span> <span class="op">&lt;</span>module<span class="op">&gt;</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true"></a>  File <span class="st">&quot;&lt;stdin&gt;&quot;</span>, line <span class="dv">1</span>, <span class="kw">in</span> f</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true"></a><span class="pp">TypeError</span>: add() takes exactly <span class="dv">2</span> arguments (<span class="dv">1</span> given)</span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="problem-ensure-valid-number-of-arguments">Problem: Ensure Valid Number of Arguments?</h2>
 <p>How to make sure</p>
 <ul>
@@ -399,10 +408,12 @@ tests/input/hof.diamond:7:3-7: Unbound variable 'incr'
 <li><strong>Where</strong> does the run-time check happen?</li>
 <li><strong>What</strong> information is needed for the check?</li>
 </ol>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <p><strong>Key:</strong> Need to <em>also</em> store the function’s <strong>arity</strong></p>
 <ul>
 <li>The <strong>number of arguments</strong> required by the function</li>
 </ul>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="strategy-progression-1">Strategy Progression</h2>
 <ol type="1">
 <li><p><strong>Representation</strong> = <code>Start-Label</code></p>
@@ -411,30 +422,44 @@ tests/input/hof.diamond:7:3-7: Unbound variable 'incr'
 </ul></li>
 <li><p><strong>Representation</strong> = <code>(Arity, Start-Label)</code></p></li>
 </ol>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="attempt-2-what-is-the-value-of-the-parameter-it">Attempt 2: What is the value of the parameter <code>it</code> ?</h2>
-<p><strong>IDEA:</strong> Use a <strong>tuple of</strong> <code>(arity, label)</code></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a><span class="kw">def</span> f(it):</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true"></a>  it(<span class="dv">5</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true"></a><span class="kw">def</span> incr(x):</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true"></a>  x <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true"></a></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true"></a>f(incr)</span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<p><strong>IDEA:</strong> Represent a <em>function</em> with a <strong>tuple of</strong></p>
+<pre><code>(arity, function_start_label)</code></pre>
+<p><br> <br> <br></p>
 <p>We can now compile a call</p>
-<pre><code>  e(x1,...,xn)</code></pre>
+<pre><code>e(x1,...,xn)</code></pre>
 <p>via the following strategy:</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <ol type="1">
 <li><strong>Evaluate</strong> the tuple <code>e</code></li>
 <li><strong>Check</strong> that <code>e[0]</code> is equal to <code>n</code> (else arity mismatch error)</li>
 <li><strong>Call</strong> the function at <code>e[1]</code></li>
 </ol>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="example">Example</h3>
 <p>Lets see how we would compile this</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a><span class="kw">def</span> f(it):</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a>  it(<span class="dv">5</span>)</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true"></a><span class="kw">def</span> incr(x):</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true"></a>  x <span class="op">+</span> <span class="dv">1</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true"></a></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true"></a>f(incr)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true"></a><span class="kw">def</span> f(it):</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true"></a>  it(<span class="dv">5</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true"></a><span class="kw">def</span> incr(x):</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true"></a>  x <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true"></a>f(incr)</span></code></pre></div>
 <p>We need to map <strong>the variable</strong></p>
 <p><code>incr</code></p>
 <p>to <strong>the tuple</strong></p>
 <p><code>(1, label_def_incr_start)</code></p>
 <p>But <strong>where</strong> will we store this information?</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="strategy-progression-2">Strategy Progression</h2>
 <ol type="1">
 <li><p><strong>Representation</strong> = <code>Start-Label</code></p>
@@ -447,6 +472,7 @@ tests/input/hof.diamond:7:3-7: Unbound variable 'incr'
 </ul></li>
 <li><p><strong>Lambda Terms</strong> Make functions just another expression!</p></li>
 </ol>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h2 id="attempt-3-lambda-terms">Attempt 3: Lambda Terms</h2>
 <p>So far, we could only define functions at <strong>top-level</strong></p>
 <ul>
@@ -479,12 +505,14 @@ tests/input/hof.diamond:7:3-7: Unbound variable 'incr'
 </tr>
 </tbody>
 </table>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="example-lambda-terms">Example: Lambda Terms</h3>
 <p>We can now replace <code>def</code> as:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a>let f    <span class="op">=</span> (<span class="kw">lambda</span> (it): it(<span class="dv">5</span>))</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true"></a>  , incr <span class="op">=</span> (<span class="kw">lambda</span>  (x): x <span class="op">+</span> <span class="dv">1</span>)</span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true"></a><span class="kw">in</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true"></a>  f(incr)</span></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true"></a>let f    <span class="op">=</span> (<span class="kw">lambda</span> (it): it(<span class="dv">5</span>))</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true"></a>  , incr <span class="op">=</span> (<span class="kw">lambda</span>  (x): x <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true"></a><span class="kw">in</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true"></a>  f(incr)</span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="implementation">Implementation</h3>
 <p>As always, to the details! Lets figure out:</p>
 <p><strong>Representation</strong></p>
@@ -502,6 +530,7 @@ tests/input/hof.diamond:7:3-7: Unbound variable 'incr'
 <li>Update <code>checker</code></li>
 <li>Update <code>compile</code></li>
 </ol>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="implementation-representation">Implementation: Representation</h3>
 <p>Represent <code>lambda-tuples'' or</code>function-tuples’’ via a special tag:</p>
 <table>
@@ -531,15 +560,15 @@ tests/input/hof.diamond:7:3-7: Unbound variable 'incr'
 </tbody>
 </table>
 <p>In our code:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Ty</span> <span class="ot">=</span> <span class="op">...</span> <span class="op">|</span> <span class="dt">TClosure</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true"></a><span class="ot">typeTag ::</span> <span class="dt">Ty</span> <span class="ot">-&gt;</span> <span class="dt">Arg</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true"></a>typeTag <span class="dt">TTuple</span>    <span class="ot">=</span> <span class="dt">HexConst</span> <span class="bn">0x00000001</span></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true"></a>typeTag <span class="dt">TClosure</span>  <span class="ot">=</span> <span class="dt">HexConst</span> <span class="bn">0x00000005</span></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true"></a></span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true"></a><span class="ot">typeMask ::</span> <span class="dt">Ty</span> <span class="ot">-&gt;</span> <span class="dt">Arg</span></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true"></a>typeMask <span class="dt">TTuple</span>   <span class="ot">=</span> <span class="dt">HexConst</span> <span class="bn">0x00000007</span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true"></a>typeMask <span class="dt">TClosure</span> <span class="ot">=</span> <span class="dt">HexConst</span> <span class="bn">0x00000007</span></span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Ty</span> <span class="ot">=</span> <span class="op">...</span> <span class="op">|</span> <span class="dt">TClosure</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true"></a><span class="ot">typeTag ::</span> <span class="dt">Ty</span> <span class="ot">-&gt;</span> <span class="dt">Arg</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true"></a>typeTag <span class="dt">TTuple</span>    <span class="ot">=</span> <span class="dt">HexConst</span> <span class="bn">0x00000001</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true"></a>typeTag <span class="dt">TClosure</span>  <span class="ot">=</span> <span class="dt">HexConst</span> <span class="bn">0x00000005</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true"></a><span class="ot">typeMask ::</span> <span class="dt">Ty</span> <span class="ot">-&gt;</span> <span class="dt">Arg</span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true"></a>typeMask <span class="dt">TTuple</span>   <span class="ot">=</span> <span class="dt">HexConst</span> <span class="bn">0x00000007</span></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true"></a>typeMask <span class="dt">TClosure</span> <span class="ot">=</span> <span class="dt">HexConst</span> <span class="bn">0x00000007</span></span></code></pre></div>
 <p>So, <strong>Function Values</strong> represented just like a tuples</p>
 <ul>
 <li>padding, <code>ESI</code> etc.</li>
@@ -547,24 +576,27 @@ tests/input/hof.diamond:7:3-7: Unbound variable 'incr'
 </ul>
 <p>Crucially, we can <strong>get</strong> <code>0</code>-th, or <code>1</code>-st elements from tuple.</p>
 <p><strong>Question:</strong> Why not use <em>plain tuples</em>?</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="implementation-types">Implementation: Types</h3>
 <p>First, lets look at the new <code>Expr</code> type</p>
 <ul>
 <li>No more <code>Def</code></li>
 </ul>
-<div class="sourceCode" id="cb16"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Expr</span> a</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true"></a>  <span class="ot">=</span> <span class="op">...</span></span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">Lam</span>               [<span class="dt">Bind</span> a]   <span class="op">!</span>(<span class="dt">Expr</span> a) a      <span class="co">-- fun. definitions</span></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">App</span>     <span class="op">!</span>(<span class="dt">Expr</span> a) [<span class="dt">Expr</span> a]             a      <span class="co">-- fun. calls</span></span></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Expr</span> a</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true"></a>  <span class="ot">=</span> <span class="op">...</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">Lam</span>               [<span class="dt">Bind</span> a]   <span class="op">!</span>(<span class="dt">Expr</span> a) a      <span class="co">-- fun. definitions</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">App</span>     <span class="op">!</span>(<span class="dt">Expr</span> a) [<span class="dt">Expr</span> a]             a      <span class="co">-- fun. calls</span></span></code></pre></div>
 <p>So we represent a <strong>function-definition</strong> as:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true"></a><span class="dt">Lam</span> [x1,<span class="op">...</span>,xn] e</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true"></a><span class="dt">Lam</span> [x1,<span class="op">...</span>,xn] e</span></code></pre></div>
 <p>and a <strong>function call</strong> as:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true"></a><span class="dt">App</span> e [e1,<span class="op">...</span>,en]</span></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a><span class="dt">App</span> e [e1,<span class="op">...</span>,en]</span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="transforms-tag">Transforms: Tag</h3>
 <p>This is pretty straight forward (do it yourself)</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="transforms-anf">Transforms: ANF</h3>
 <p>QUIZ:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true"></a>  (<span class="dt">App</span> e es)</span></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true"></a>  (<span class="dt">App</span> e es)</span></code></pre></div>
 <p>Does <code>e</code> need to be</p>
 <ul>
 <li><strong>A</strong> Immediate<br />
@@ -572,9 +604,10 @@ tests/input/hof.diamond:7:3-7: Unbound variable 'incr'
 <li><strong>B</strong> ANF</li>
 <li><strong>C</strong> None of the above</li>
 </ul>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="transforms-anf-1">Transforms: ANF</h3>
 <p>QUIZ:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true"></a>  (<span class="dt">App</span> e es)</span></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true"></a>  (<span class="dt">App</span> e es)</span></code></pre></div>
 <p>Do <code>es</code> need to be</p>
 <ul>
 <li><strong>A</strong> Immediate<br />
@@ -582,6 +615,7 @@ tests/input/hof.diamond:7:3-7: Unbound variable 'incr'
 <li><strong>B</strong> ANF</li>
 <li><strong>C</strong> None of the above</li>
 </ul>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="transforms-anf-2">Transforms: ANF</h3>
 <p>The <code>App</code> case, fun + args should be <strong>immediate</strong></p>
 <ul>
@@ -591,12 +625,13 @@ tests/input/hof.diamond:7:3-7: Unbound variable 'incr'
 <ul>
 <li>Must also handle the <strong>callee-expression</strong> (named <code>e</code> below)</li>
 </ul>
-<div class="sourceCode" id="cb21"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true"></a>anf i (<span class="dt">App</span> e es)   <span class="ot">=</span> (i', stitch bs (<span class="dt">App</span> v vs))</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true"></a>    (i', bs, v<span class="op">:</span>vs) <span class="ot">=</span> imms i (e<span class="op">:</span>es)</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true"></a>anf i (<span class="dt">App</span> e es)   <span class="ot">=</span> (i', stitch bs (<span class="dt">App</span> v vs))</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true"></a>    (i', bs, v<span class="op">:</span>vs) <span class="ot">=</span> imms i (e<span class="op">:</span>es)</span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="transforms-anf-3">Transforms: ANF</h3>
 <p>QUIZ:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a>  (<span class="dt">Lam</span> xs e)</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true"></a>  (<span class="dt">Lam</span> xs e)</span></code></pre></div>
 <p>Does <code>e</code> need to be</p>
 <ul>
 <li><strong>A</strong> Immediate<br />
@@ -604,36 +639,39 @@ tests/input/hof.diamond:7:3-7: Unbound variable 'incr'
 <li><strong>B</strong> ANF</li>
 <li><strong>C</strong> None of the above</li>
 </ul>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="transforms-anf-4">Transforms: ANF</h3>
 <p>The <code>Lam</code> case, the body will be <strong>executed</strong> (when called)</p>
 <ul>
 <li>So we just need to make sure its in ANF (like all the code!)</li>
 </ul>
-<div class="sourceCode" id="cb23"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true"></a>anf i (<span class="dt">Lam</span> xs e) <span class="ot">=</span> (i', <span class="dt">Lam</span> xs e')</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true"></a>    (i', e')     <span class="ot">=</span> anf i e</span></code></pre></div>
+<div class="sourceCode" id="cb27"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true"></a>anf i (<span class="dt">Lam</span> xs e) <span class="ot">=</span> (i', <span class="dt">Lam</span> xs e')</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true"></a>    (i', e')     <span class="ot">=</span> anf i e</span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="transforms-checker">Transforms: Checker</h3>
 <p>We just have <code>Expr</code> (no <code>Def</code>) so there is a single function:</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true"></a><span class="ot">wellFormed ::</span> <span class="dt">BareExpr</span> <span class="ot">-&gt;</span> [<span class="dt">UserError</span>]</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true"></a>wellFormed <span class="ot">=</span> go emptyEnv</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true"></a>    gos                       <span class="ot">=</span> <span class="fu">concatMap</span> <span class="op">.</span> go</span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true"></a>    go _    (<span class="dt">Boolean</span> {})      <span class="ot">=</span> <span class="op">...</span></span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true"></a>    go _    (<span class="dt">Number</span>  n     l) <span class="ot">=</span> largeNumberErrors      n l</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true"></a>    go vEnv (<span class="dt">Id</span>      x     l) <span class="ot">=</span> unboundVarErrors  vEnv x l</span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true"></a>    go vEnv (<span class="dt">Prim1</span> _ e     _) <span class="ot">=</span> <span class="op">...</span></span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true"></a>    go vEnv (<span class="dt">Prim2</span> _ e1 e2 _) <span class="ot">=</span> <span class="op">...</span></span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true"></a>    go vEnv (<span class="dt">If</span>   e1 e2 e3 _) <span class="ot">=</span> <span class="op">...</span></span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true"></a>    go vEnv (<span class="dt">Let</span> x e1 e2   _) <span class="ot">=</span> <span class="op">...</span> <span class="op">++</span> go vEnv e1 <span class="op">++</span> go (addEnv x vEnv) e2</span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true"></a>    go vEnv (<span class="dt">Tuple</span> es      _) <span class="ot">=</span> <span class="op">...</span></span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true"></a>    go vEnv (<span class="dt">GetItem</span> e1 e2 _) <span class="ot">=</span> <span class="op">...</span></span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true"></a>    go vEnv (<span class="dt">App</span> e es      _) <span class="ot">=</span> <span class="op">?</span><span class="dv">1</span></span>
-<span id="cb24-15"><a href="#cb24-15" aria-hidden="true"></a>    go vEnv (<span class="dt">Lam</span> xs e      _) <span class="ot">=</span> <span class="op">?</span><span class="dv">2</span> <span class="op">++</span> go <span class="op">?</span><span class="dv">3</span> e</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true"></a><span class="ot">wellFormed ::</span> <span class="dt">BareExpr</span> <span class="ot">-&gt;</span> [<span class="dt">UserError</span>]</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true"></a>wellFormed <span class="ot">=</span> go emptyEnv</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true"></a>    gos                       <span class="ot">=</span> <span class="fu">concatMap</span> <span class="op">.</span> go</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true"></a>    go _    (<span class="dt">Boolean</span> {})      <span class="ot">=</span> <span class="op">...</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true"></a>    go _    (<span class="dt">Number</span>  n     l) <span class="ot">=</span> largeNumberErrors      n l</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true"></a>    go vEnv (<span class="dt">Id</span>      x     l) <span class="ot">=</span> unboundVarErrors  vEnv x l</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true"></a>    go vEnv (<span class="dt">Prim1</span> _ e     _) <span class="ot">=</span> <span class="op">...</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true"></a>    go vEnv (<span class="dt">Prim2</span> _ e1 e2 _) <span class="ot">=</span> <span class="op">...</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true"></a>    go vEnv (<span class="dt">If</span>   e1 e2 e3 _) <span class="ot">=</span> <span class="op">...</span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true"></a>    go vEnv (<span class="dt">Let</span> x e1 e2   _) <span class="ot">=</span> <span class="op">...</span> <span class="op">++</span> go vEnv e1 <span class="op">++</span> go (addEnv x vEnv) e2</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true"></a>    go vEnv (<span class="dt">Tuple</span> es      _) <span class="ot">=</span> <span class="op">...</span></span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true"></a>    go vEnv (<span class="dt">GetItem</span> e1 e2 _) <span class="ot">=</span> <span class="op">...</span></span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true"></a>    go vEnv (<span class="dt">App</span> e es      _) <span class="ot">=</span> <span class="op">?</span><span class="dv">1</span></span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true"></a>    go vEnv (<span class="dt">Lam</span> xs e      _) <span class="ot">=</span> <span class="op">?</span><span class="dv">2</span> <span class="op">++</span> go <span class="op">?</span><span class="dv">3</span> e</span></code></pre></div>
 <ul>
 <li><p>How shall we implement <code>?1</code> ?</p></li>
 <li><p>How shall we implement <code>?2</code> ?</p></li>
 <li><p>How shall we implement <code>?3</code> ?</p></li>
 </ul>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="transforms-compiler">Transforms: Compiler</h3>
 <p>Finally, lets see how to convert <code>Expr</code> into <code>Asm</code>, two separate cases:</p>
 <ul>
@@ -641,57 +679,60 @@ tests/input/hof.diamond:7:3-7: Unbound variable 'incr'
 <li><p><code>App</code> : calls</p></li>
 </ul>
 <h3 id="transforms-compiler-lam">Transforms: Compiler: <code>Lam</code></h3>
-<div class="sourceCode" id="cb25"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true"></a><span class="ot">compileEnv ::</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> <span class="dt">AExp</span> <span class="ot">-&gt;</span> [<span class="dt">Instruction</span>]</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true"></a>compileEnv env (<span class="dt">Lam</span> xs e l)</span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true"></a>  <span class="ot">=</span> <span class="dt">IJmp</span>   end              <span class="co">-- Why?</span></span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true"></a>  <span class="op">:</span> <span class="dt">ILabel</span> start            <span class="co">-- Function start</span></span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true"></a>  <span class="op">:</span> compileDecl l xs e      <span class="co">-- Function code (like Decl)</span></span>
-<span id="cb25-6"><a href="#cb25-6" aria-hidden="true"></a> <span class="op">++</span> <span class="dt">ILabel</span> end              <span class="co">-- Function end</span></span>
-<span id="cb25-7"><a href="#cb25-7" aria-hidden="true"></a>  <span class="op">:</span> lamTuple arity start    <span class="co">-- Compile fun-tuple into EAX</span></span>
-<span id="cb25-8"><a href="#cb25-8" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb25-9"><a href="#cb25-9" aria-hidden="true"></a>    arity <span class="ot">=</span> <span class="fu">length</span> xs</span>
-<span id="cb25-10"><a href="#cb25-10" aria-hidden="true"></a>    start <span class="ot">=</span> <span class="dt">LamStart</span> l</span>
-<span id="cb25-11"><a href="#cb25-11" aria-hidden="true"></a>    end   <span class="ot">=</span> <span class="dt">LamEnd</span>   l</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true"></a><span class="ot">compileEnv ::</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> <span class="dt">AExp</span> <span class="ot">-&gt;</span> [<span class="dt">Instruction</span>]</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true"></a>compileEnv env (<span class="dt">Lam</span> xs e l) </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true"></a>  <span class="ot">=</span> <span class="dt">IJmp</span>   end              <span class="co">-- Why?</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true"></a>  <span class="op">:</span> <span class="dt">ILabel</span> start            <span class="co">-- Function start</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true"></a>  <span class="op">:</span> compileDecl l xs e      <span class="co">-- Function code (like Decl)</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true"></a> <span class="op">++</span> <span class="dt">ILabel</span> end              <span class="co">-- Function end</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true"></a>  <span class="op">:</span> lamTuple arity start    <span class="co">-- Compile fun-tuple into EAX</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true"></a>    arity <span class="ot">=</span> <span class="fu">length</span> xs</span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true"></a>    start <span class="ot">=</span> <span class="dt">LamStart</span> l</span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true"></a>    end   <span class="ot">=</span> <span class="dt">LamEnd</span>   l</span></code></pre></div>
 <p><strong>QUESTION:</strong> Why do we start with the <code>IJmp</code>?</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true"></a><span class="ot">lamTuple ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Label</span> <span class="ot">-&gt;</span> [<span class="dt">Instruction</span>]</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true"></a>lamTuple arity start</span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true"></a>  <span class="ot">=</span>  tupleAlloc  <span class="dv">2</span>                           <span class="co">-- alloc tuple size = 2  </span></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true"></a>  <span class="op">++</span> tupleWrites [ repr arity                <span class="co">-- fill arity</span></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true"></a>                 , <span class="dt">CodePtr</span> start ]           <span class="co">-- fill code-ptr</span></span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true"></a>  <span class="op">++</span> [ <span class="dt">IOr</span>  (<span class="dt">Reg</span> <span class="dt">EAX</span>) (typeTag <span class="dt">TClosure</span>) ]   <span class="co">-- set the tag bits</span></span></code></pre></div>
+<div class="sourceCode" id="cb30"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true"></a><span class="ot">lamTuple ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Label</span> <span class="ot">-&gt;</span> [<span class="dt">Instruction</span>]</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true"></a>lamTuple arity start</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true"></a>  <span class="ot">=</span>  tupleAlloc  <span class="dv">2</span>                           <span class="co">-- alloc tuple size = 2  </span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true"></a>  <span class="op">++</span> tupleWrites [ repr arity                <span class="co">-- fill arity</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true"></a>                 , <span class="dt">CodePtr</span> start ]           <span class="co">-- fill code-ptr</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true"></a>  <span class="op">++</span> [ <span class="dt">IOr</span>  (<span class="dt">Reg</span> <span class="dt">EAX</span>) (typeTag <span class="dt">TClosure</span>) ]   <span class="co">-- set the tag bits</span></span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <h3 id="transforms-compiler-app">Transforms: Compiler: <code>App</code></h3>
 <p><strong>Recall! IDEA:</strong> Use a <strong>tuple of</strong> <code>(arity, label)</code></p>
 <p>We can now compile a call</p>
 <pre><code>  e(x1,...,xn)</code></pre>
 <p>via the following strategy:</p>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <ol type="1">
 <li><strong>Evaluate</strong> the tuple <code>e</code></li>
 <li><strong>Check</strong> that <code>e[0]</code> is equal to <code>n</code> (else arity mismatch error)</li>
 <li><strong>Call</strong> the function at <code>e[1]</code></li>
 </ol>
-<div class="sourceCode" id="cb28"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true"></a>compileEnv env (<span class="dt">App</span> vE vXs)</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true"></a>  <span class="ot">=</span> assertType     env vE <span class="dt">TClosure</span>                    <span class="co">-- check vE is a function</span></span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true"></a> <span class="op">++</span> assertArity    env vE (<span class="fu">length</span> vXs)                <span class="co">-- check vE arity</span></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true"></a> <span class="op">++</span> tupleReadRaw   (immArg env vE) (repr (<span class="dv">1</span><span class="ot"> ::</span> <span class="dt">Int</span>))  <span class="co">-- load vE[1] into EAX</span></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true"></a> <span class="op">++</span> [<span class="dt">IPush</span> (param env vX) <span class="op">|</span> vX <span class="ot">&lt;-</span> <span class="fu">reverse</span> vXs]        <span class="co">-- push args</span></span>
-<span id="cb28-6"><a href="#cb28-6" aria-hidden="true"></a> <span class="op">++</span> [<span class="dt">IPush</span> (param env vE)]                            <span class="co">-- push closure-ptr</span></span>
-<span id="cb28-7"><a href="#cb28-7" aria-hidden="true"></a> <span class="op">++</span> [<span class="dt">ICall</span> (<span class="dt">Reg</span> <span class="dt">EAX</span>)]                                 <span class="co">-- call EAX</span></span>
-<span id="cb28-8"><a href="#cb28-8" aria-hidden="true"></a> <span class="op">++</span> [<span class="dt">IAdd</span>  (<span class="dt">Reg</span> <span class="dt">ESP</span>) (<span class="dv">4</span> <span class="op">*</span> (n <span class="op">+</span> <span class="dv">1</span>)]                    <span class="co">-- pop  args</span></span></code></pre></div>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true"></a>compileEnv env (<span class="dt">App</span> vE vXs)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true"></a>  <span class="ot">=</span> assertType     env vE <span class="dt">TClosure</span>                    <span class="co">-- check vE is a function</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true"></a> <span class="op">++</span> assertArity    env vE (<span class="fu">length</span> vXs)                <span class="co">-- check vE arity</span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true"></a> <span class="op">++</span> tupleReadRaw   (immArg env vE) (repr (<span class="dv">1</span><span class="ot"> ::</span> <span class="dt">Int</span>))  <span class="co">-- load vE[1] into EAX</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true"></a> <span class="op">++</span> [<span class="dt">IPush</span> (param env vX) <span class="op">|</span> vX <span class="ot">&lt;-</span> <span class="fu">reverse</span> vXs]        <span class="co">-- push args</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true"></a> <span class="op">++</span> [<span class="dt">IPush</span> (param env vE)]                            <span class="co">-- push closure-ptr</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true"></a> <span class="op">++</span> [<span class="dt">ICall</span> (<span class="dt">Reg</span> <span class="dt">EAX</span>)]                                 <span class="co">-- call EAX</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true"></a> <span class="op">++</span> [<span class="dt">IAdd</span>  (<span class="dt">Reg</span> <span class="dt">ESP</span>) (<span class="dv">4</span> <span class="op">*</span> (n <span class="op">+</span> <span class="dv">1</span>)]                    <span class="co">-- pop  args</span></span></code></pre></div>
 <h2 id="a-problem-scope">A Problem: Scope</h2>
 <p>Consider the following program:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true"></a><span class="kw">let</span> one <span class="ot">=</span> <span class="dv">1</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true"></a>  , f   <span class="ot">=</span> (lambda (it)<span class="op">:</span> it(<span class="dv">5</span>))</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true"></a>  , inc <span class="ot">=</span> (lambda (n)<span class="op">:</span> n <span class="op">+</span> one)</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true"></a><span class="kw">in</span></span>
-<span id="cb29-5"><a href="#cb29-5" aria-hidden="true"></a>  f(inc)</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true"></a><span class="kw">let</span> one <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true"></a>  , f   <span class="ot">=</span> (lambda (it)<span class="op">:</span> it(<span class="dv">5</span>))</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true"></a>  , inc <span class="ot">=</span> (lambda (n)<span class="op">:</span> n <span class="op">+</span> one)</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true"></a><span class="kw">in</span></span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true"></a>  f(inc)</span></code></pre></div>
 <h2 id="a-problem-magnified-dynamically-created-functions">A Problem Magnified: Dynamically Created Functions</h2>
 <p>Will it work? How about this variant:</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true"></a><span class="kw">let</span> add    <span class="ot">=</span> (lambda (n)<span class="op">:</span> (lambda (m)<span class="op">:</span> n <span class="op">+</span> m))</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true"></a>  , f      <span class="ot">=</span> (lambda (it)<span class="op">:</span> it(<span class="dv">5</span>))</span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true"></a>  , plus1  <span class="ot">=</span> add(<span class="dv">1</span>)</span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true"></a>  , plus10 <span class="ot">=</span> add(<span class="dv">10</span>)</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true"></a><span class="kw">in</span></span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true"></a>  (f(plus1), f(plus10))</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true"></a><span class="kw">let</span> add    <span class="ot">=</span> (lambda (n)<span class="op">:</span> (lambda (m)<span class="op">:</span> n <span class="op">+</span> m))</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true"></a>  , f      <span class="ot">=</span> (lambda (it)<span class="op">:</span> it(<span class="dv">5</span>))</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true"></a>  , plus1  <span class="ot">=</span> add(<span class="dv">1</span>)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true"></a>  , plus10 <span class="ot">=</span> add(<span class="dv">10</span>)</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true"></a><span class="kw">in</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true"></a>  (f(plus1), f(plus10))</span></code></pre></div>
 <ul>
 <li><code>add(1)</code> should evaluate to a <strong>function-that-adds-1</strong></li>
 <li><code>add(10)</code> should evaluate to a <strong>function-that-adds-10</strong></li>
@@ -713,9 +754,9 @@ tests/input/hof.diamond:7:3-7: Unbound variable 'incr'
 <li><code>x</code> is <strong>not bound</strong> inside <code>e</code></li>
 </ul>
 <p>For example consider the expression <code>e</code> :</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true"></a><span class="kw">lambda</span> (m):</span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true"></a>  let t <span class="op">=</span> m <span class="kw">in</span></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true"></a>    n <span class="op">+</span> t</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true"></a><span class="kw">lambda</span> (m):</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true"></a>  let t <span class="op">=</span> m <span class="kw">in</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true"></a>    n <span class="op">+</span> t</span></code></pre></div>
 <ul>
 <li><code>m</code>, <code>t</code> are <strong>bound</strong> inside <code>e</code>, but,</li>
 <li><code>n</code> is <strong>free</strong> inside <code>e</code></li>
@@ -723,17 +764,17 @@ tests/input/hof.diamond:7:3-7: Unbound variable 'incr'
 <h2 id="computing-free-variables">Computing Free Variables</h2>
 <p>Lets write a function to <strong>compute</strong> the set of free variables.</p>
 <p><strong>Question</strong> Why <em>Set</em> ?</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true"></a><span class="ot">freeVars ::</span> <span class="dt">Expr</span> <span class="ot">-&gt;</span> [<span class="dt">Id</span>]</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true"></a>freeVars e <span class="ot">=</span> S.toList (go e)</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true"></a><span class="ot">    go ::</span> <span class="dt">Expr</span> <span class="ot">-&gt;</span> <span class="dt">S.Set</span> <span class="dt">Id</span></span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true"></a>    go (<span class="dt">Id</span> x)          <span class="ot">=</span> S.singleton x</span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true"></a>    go (<span class="dt">Number</span> _)      <span class="ot">=</span> S.empty</span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true"></a>    go (<span class="dt">Boolean</span> _)     <span class="ot">=</span> S.empty</span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true"></a>    go (<span class="dt">If</span> e e1 e2)    <span class="ot">=</span> S.unions (<span class="fu">map</span> go [e1, e2, e3])</span>
-<span id="cb32-9"><a href="#cb32-9" aria-hidden="true"></a>    go (<span class="dt">App</span> e es)      <span class="ot">=</span> S.unions (<span class="fu">map</span> go (e<span class="op">:</span>es))</span>
-<span id="cb32-10"><a href="#cb32-10" aria-hidden="true"></a>    go (<span class="dt">Let</span> x e1 e2)   <span class="ot">=</span> S.union (go e1) (S.delete x (go e2))</span>
-<span id="cb32-11"><a href="#cb32-11" aria-hidden="true"></a>    go (<span class="dt">Lam</span> xs e)      <span class="ot">=</span> S.difference (go e) (S.fromList xs)<span class="ot">=</span></span></code></pre></div>
+<div class="sourceCode" id="cb36"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true"></a><span class="ot">freeVars ::</span> <span class="dt">Expr</span> <span class="ot">-&gt;</span> [<span class="dt">Id</span>]</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true"></a>freeVars e <span class="ot">=</span> S.toList (go e)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true"></a><span class="ot">    go ::</span> <span class="dt">Expr</span> <span class="ot">-&gt;</span> <span class="dt">S.Set</span> <span class="dt">Id</span></span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true"></a>    go (<span class="dt">Id</span> x)          <span class="ot">=</span> S.singleton x</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true"></a>    go (<span class="dt">Number</span> _)      <span class="ot">=</span> S.empty</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true"></a>    go (<span class="dt">Boolean</span> _)     <span class="ot">=</span> S.empty</span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true"></a>    go (<span class="dt">If</span> e e1 e2)    <span class="ot">=</span> S.unions (<span class="fu">map</span> go [e1, e2, e3])</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true"></a>    go (<span class="dt">App</span> e es)      <span class="ot">=</span> S.unions (<span class="fu">map</span> go (e<span class="op">:</span>es))</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true"></a>    go (<span class="dt">Let</span> x e1 e2)   <span class="ot">=</span> S.union (go e1) (S.delete x (go e2))</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true"></a>    go (<span class="dt">Lam</span> xs e)      <span class="ot">=</span> S.difference (go e) (S.fromList xs)<span class="ot">=</span></span></code></pre></div>
 <p>lambda (x1,x2,x3): e</p>
 <p>let x = y + 10 in x + z</p>
 <p>A. {x} B. {} C. { gobble_gobble }</p>
@@ -745,12 +786,12 @@ tests/input/hof.diamond:7:3-7: Unbound variable 'incr'
 <li>Should use <em>the same</em> values whenever we “call” the <code>lambda</code>.</li>
 </ul>
 <p>For example:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true"></a><span class="kw">let</span> add    <span class="ot">=</span> (lambda (n)<span class="op">:</span> (lambda (m)<span class="op">:</span> n <span class="op">+</span> m))</span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true"></a>  , f      <span class="ot">=</span> (lambda (it)<span class="op">:</span> it(<span class="dv">5</span>))</span>
-<span id="cb33-3"><a href="#cb33-3" aria-hidden="true"></a>  , plus1  <span class="ot">=</span> add(<span class="dv">1</span>)</span>
-<span id="cb33-4"><a href="#cb33-4" aria-hidden="true"></a>  , plus10 <span class="ot">=</span> add(<span class="dv">10</span>)</span>
-<span id="cb33-5"><a href="#cb33-5" aria-hidden="true"></a><span class="kw">in</span></span>
-<span id="cb33-6"><a href="#cb33-6" aria-hidden="true"></a>  (f(plus1), f(plus10), plus10(<span class="dv">20</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true"></a><span class="kw">let</span> add    <span class="ot">=</span> (lambda (n)<span class="op">:</span> (lambda (m)<span class="op">:</span> n <span class="op">+</span> m))</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true"></a>  , f      <span class="ot">=</span> (lambda (it)<span class="op">:</span> it(<span class="dv">5</span>))</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true"></a>  , plus1  <span class="ot">=</span> add(<span class="dv">1</span>)</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true"></a>  , plus10 <span class="ot">=</span> add(<span class="dv">10</span>)</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true"></a><span class="kw">in</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true"></a>  (f(plus1), f(plus10), plus10(<span class="dv">20</span>))</span></code></pre></div>
 <p>should evaluate to <code>(6, 15, 30)</code></p>
 <ul>
 <li><code>plus1</code> be like <code>lambda (m): 1  + m</code></li>
@@ -785,32 +826,32 @@ tests/input/hof.diamond:7:3-7: Unbound variable 'incr'
 </ol>
 <h2 id="closures-strategy">Closures: Strategy</h2>
 <p>What if we have <em>multiple</em> free variables?</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true"></a>let foo    <span class="op">=</span> (<span class="kw">lambda</span> (x, y):</span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true"></a>                (<span class="kw">lambda</span> (z): x <span class="op">+</span> y <span class="op">+</span> z))</span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true"></a>  , plus10 <span class="op">=</span> foo(<span class="dv">4</span>, <span class="dv">6</span>)</span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true"></a>  , plus20 <span class="op">=</span> foo(<span class="dv">7</span>, <span class="dv">13</span>)</span>
-<span id="cb36-5"><a href="#cb36-5" aria-hidden="true"></a><span class="kw">in</span></span>
-<span id="cb36-6"><a href="#cb36-6" aria-hidden="true"></a>  (plus10(<span class="dv">0</span>), plus20(<span class="dv">100</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true"></a>let foo    <span class="op">=</span> (<span class="kw">lambda</span> (x, y):</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true"></a>                (<span class="kw">lambda</span> (z): x <span class="op">+</span> y <span class="op">+</span> z))</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true"></a>  , plus10 <span class="op">=</span> foo(<span class="dv">4</span>, <span class="dv">6</span>)</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true"></a>  , plus20 <span class="op">=</span> foo(<span class="dv">7</span>, <span class="dv">13</span>)</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true"></a><span class="kw">in</span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true"></a>  (plus10(<span class="dv">0</span>), plus20(<span class="dv">100</span>))</span></code></pre></div>
 <p>represent <code>plus10</code> as:</p>
 <pre><code>(arity, code-label, [x := 4], [y := 6])</code></pre>
 <p>represent <code>plus20</code> as:</p>
 <pre><code>(arity, code-label, [x := 7], [y := 13])</code></pre>
 <h3 id="example-1">Example</h3>
 <p>Lets see how to evaluate</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true"></a>let foo    <span class="op">=</span> (<span class="kw">lambda</span> (x, y):</span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true"></a>                (<span class="kw">lambda</span> (z): x <span class="op">+</span> y <span class="op">+</span> z))</span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true"></a>  , plus10 <span class="op">=</span> foo(<span class="dv">4</span>, <span class="dv">6</span>)</span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true"></a><span class="kw">in</span></span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true"></a>  plus10(<span class="dv">0</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true"></a>let foo    <span class="op">=</span> (<span class="kw">lambda</span> (x, y):</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true"></a>                (<span class="kw">lambda</span> (z): x <span class="op">+</span> y <span class="op">+</span> z))</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true"></a>  , plus10 <span class="op">=</span> foo(<span class="dv">4</span>, <span class="dv">6</span>)</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true"></a><span class="kw">in</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true"></a>  plus10(<span class="dv">0</span>)</span></code></pre></div>
 <p>TODO: PIC</p>
 <h3 id="example-2">Example</h3>
 <p>Lets see how to evaluate</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true"></a>let foo    <span class="op">=</span> (<span class="kw">lambda</span> (x, y):</span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true"></a>                (<span class="kw">lambda</span> (z): x <span class="op">+</span> y <span class="op">+</span> z))</span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true"></a>  , plus10 <span class="op">=</span> foo(<span class="dv">4</span>, <span class="dv">6</span>)</span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true"></a>  , f      <span class="op">=</span> (<span class="kw">lambda</span> (it): it(<span class="dv">5</span>))</span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true"></a><span class="kw">in</span></span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true"></a>  f(plus10)</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true"></a>let foo    <span class="op">=</span> (<span class="kw">lambda</span> (x, y):</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true"></a>                (<span class="kw">lambda</span> (z): x <span class="op">+</span> y <span class="op">+</span> z))</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true"></a>  , plus10 <span class="op">=</span> foo(<span class="dv">4</span>, <span class="dv">6</span>)</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true"></a>  , f      <span class="op">=</span> (<span class="kw">lambda</span> (it): it(<span class="dv">5</span>))</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true"></a><span class="kw">in</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true"></a>  f(plus10)</span></code></pre></div>
 <p>TODO: PIC</p>
 <h3 id="implementation-1">Implementation</h3>
 <p><strong>Representation</strong></p>
@@ -844,15 +885,15 @@ tests/input/hof.diamond:7:3-7: Unbound variable 'incr'
 </ul>
 <h3 id="transforms-checker-1">Transforms: Checker</h3>
 <p>What environment should we use to check a <code>Lam</code> <strong>body</strong> ?</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true"></a><span class="ot">wellFormed ::</span> <span class="dt">BareExpr</span> <span class="ot">-&gt;</span> [<span class="dt">UserError</span>]</span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true"></a>wellFormed <span class="ot">=</span> go emptyEnv</span>
-<span id="cb43-3"><a href="#cb43-3" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb43-4"><a href="#cb43-4" aria-hidden="true"></a>    <span class="op">...</span>  </span>
-<span id="cb43-5"><a href="#cb43-5" aria-hidden="true"></a>    go vEnv (<span class="dt">Lam</span> xs e _) <span class="ot">=</span> errDupParams xs</span>
-<span id="cb43-6"><a href="#cb43-6" aria-hidden="true"></a>                        <span class="op">++</span> go <span class="op">?</span>vEnv e</span>
-<span id="cb43-7"><a href="#cb43-7" aria-hidden="true"></a></span>
-<span id="cb43-8"><a href="#cb43-8" aria-hidden="true"></a><span class="ot">addsEnv ::</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> [<span class="dt">BareBind</span>] <span class="ot">-&gt;</span> <span class="dt">Env</span></span>
-<span id="cb43-9"><a href="#cb43-9" aria-hidden="true"></a>addsEnv env xs <span class="ot">=</span> <span class="fu">foldr</span> addEnv env xs</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true"></a><span class="ot">wellFormed ::</span> <span class="dt">BareExpr</span> <span class="ot">-&gt;</span> [<span class="dt">UserError</span>]</span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true"></a>wellFormed <span class="ot">=</span> go emptyEnv</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb47-4"><a href="#cb47-4" aria-hidden="true"></a>    <span class="op">...</span>  </span>
+<span id="cb47-5"><a href="#cb47-5" aria-hidden="true"></a>    go vEnv (<span class="dt">Lam</span> xs e _) <span class="ot">=</span> errDupParams xs</span>
+<span id="cb47-6"><a href="#cb47-6" aria-hidden="true"></a>                        <span class="op">++</span> go <span class="op">?</span>vEnv e</span>
+<span id="cb47-7"><a href="#cb47-7" aria-hidden="true"></a></span>
+<span id="cb47-8"><a href="#cb47-8" aria-hidden="true"></a><span class="ot">addsEnv ::</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> [<span class="dt">BareBind</span>] <span class="ot">-&gt;</span> <span class="dt">Env</span></span>
+<span id="cb47-9"><a href="#cb47-9" aria-hidden="true"></a>addsEnv env xs <span class="ot">=</span> <span class="fu">foldr</span> addEnv env xs</span></code></pre></div>
 <p><strong>QUIZ</strong> How shall we implement <code>?vEnv</code> ?</p>
 <p><strong>A.</strong> <code>addsEnv vEnv     []</code></p>
 <p><strong>B.</strong> <code>addsEnv vEnv     xs</code></p>
@@ -904,64 +945,64 @@ tests/input/hof.diamond:7:3-7: Unbound variable 'incr'
 <ol start="3" type="1">
 <li><strong>Allocate</strong> tuple <code>(arity, code-label, y1, ... , yn)</code></li>
 </ol>
-<div class="sourceCode" id="cb44"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true"></a><span class="ot">compileEnv ::</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> <span class="dt">AExp</span> <span class="ot">-&gt;</span> [<span class="dt">Instruction</span>]</span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true"></a>compileEnv env (<span class="dt">Lam</span> xs e l)</span>
-<span id="cb44-3"><a href="#cb44-3" aria-hidden="true"></a>  <span class="ot">=</span> <span class="dt">IJmp</span>   end                       <span class="co">-- Why?</span></span>
-<span id="cb44-4"><a href="#cb44-4" aria-hidden="true"></a>  <span class="op">:</span> <span class="dt">ILabel</span> start                     <span class="co">-- Function start</span></span>
-<span id="cb44-5"><a href="#cb44-5" aria-hidden="true"></a>  <span class="op">:</span> lambdaBody ys xs e               <span class="co">-- Function code (like Decl)</span></span>
-<span id="cb44-6"><a href="#cb44-6" aria-hidden="true"></a> <span class="op">++</span> <span class="dt">ILabel</span> end                       <span class="co">-- Function end</span></span>
-<span id="cb44-7"><a href="#cb44-7" aria-hidden="true"></a>  <span class="op">:</span> lamTuple arity start env ys      <span class="co">-- Compile closure-tuple into EAX</span></span>
-<span id="cb44-8"><a href="#cb44-8" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb44-9"><a href="#cb44-9" aria-hidden="true"></a>    ys    <span class="ot">=</span> freeVars (<span class="dt">Lam</span> xs e l)</span>
-<span id="cb44-10"><a href="#cb44-10" aria-hidden="true"></a>    arity <span class="ot">=</span> <span class="fu">length</span> xs</span>
-<span id="cb44-11"><a href="#cb44-11" aria-hidden="true"></a>    start <span class="ot">=</span> <span class="dt">LamStart</span> l</span>
-<span id="cb44-12"><a href="#cb44-12" aria-hidden="true"></a>    end   <span class="ot">=</span> <span class="dt">LamEnd</span>   l</span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true"></a><span class="ot">compileEnv ::</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> <span class="dt">AExp</span> <span class="ot">-&gt;</span> [<span class="dt">Instruction</span>]</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true"></a>compileEnv env (<span class="dt">Lam</span> xs e l)</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true"></a>  <span class="ot">=</span> <span class="dt">IJmp</span>   end                       <span class="co">-- Why?</span></span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true"></a>  <span class="op">:</span> <span class="dt">ILabel</span> start                     <span class="co">-- Function start</span></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true"></a>  <span class="op">:</span> lambdaBody ys xs e               <span class="co">-- Function code (like Decl)</span></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true"></a> <span class="op">++</span> <span class="dt">ILabel</span> end                       <span class="co">-- Function end</span></span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true"></a>  <span class="op">:</span> lamTuple arity start env ys      <span class="co">-- Compile closure-tuple into EAX</span></span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true"></a>    ys    <span class="ot">=</span> freeVars (<span class="dt">Lam</span> xs e l)</span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true"></a>    arity <span class="ot">=</span> <span class="fu">length</span> xs</span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true"></a>    start <span class="ot">=</span> <span class="dt">LamStart</span> l</span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true"></a>    end   <span class="ot">=</span> <span class="dt">LamEnd</span>   l</span></code></pre></div>
 <h3 id="creating-closure-tuples">Creating Closure Tuples</h3>
 <p>To create the actual closure-tuple we need</p>
 <ul>
 <li>the <strong>free-variables</strong> <code>ys</code></li>
 <li>the <code>env</code> from which to <strong>values</strong> of the free variables.</li>
 </ul>
-<div class="sourceCode" id="cb45"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true"></a><span class="ot">lamTuple ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Label</span> <span class="ot">-&gt;</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> [<span class="dt">Id</span>] <span class="ot">-&gt;</span> [<span class="dt">Instruction</span>]</span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true"></a>lamTuple arity start env ys</span>
-<span id="cb45-3"><a href="#cb45-3" aria-hidden="true"></a>  <span class="ot">=</span>  tupleAlloc  (<span class="dv">2</span> <span class="op">+</span> <span class="fu">length</span> ys)                    <span class="co">-- alloc tuple 2 + |ys|  </span></span>
-<span id="cb45-4"><a href="#cb45-4" aria-hidden="true"></a>  <span class="op">++</span> tupleWrites ( repr arity                       <span class="co">-- fill arity</span></span>
-<span id="cb45-5"><a href="#cb45-5" aria-hidden="true"></a>                 <span class="op">:</span> <span class="dt">CodePtr</span> start                    <span class="co">-- fill code-ptr</span></span>
-<span id="cb45-6"><a href="#cb45-6" aria-hidden="true"></a>                 <span class="op">:</span> [immArg env (<span class="dt">Id</span> y) <span class="op">|</span> y <span class="ot">&lt;-</span> ys] )  <span class="co">-- fill free-vars</span></span>
-<span id="cb45-7"><a href="#cb45-7" aria-hidden="true"></a>  <span class="op">++</span> [ <span class="dt">IOr</span>  (<span class="dt">Reg</span> <span class="dt">EAX</span>) (typeTag <span class="dt">TClosure</span>) ]          <span class="co">-- set the tag bits</span></span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true"></a><span class="ot">lamTuple ::</span> <span class="dt">Int</span> <span class="ot">-&gt;</span> <span class="dt">Label</span> <span class="ot">-&gt;</span> <span class="dt">Env</span> <span class="ot">-&gt;</span> [<span class="dt">Id</span>] <span class="ot">-&gt;</span> [<span class="dt">Instruction</span>]</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true"></a>lamTuple arity start env ys</span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true"></a>  <span class="ot">=</span>  tupleAlloc  (<span class="dv">2</span> <span class="op">+</span> <span class="fu">length</span> ys)                    <span class="co">-- alloc tuple 2 + |ys|  </span></span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true"></a>  <span class="op">++</span> tupleWrites ( repr arity                       <span class="co">-- fill arity</span></span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true"></a>                 <span class="op">:</span> <span class="dt">CodePtr</span> start                    <span class="co">-- fill code-ptr</span></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true"></a>                 <span class="op">:</span> [immArg env (<span class="dt">Id</span> y) <span class="op">|</span> y <span class="ot">&lt;-</span> ys] )  <span class="co">-- fill free-vars</span></span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true"></a>  <span class="op">++</span> [ <span class="dt">IOr</span>  (<span class="dt">Reg</span> <span class="dt">EAX</span>) (typeTag <span class="dt">TClosure</span>) ]          <span class="co">-- set the tag bits</span></span></code></pre></div>
 <h3 id="generating-code-block">Generating Code Block</h3>
-<div class="sourceCode" id="cb46"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true"></a><span class="ot">lambdaBody ::</span> [<span class="dt">Id</span>] <span class="ot">-&gt;</span> [<span class="dt">Id</span>] <span class="ot">-&gt;</span> <span class="dt">AExp</span> <span class="ot">-&gt;</span> [<span class="dt">Instruction</span>]</span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true"></a>lambdaBody ys xs e <span class="ot">=</span> funInstrs maxStack</span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true"></a>                        ( restore ys           <span class="co">-- restore free vars from closure-ptr</span></span>
-<span id="cb46-4"><a href="#cb46-4" aria-hidden="true"></a>                       <span class="op">++</span> compileEnv env e )   <span class="co">-- exec function-body as before</span></span>
-<span id="cb46-5"><a href="#cb46-5" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb46-6"><a href="#cb46-6" aria-hidden="true"></a>    maxStack       <span class="ot">=</span> envMax env <span class="op">+</span> countVars e  <span class="co">-- max stack size</span></span>
-<span id="cb46-7"><a href="#cb46-7" aria-hidden="true"></a>    env            <span class="ot">=</span> fromListEnv bs</span>
-<span id="cb46-8"><a href="#cb46-8" aria-hidden="true"></a>    bs             <span class="ot">=</span> <span class="fu">zip</span> xs  [<span class="op">-</span><span class="dv">2</span>,<span class="op">-</span><span class="dv">3</span><span class="op">..</span>]         <span class="co">-- put params    into env/stack</span></span>
-<span id="cb46-9"><a href="#cb46-9" aria-hidden="true"></a>                  <span class="op">++</span> <span class="fu">zip</span> ys  [<span class="dv">1</span><span class="op">..</span>]             <span class="co">-- put free-vars into env/stack</span></span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true"></a><span class="ot">lambdaBody ::</span> [<span class="dt">Id</span>] <span class="ot">-&gt;</span> [<span class="dt">Id</span>] <span class="ot">-&gt;</span> <span class="dt">AExp</span> <span class="ot">-&gt;</span> [<span class="dt">Instruction</span>]</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true"></a>lambdaBody ys xs e <span class="ot">=</span> funInstrs maxStack</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true"></a>                        ( restore ys           <span class="co">-- restore free vars from closure-ptr</span></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true"></a>                       <span class="op">++</span> compileEnv env e )   <span class="co">-- exec function-body as before</span></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true"></a>    maxStack       <span class="ot">=</span> envMax env <span class="op">+</span> countVars e  <span class="co">-- max stack size</span></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true"></a>    env            <span class="ot">=</span> fromListEnv bs</span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true"></a>    bs             <span class="ot">=</span> <span class="fu">zip</span> xs  [<span class="op">-</span><span class="dv">2</span>,<span class="op">-</span><span class="dv">3</span><span class="op">..</span>]         <span class="co">-- put params    into env/stack</span></span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true"></a>                  <span class="op">++</span> <span class="fu">zip</span> ys  [<span class="dv">1</span><span class="op">..</span>]             <span class="co">-- put free-vars into env/stack</span></span></code></pre></div>
 <p>To <code>restore ys</code> we use the closure-ptr passed in at <code>[EBP+8]</code> – the special <strong>first</strong> parameter – to copy the free-vars <code>ys</code> onto the stack.</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true"></a><span class="ot">restore ::</span> [<span class="dt">Id</span>] <span class="ot">-&gt;</span> [<span class="dt">Instruction</span>]</span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true"></a>restore ys  <span class="ot">=</span> <span class="fu">concat</span> [ copy i <span class="op">|</span> (y, i) <span class="ot">&lt;-</span> <span class="fu">zip</span> ys [<span class="dv">1</span><span class="op">..</span>]]</span>
-<span id="cb47-3"><a href="#cb47-3" aria-hidden="true"></a>  <span class="kw">where</span></span>
-<span id="cb47-4"><a href="#cb47-4" aria-hidden="true"></a>    closPtr <span class="ot">=</span> <span class="dt">RegOffset</span> <span class="dv">8</span> <span class="dt">EBP</span></span>
-<span id="cb47-5"><a href="#cb47-5" aria-hidden="true"></a>    copy i  <span class="ot">=</span> tupleReadRaw closPtr (repr (i<span class="op">+</span><span class="dv">1</span>))  <span class="co">-- copy tuple-fld for y into EAX...</span></span>
-<span id="cb47-6"><a href="#cb47-6" aria-hidden="true"></a>           <span class="op">++</span> [ <span class="dt">IMov</span> (stackVar i) (<span class="dt">Reg</span> <span class="dt">EAX</span>) ]    <span class="co">-- ...write EAX into stackVar for y</span></span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true"></a><span class="ot">restore ::</span> [<span class="dt">Id</span>] <span class="ot">-&gt;</span> [<span class="dt">Instruction</span>]</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true"></a>restore ys  <span class="ot">=</span> <span class="fu">concat</span> [ copy i <span class="op">|</span> (y, i) <span class="ot">&lt;-</span> <span class="fu">zip</span> ys [<span class="dv">1</span><span class="op">..</span>]]</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true"></a>  <span class="kw">where</span></span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true"></a>    closPtr <span class="ot">=</span> <span class="dt">RegOffset</span> <span class="dv">8</span> <span class="dt">EBP</span></span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true"></a>    copy i  <span class="ot">=</span> tupleReadRaw closPtr (repr (i<span class="op">+</span><span class="dv">1</span>))  <span class="co">-- copy tuple-fld for y into EAX...</span></span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true"></a>           <span class="op">++</span> [ <span class="dt">IMov</span> (stackVar i) (<span class="dt">Reg</span> <span class="dt">EAX</span>) ]    <span class="co">-- ...write EAX into stackVar for y</span></span></code></pre></div>
 <h2 id="a-problem-recursion">A Problem: Recursion</h2>
 <p>Oops, how do we write:</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true"></a><span class="kw">def</span> fac(n):</span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true"></a>  <span class="cf">if</span> (n <span class="op">&gt;</span> <span class="dv">1</span>):</span>
-<span id="cb48-3"><a href="#cb48-3" aria-hidden="true"></a>    n <span class="op">*</span> fac(n<span class="op">-</span><span class="dv">1</span>)</span>
-<span id="cb48-4"><a href="#cb48-4" aria-hidden="true"></a>  <span class="cf">else</span>:</span>
-<span id="cb48-5"><a href="#cb48-5" aria-hidden="true"></a>    <span class="dv">1</span></span>
-<span id="cb48-6"><a href="#cb48-6" aria-hidden="true"></a></span>
-<span id="cb48-7"><a href="#cb48-7" aria-hidden="true"></a>fac(<span class="dv">5</span>)  </span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true"></a><span class="kw">def</span> fac(n):</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true"></a>  <span class="cf">if</span> (n <span class="op">&gt;</span> <span class="dv">1</span>):</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true"></a>    n <span class="op">*</span> fac(n<span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true"></a>  <span class="cf">else</span>:</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true"></a>    <span class="dv">1</span></span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true"></a></span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true"></a>fac(<span class="dv">5</span>)  </span></code></pre></div>
 <p>If we try</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true"></a>let fac <span class="op">=</span> (<span class="kw">lambda</span> (n):</span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true"></a>             <span class="cf">if</span> (n <span class="op">&lt;</span> <span class="dv">1</span>):</span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true"></a>               <span class="dv">1</span></span>
-<span id="cb49-4"><a href="#cb49-4" aria-hidden="true"></a>             <span class="cf">else</span>:</span>
-<span id="cb49-5"><a href="#cb49-5" aria-hidden="true"></a>               n <span class="op">*</span> fac(n<span class="op">-</span><span class="dv">1</span>))</span>
-<span id="cb49-6"><a href="#cb49-6" aria-hidden="true"></a><span class="kw">in</span> fac(<span class="dv">5</span>)  </span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true"></a>let fac <span class="op">=</span> (<span class="kw">lambda</span> (n):</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true"></a>             <span class="cf">if</span> (n <span class="op">&lt;</span> <span class="dv">1</span>):</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true"></a>               <span class="dv">1</span></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true"></a>             <span class="cf">else</span>:</span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true"></a>               n <span class="op">*</span> fac(n<span class="op">-</span><span class="dv">1</span>))</span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true"></a><span class="kw">in</span> fac(<span class="dv">5</span>)  </span></code></pre></div>
 <p>We get a variable unbound error!</p>
 <pre><code>Errors found!
 tests/input/fac-bad.fdl:5:20-23: Unbound variable 'fac'
@@ -974,27 +1015,27 @@ tests/input/fac-bad.fdl:5:20-23: Unbound variable 'fac'
 <li>Like Ocaml’s <code>let rec</code></li>
 </ul>
 <p>Which looks like this:</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true"></a><span class="kw">def</span> fac(n):</span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true"></a>  <span class="cf">if</span> (n <span class="op">&lt;</span> <span class="dv">1</span>):</span>
-<span id="cb51-3"><a href="#cb51-3" aria-hidden="true"></a>    <span class="dv">1</span></span>
-<span id="cb51-4"><a href="#cb51-4" aria-hidden="true"></a>  <span class="cf">else</span>:</span>
-<span id="cb51-5"><a href="#cb51-5" aria-hidden="true"></a>    n <span class="op">*</span> fac(n <span class="op">-</span> <span class="dv">1</span>)</span>
-<span id="cb51-6"><a href="#cb51-6" aria-hidden="true"></a><span class="kw">in</span></span>
-<span id="cb51-7"><a href="#cb51-7" aria-hidden="true"></a>  fac(<span class="dv">5</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true"></a><span class="kw">def</span> fac(n):</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true"></a>  <span class="cf">if</span> (n <span class="op">&lt;</span> <span class="dv">1</span>):</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true"></a>    <span class="dv">1</span></span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true"></a>  <span class="cf">else</span>:</span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true"></a>    n <span class="op">*</span> fac(n <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb55-6"><a href="#cb55-6" aria-hidden="true"></a><span class="kw">in</span></span>
+<span id="cb55-7"><a href="#cb55-7" aria-hidden="true"></a>  fac(<span class="dv">5</span>)</span></code></pre></div>
 <h3 id="representing-named-functions">Representing Named Functions</h3>
 <p>We extend <code>Expr</code> to handle such functions as:</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Expr</span> a</span>
-<span id="cb52-2"><a href="#cb52-2" aria-hidden="true"></a>  <span class="ot">=</span> <span class="op">...</span></span>
-<span id="cb52-3"><a href="#cb52-3" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">Fun</span>     (<span class="dt">Bind</span> a)      <span class="co">-- ^ name of function</span></span>
-<span id="cb52-4"><a href="#cb52-4" aria-hidden="true"></a>            [<span class="dt">Bind</span> a]      <span class="co">-- ^ list of parameters  </span></span>
-<span id="cb52-5"><a href="#cb52-5" aria-hidden="true"></a>            (<span class="dt">Expr</span> a) a    <span class="co">-- ^ body of function</span></span></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true"></a><span class="kw">data</span> <span class="dt">Expr</span> a</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true"></a>  <span class="ot">=</span> <span class="op">...</span></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true"></a>  <span class="op">|</span> <span class="dt">Fun</span>     (<span class="dt">Bind</span> a)      <span class="co">-- ^ name of function</span></span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true"></a>            [<span class="dt">Bind</span> a]      <span class="co">-- ^ list of parameters  </span></span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true"></a>            (<span class="dt">Expr</span> a) a    <span class="co">-- ^ body of function</span></span></code></pre></div>
 <p>Note that we parse the code</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true"></a><span class="kw">def</span> f(x1,...,xn):</span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true"></a>  e</span>
-<span id="cb53-3"><a href="#cb53-3" aria-hidden="true"></a><span class="kw">in</span></span>
-<span id="cb53-4"><a href="#cb53-4" aria-hidden="true"></a>  e<span class="st">'</span></span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true"></a><span class="kw">def</span> f(x1,...,xn):</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true"></a>  e</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true"></a><span class="kw">in</span></span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true"></a>  e<span class="st">'</span></span></code></pre></div>
 <p>as the <code>Expr</code></p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true"></a><span class="dt">Let</span> f (<span class="dt">Fun</span> f [x1,<span class="op">...</span>,xn] e) e'</span></code></pre></div>
+<div class="sourceCode" id="cb58"><pre class="sourceCode haskell"><code class="sourceCode haskell"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true"></a><span class="dt">Let</span> f (<span class="dt">Fun</span> f [x1,<span class="op">...</span>,xn] e) e'</span></code></pre></div>
 <h3 id="compiling-named-functions">Compiling Named Functions</h3>
 <p>Mostly, this is left as an exercise to you.</p>
 <p><strong>Non-Recursive</strong> functions</p>
