@@ -965,7 +965,7 @@ compileEnv env (Lam xs e l)
   : ILabel start            -- Function start
   : compileDecl l xs e      -- Function code (like Decl)
  ++ ILabel end              -- Function end
-  : lamTuple arity start    -- Compile fun-tuple into EAX
+  : lamTuple arity start    -- Compile fun-tuple into RAX
   where
     arity = length xs
     start = LamStart l
@@ -980,7 +980,7 @@ lamTuple arity start
   =  tupleAlloc  2                           -- alloc tuple size = 2  
   ++ tupleWrites [ repr arity                -- fill arity
                  , CodePtr start ]           -- fill code-ptr
-  ++ [ IOr  (Reg EAX) (typeTag TClosure) ]   -- set the tag bits
+  ++ [ IOr  (Reg RAX) (typeTag TClosure) ]   -- set the tag bits
 ```
 
 <br>
@@ -1040,12 +1040,31 @@ via the following strategy:
 compileEnv env (App vE vXs)
   = assertType     env vE TClosure                    -- check vE is a function
  ++ assertArity    env vE (length vXs)                -- check vE arity
- ++ tupleReadRaw   (immArg env vE) (repr (1 :: Int))  -- load vE[1] into EAX
- ++ [IPush (param env vX) | vX <- reverse vXs]        -- push args
- ++ [IPush (param env vE)]                            -- push closure-ptr
- ++ [ICall (Reg EAX)]                                 -- call EAX
- ++ [IAdd  (Reg ESP) (4 * (n + 1)]                    -- pop  args
+ ++ tupleReadRaw   (immArg env vE) (repr (1 :: Int))  -- load vE[1] into RAX
+ ++ pushRegArgs   rArgs				      -- push reg args 
+ ++ pushStackArgs sArgs				      -- push stack args
+ ++ [ICall (Reg RAX)]                                 -- call RAX
+ ++ popStackArgs  (length sArgs)
+  where
+    (rArgs, sArgs) = splitAt 6 args
 ```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 
 ## A Problem: Scope
 
@@ -1058,6 +1077,22 @@ let one = 1
 in
   f(inc)
 ```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 
 ## A Problem Magnified: Dynamically Created Functions
 
@@ -1082,6 +1117,23 @@ Yet, its **the same code**
 
 **Problem:** How can we represent _different behaviors?_
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+
 ## Free and Bound Variables
 
 A variable `x` is **bound** inside an expression `e` if
@@ -1104,6 +1156,23 @@ lambda (m):
 - `m`, `t` are  **bound** inside `e`, but,
 - `n` is **free** inside `e`
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
 ## Computing Free Variables
 
 Lets write a function to **compute** the set of free variables.
@@ -1115,25 +1184,32 @@ freeVars :: Expr -> [Id]
 freeVars e = S.toList (go e)
   where
     go :: Expr -> S.Set Id
-    go (Id x)          = S.singleton x
-    go (Number _)      = S.empty
-    go (Boolean _)     = S.empty
-    go (If e e1 e2)    = S.unions (map go [e1, e2, e3])
-    go (App e es)      = S.unions (map go (e:es))
-    go (Let x e1 e2)   = S.union (go e1) (S.delete x (go e2))
-    go (Lam xs e)      = S.difference (go e) (S.fromList xs)=
+    go (Id x)          = TODO 
+    go (Number _)      = TODO 
+    go (Boolean _)     = TODO 
+    go (If e e1 e2)    = TODO 
+    go (App e es)      = TODO 
+    go (Let x e1 e2)   = TODO 
+    go (Lam xs e)      = TODO 
 ```
 
-lambda (x1,x2,x3): e
-
-let x = y + 10 in
-  x + z
-
-A. {x}
-B. {}
-C. { gobble_gobble }
-
 **TODO-IN-CLASS**
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
 
 ## Free Variables and Lambdas
 
@@ -1156,11 +1232,39 @@ in
 should evaluate to `(6, 15, 30)`
 
 - `plus1` be like `lambda (m): 1  + m`
-- `plus1` be like `lambda (m): 10 + m`
+- `plus10` be like `lambda (m): 10 + m`
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ## Achieving Closure
 
 (Recall from CSE 130)
+
+```haskell
+let add    = (lambda (n): (lambda (m): n + m))
+  , f      = (lambda (it): it(5))
+  , plus1  = add(1)
+  , plus10 = add(10)
+in
+  (f(plus1), f(plus10), plus10(20))
+```
+
+should evaluate to `(6, 15, 30)`
+
+- `plus1` be like `lambda (m): 1  + m`
+- `plus10` be like `lambda (m): 10 + m`
+
 
 **Key Idea:**  Each function value must **store its free variables**
 
@@ -1177,6 +1281,20 @@ represent `plus10` as:
 ```
 
 Same code, but different free variables.
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ## Strategy Progression
 
@@ -1195,6 +1313,20 @@ Same code, but different free variables.
 4. **Function Value** `(Arity, Start-Label, Free_1, ... , Free_N)`
 
     - **Ta Da!**
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ## Closures: Strategy
 
@@ -1221,6 +1353,22 @@ represent `plus20` as:
 (arity, code-label, [x := 7], [y := 13])
 ```
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
 ### Example
 
 Lets see how to evaluate
@@ -1233,7 +1381,19 @@ in
   plus10(0)
 ```
 
-TODO: PIC
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 
 ### Example
 
@@ -1248,7 +1408,19 @@ in
   f(plus10)
 ```
 
-TODO: PIC
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 
 ### Implementation
 
@@ -1268,6 +1440,19 @@ TODO: PIC
 2. Update `checker`       
 
 3. Update `compile`
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ### Representation
 
@@ -1290,6 +1475,22 @@ Where each cell represents 32-bits / 4-bytes / 1-word.
 **Note:** (As with all tuples) the first word contains the #elements of the tuple.
 
 * Which, in this case, it is `N + 2`
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 
 ### Transforms: Checker
@@ -1316,22 +1517,88 @@ addsEnv env xs = foldr addEnv env xs
 
 **C.** `addsEnv emptyEnv xs`
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
 ### Transforms: Compile
 
 **Question** How does the called function **know** the values of free vars?
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 - Needs to **restore them** from closure tuple
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 - Needs to **access** the closure tuple!
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
 ... But how shall we give the called function **access** to the tuple?
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
 **By passing the tuple as an _extra parameter_**
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 
 
 ### Transforms: Compile
 
-**Calls** `App`
+**Calls** `App` (as before)
 
 1. **Push** parameters
 2. **Push** closure-pointer-parameter
@@ -1342,16 +1609,21 @@ addsEnv env xs = foldr addEnv env xs
 
 1. **Compute** *free-vars* `x1`,...,`xn`
 2. **Generate** code-block
-  - **Restore** free vars from closure-pointer-parameter
+  - **Restore** free vars from closure-pointer-parameter **New**
   - **Execute** function body (as before)
 3. **Allocate** tuple `(arity, code-label, x1, ... , xn)`
 
-### Transforms: Compile Calls
-
-1. **Push** parameters
-2. **Push** closure-pointer
-3. **Call** code-label
-4. **Pop**  params + pointer
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ### Transforms: Compile Definitions
 
@@ -1368,13 +1640,29 @@ compileEnv env (Lam xs e l)
   : ILabel start                     -- Function start
   : lambdaBody ys xs e               -- Function code (like Decl)
  ++ ILabel end                       -- Function end
-  : lamTuple arity start env ys      -- Compile closure-tuple into EAX
+  : lamTuple arity start env ys      -- Compile closure-tuple into RAX
   where
     ys    = freeVars (Lam xs e l)
     arity = length xs
     start = LamStart l
     end   = LamEnd   l
 ```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 ### Creating Closure Tuples
 
@@ -1390,7 +1678,7 @@ lamTuple arity start env ys
   ++ tupleWrites ( repr arity                       -- fill arity
                  : CodePtr start                    -- fill code-ptr
                  : [immArg env (Id y) | y <- ys] )  -- fill free-vars
-  ++ [ IOr  (Reg EAX) (typeTag TClosure) ]          -- set the tag bits
+  ++ [ IOr  (Reg RAX) (typeTag TClosure) ]          -- set the tag bits
 ```
 
 ### Generating Code Block
@@ -1398,28 +1686,41 @@ lamTuple arity start env ys
 
 ```haskell
 lambdaBody :: [Id] -> [Id] -> AExp -> [Instruction]
-lambdaBody ys xs e = funInstrs maxStack
-                        ( restore ys           -- restore free vars from closure-ptr
-                       ++ compileEnv env e )   -- exec function-body as before
-  where
-    maxStack       = envMax env + countVars e  -- max stack size
-    env            = fromListEnv bs
-    bs             = zip xs  [-2,-3..]         -- put params    into env/stack
-                  ++ zip ys  [1..]             -- put free-vars into env/stack
+lambdaBody ys xs e = 
+    funEntry n               -- 1. setup  stack frame RBP/RSP
+ ++ copyArgs xs'             -- 2. copy parameters to stack slots
+ ++ restore nXs ys           -- 3. copy (closure) free vars to stack slots
+ ++ compileEnv env body      -- 4. execute 'body' with result in RAX
+ ++ funExit n                -- 5. teardown stack frame & return 
 ```
 
-To `restore ys` we use the closure-ptr passed
-in at `[EBP+8]` --  the special **first** parameter -- to
-copy the free-vars `ys` onto the stack.
+To `restore ys` we use the closure-ptr passed in at `[RDI]` 
+--  the special **first** parameter -- to copy the free-vars 
+`ys` onto the stack.
 
 ```haskell
-restore :: [Id] -> [Instruction]
-restore ys  = concat [ copy i | (y, i) <- zip ys [1..]]
-  where
-    closPtr = RegOffset 8 EBP
-    copy i  = tupleReadRaw closPtr (repr (i+1))  -- copy tuple-fld for y into EAX...
-           ++ [ IMov (stackVar i) (Reg EAX) ]    -- ...write EAX into stackVar for y
+restore :: Int -> [Id] -> [Instruction]
+restore base ys = 
+  concat [ copy i | (_, i) <- zip ys [1..]]
+    where
+      closV  = Reg RDI
+      copy i = tupleReadRaw closV (repr (i+1))	       -- copy tuple-fld for y into RAX...
+            ++ [ IMov (stackVar (base+i)) (Reg RAX) ]  -- ...write RAX into stackVar for y
 ```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 
 ## A Problem: Recursion
 
