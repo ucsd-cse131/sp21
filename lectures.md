@@ -16,9 +16,9 @@ headerImg: books.jpg
 | 4/27       | Functions                     | [html][lec6] [md][md6] | [pdf][pdf6]  | [code][cod6]   |
 | 5/13       | Heap Data  | [html][lec7] [md][md7] | [pdf][pdf7a]  | [code][cod7]   |
 | 5/18       | ""         | ""                     | ""  | ""             |
+| 5/20       | Closures   | [html][lec8] [md][md7] | [pdf][pdf8]   | [code][cod8]   |
 
 <!-- 
-| 11/19      | Heap Data                     | [html][lec7] [md][md7] |             | [code][cod7]   |
 | 11/28      | Garbage Collection            | [html][lec8] [md][md8] | [pdf][pdf8] | [code][cod8]   |
 -->
 
@@ -57,10 +57,10 @@ headerImg: books.jpg
 [cod7]: https://github.com/ucsd-cse131/05-egg-eater
 [pdf7a]: static/img/07-egg-A.pdf
 
-[lec8]: lectures/08-fox.html
-[md8]: http://github.com/ucsd-progsys/131-web/blob/master/lectures/08-fox.md 
-[cod8]: https://github.com/ucsd-cse131/06-fox
-[pdf8]: static/img/fox-notes.pdf
+[lec8]: lectures/08-fer-de-lance.html
+[md8]: http://github.com/ucsd-progsys/131-web/blob/master/lectures/08-fer-de-lance.md
+[cod8]: https://github.com/ucsd-cse131/06-fer-de-lance
+[pdf8]: static/img/08-fdl-A.pdf
 
 [lec9]: lectures/09-garter.html
 [md9]: http://github.com/ucsd-progsys/131-web/blob/master/lectures/09-garter.md
