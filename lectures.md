@@ -17,6 +17,8 @@ headerImg: books.jpg
 | 5/13       | Heap Data  | [html][lec7] [md][md7] | [pdf][pdf7a]  | [code][cod7]   |
 | 5/18       | ""         | ""                     | ""  | ""             |
 | 5/20       | Closures   | [html][lec8] [md][md7] | [pdf][pdf8]   | [code][cod8]   |
+| 5/25       | "" | "" | [pdf][pdf8b]   | "" |
+| 5/27       | "" | "" | [pdf][pdf8c]   | "" |
 
 <!-- 
 | 11/28      | Garbage Collection            | [html][lec8] [md][md8] | [pdf][pdf8] | [code][cod8]   |
@@ -61,6 +63,8 @@ headerImg: books.jpg
 [md8]: http://github.com/ucsd-progsys/131-web/blob/master/lectures/08-fer-de-lance.md
 [cod8]: https://github.com/ucsd-cse131/06-fer-de-lance
 [pdf8]: static/img/08-fdl-A.pdf
+[pdf8b]: static/img/08-fdl-B.pdf
+[pdf8c]: static/img/08-fdl-C.pdf
 
 [lec9]: lectures/09-garter.html
 [md9]: http://github.com/ucsd-progsys/131-web/blob/master/lectures/09-garter.md
