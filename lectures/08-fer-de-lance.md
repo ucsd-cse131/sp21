@@ -1098,11 +1098,16 @@ in
 
 Will it work? How about this variant:
 
+```
+lambda(m): n + m        ---->   (1, label_lam_99, [n = ???])
+```
+
 ```haskell
-let add    = (lambda (n): (lambda (m): n + m))
+let addition = (lambda (a, b): a + b) 
+let add    = (lambda (n): (lambda (m): addition(n, m)))
   , f      = (lambda (it): it(5))
-  , plus1  = add(1)
-  , plus10 = add(10)
+  , plus1  = add(1)                 -- < 1, label_lam_99, [n := 1]>
+  , plus10 = add(10)                -- < 1, label_lam_99, [n := 10]>
 in
   (f(plus1), f(plus10))
 ```
@@ -1131,6 +1136,7 @@ Yet, its **the same code**
 <br>
 <br>
 <br>
+
 
 
 
@@ -1179,18 +1185,33 @@ Lets write a function to **compute** the set of free variables.
 
 **Question** Why *Set* ?
 
+```
+lambda(x): x + y
+
+let x = e1 in e2
+
+- free e1 + (free e2 - x) 
+```
+
+```
+Bin Plus (Id x) (Id y)
+
+
+App (Id inc) [(Id x), (Id y), (Id z)]
+```
+
 ```haskell
 freeVars :: Expr -> [Id]
 freeVars e = S.toList (go e)
   where
     go :: Expr -> S.Set Id
-    go (Id x)          = TODO 
-    go (Number _)      = TODO 
-    go (Boolean _)     = TODO 
-    go (If e e1 e2)    = TODO 
-    go (App e es)      = TODO 
-    go (Let x e1 e2)   = TODO 
-    go (Lam xs e)      = TODO 
+    go (Id x)        = S.singleton x
+    go (Number _)    = S.empty
+    go (Boolean _)   = S.empty
+    go (If e e1 e2)  = S.unions [go e, go e1, go e2]
+    go (App e es)    = S.unions (go e : map go es) 
+    go (Let x e1 e2) = S.union (go e1) (S.minus (go e2) x)
+    go (Lam xs e)    = S.difference (go e) xs
 ```
 
 **TODO-IN-CLASS**
@@ -1210,12 +1231,12 @@ freeVars e = S.toList (go e)
 <br>
 
 
-
 ## Free Variables and Lambdas
 
 **Free Variables** of a `lambda`
 
 - Those whose values come from *outside*
+
 - Should use *the same* values whenever we "call" the `lambda`.
 
 For example:
@@ -1334,7 +1355,8 @@ What if we have *multiple* free variables?
 
 ```python
 let foo    = (lambda (x, y):
-                (lambda (z): x + y + z))
+                (lambda (z): x + y + z)
+             )
   , plus10 = foo(4, 6)
   , plus20 = foo(7, 13)
 in
@@ -1375,7 +1397,8 @@ Lets see how to evaluate
 
 ```python
 let foo    = (lambda (x, y):
-                (lambda (z): x + y + z))
+                (lambda (z): x + y + z)
+             )
   , plus10 = foo(4, 6)
 in
   plus10(0)
@@ -1401,7 +1424,8 @@ Lets see how to evaluate
 
 ```python
 let foo    = (lambda (x, y):
-                (lambda (z): x + y + z))
+                (lambda (z): x + y + z)
+             )
   , plus10 = foo(4, 6)
   , f      = (lambda (it): it(5))
 in
@@ -1465,16 +1489,16 @@ We can represent a **closure** as a tuple of
 which means, following the convention for tuples, as:
 
 ```
--------------------------------------------------------------------------
-| N + 2 | arity | code-ptr | var1 | var2 | ... | varN | (maybe padding) |
--------------------------------------------------------------------------
+------------------------------------------------
+| N + 2 | arity | code-ptr | var1 | ... | varN |
+------------------------------------------------
 ```
 
-Where each cell represents 32-bits / 4-bytes / 1-word.
+Where each cell represents 64-bits / 8-bytes / 1-(double)word.
 
 **Note:** (As with all tuples) the first word contains the #elements of the tuple.
 
-* Which, in this case, it is `N + 2`
+* In this case `N + 2`
 
 <br>
 <br>
@@ -1542,6 +1566,11 @@ addsEnv env xs = foldr addEnv env xs
 <br>
 <br>
 <br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 - Needs to **restore them** from closure tuple
 
@@ -1552,9 +1581,20 @@ addsEnv env xs = foldr addEnv env xs
 <br>
 <br>
 <br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 - Needs to **access** the closure tuple!
 
+<br>
+<br>
+<br>
+<br>
+<br>
 <br>
 <br>
 <br>
@@ -1600,12 +1640,49 @@ addsEnv env xs = foldr addEnv env xs
 
 **Calls** `App` (as before)
 
-1. **Push** parameters
-2. **Push** closure-pointer-parameter
-3. **Call** code-label
-4. **Pop**  params + pointer
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+1. **Push** *closure-pointer* + parameters
+2. **Call** code-label
+3. **Pop**  *closure-pointer* + params
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 **Definitions** `Lam`
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 1. **Compute** *free-vars* `x1`,...,`xn`
 2. **Generate** code-block
@@ -1668,8 +1745,26 @@ compileEnv env (Lam xs e l)
 
 To create the actual closure-tuple we need
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
 * the **free-variables** `ys`
 * the `env` from which to **values** of the free variables.
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 
 ```haskell
 lamTuple :: Int -> Label -> Env -> [Id] -> [Instruction]
@@ -1683,6 +1778,15 @@ lamTuple arity start env ys
 
 ### Generating Code Block
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
 
 ```haskell
 lambdaBody :: [Id] -> [Id] -> AExp -> [Instruction]
@@ -1693,6 +1797,17 @@ lambdaBody ys xs e =
  ++ compileEnv env body      -- 4. execute 'body' with result in RAX
  ++ funExit n                -- 5. teardown stack frame & return 
 ```
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 To `restore ys` we use the closure-ptr passed in at `[RDI]` 
 --  the special **first** parameter -- to copy the free-vars 
@@ -1758,13 +1873,28 @@ tests/input/fac-bad.fdl:5:20-23: Unbound variable 'fac'
 
 We need to teach our compiler that its ok to use the name `fac` inside the body!
 
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 ### Solution: Named Functions
 
-We have a new form of **named functions**
-
-- Like Ocaml's `let rec`
-
-Which looks like this:
+We have a new form of **named functions** which looks like this:
 
 ```python
 def fac(n):
@@ -1791,7 +1921,7 @@ data Expr a
 Note that we parse the code
 
 ```python
-def f(x1,...,xn):
+def foo(x1,...,xn):
   e
 in
   e'
@@ -1800,14 +1930,43 @@ in
 as the `Expr`  
 
 ```haskell
-Let f (Fun f [x1,...,xn] e) e'
+Let foo (Fun foo [x1,...,xn] e) e'
 ```
+
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 
 ### Compiling Named Functions
 
-Mostly, this is left as an exercise to you.
+Mostly, this is left as an exercise to _you_ 
+
+<br>
+<br>
+<br>
+<br>
+<br>
 
 **Non-Recursive** functions
+
+<br>
+<br>
+<br>
+<br>
+<br>
 
 - i.e. `f` *does not* appear inside `e` in `Fun f xs e`
 - Treat `Fun f xs e` as `Lam xs e` ...
@@ -1815,15 +1974,36 @@ Mostly, this is left as an exercise to you.
 
 **Recursive**
 
+<br>
+<br>
+<br>
+<br>
+<br>
+
 - i.e. `f` *does* appear inside `e` in `Fun f xs e`
 - Can you think of a simple tweak to the `Lam` strategy that works?
 
 
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 ## Recap: Functions as Values
 
-We have functions, but they are *second-class* entities
-in our languages: they don't have the same *abilities*
-as other values.
+We had functions, but they were *second-class* entities...
+
+Now, they are *first-class* values 
+
+* passed around as parameters
+* returned from functions 
+* stored in tuples etc.
+
+How?
 
 1. **Representation** = `Start-Label`
 
@@ -1842,7 +2022,12 @@ as other values.
     - **Ta Da!**
 
 
+**Next:** Adding **garbage collection**
+
+- *Reclaim!* Heap memory that is no longer in use
+
 **Next:** Adding **static type inference**
 
-- **Faster!** Gets rid of those annoying (and slow!) run-time checks
-- **Safer!** Catches problems at compile-time, when easiest to fix!
+- *Faster!* Gets rid of those annoying (and slow!) run-time checks
+- *Safer!* Catches problems at compile-time, when easiest to fix!
+
