@@ -4,11 +4,23 @@ date: 2018-03-7
 headerImg: fox.jpg
 ---
 
+## Adding Garbage Collection to the Runtime
+
 ![Compiler and Runtime](/static/img/compiler-pipeline-1-2.png)
 
-## Recap: Tuples on the Heap
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
-### QUIZ
+## QUIZ: Tuples on the Heap
 
 Using the above "library" we can write code like:
 
@@ -34,7 +46,20 @@ What will be the result of compiling the above?
 4. `4`
 5. `10`
 
-### QUIZ
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+## QUIZ
 
 Using the above "library" we can write code like:
 
@@ -52,7 +77,22 @@ What will be the result of compiling the above?
 5. `10`
 
 
-### Example 1: Garbage at End
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Example 1: Garbage at End
 
 ```python
 let x = (1, 2)
@@ -64,10 +104,25 @@ in
 
 [Click to see video][mov1]
 
-<iframe src="https://www.youtube.com/embed/LddzswC7jEM" width="560" height="315" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/nRGftMYg_3g" width="560" height="315" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 
-### Example 2: Garbage in Middle
+## Example 2: Garbage in Middle
 
 ```python
 let y = let tmp = (10, 20)
@@ -80,10 +135,23 @@ in
 
 [Click to see video][mov2]
 
-<iframe src="https://www.youtube.com/embed/2u0y-u1ksbY" width="560" height="315" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/sDlfN7n-4ws" width="560" height="315" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 
-### Example 3: Garbage in Middle (with stack)
+
+## Example 3: Garbage in Middle (with stack)
 
 ```python
 def foo(p, q):
@@ -99,10 +167,22 @@ in
 
 [Click to see video][mov3]
 
-<iframe src="https://www.youtube.com/embed/pCrBJWDwr2k" width="560" height="315" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/25L_-VQUQ9s" width="560" height="315" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 
-### Example 4: Transitive Reachability
+## Example 4: Transitive Reachability
 
 ```python
 def range(i, j):
@@ -127,12 +207,21 @@ in
 
 [Click to see video][mov4]
 
-<iframe src="https://www.youtube.com/embed/3MEmwxtEprE" width="560" height="315" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+<iframe src="https://www.youtube.com/embed/FQUWO_WfP2s" width="560" height="315" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+
+<!-- NEW --> 
+
+[mov1]: https://youtu.be/nRGftMYg_3g
+[mov2]: https://youtu.be/sDlfN7n-4ws 
+[mov3]: https://youtu.be/25L_-VQUQ9s
+[mov4]: https://youtu.be/FQUWO_WfP2s
 
 
+<!-- OLD (32-bit) 
 [mov1]: https://youtu.be/LddzswC7jEM
 [mov2]: https://youtu.be/2u0y-u1ksbY
 [mov3]: https://youtu.be/pCrBJWDwr2k
 [mov4]: https://youtu.be/3MEmwxtEprE 
+-->
 
 

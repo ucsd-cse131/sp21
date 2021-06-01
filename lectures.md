@@ -19,9 +19,8 @@ headerImg: books.jpg
 | 5/20       | Closures   | [html][lec8] [md][md7] | [pdf][pdf8]   | [code][cod8]   |
 | 5/25       | "" | "" | [pdf][pdf8b]   | "" |
 | 5/27       | "" | "" | [pdf][pdf8c]   | "" |
-
+| 6/1       | Garbage Collection            | [html][lec9] [md][md9] | [pdf][pdf9] | [code][cod9]   |
 <!-- 
-| 11/28      | Garbage Collection            | [html][lec8] [md][md8] | [pdf][pdf8] | [code][cod8]   |
 -->
 
 [lec1]: lectures/01-introduction.html
@@ -66,5 +65,7 @@ headerImg: books.jpg
 [pdf8b]: static/img/08-fdl-B.pdf
 [pdf8c]: static/img/08-fdl-C.pdf
 
-[lec9]: lectures/09-garter.html
-[md9]: http://github.com/ucsd-progsys/131-web/blob/master/lectures/09-garter.md
+[lec9]: lectures/09-garter-gc.html
+[md9]: http://github.com/ucsd-progsys/131-web/blob/master/lectures/09-garter-gc.md
+[cod9]: https://github.com/ucsd-cse131/07-garter
+[pdf9]: static/img/09-garter.pdf
