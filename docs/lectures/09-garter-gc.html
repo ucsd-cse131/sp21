@@ -330,6 +330,113 @@ if (window.navigator.appName == "Microsoft Internet Explorer") {
 <p><a href="https://youtu.be/25L_-VQUQ9s">Click to see video</a></p>
 <iframe src="https://www.youtube.com/embed/25L_-VQUQ9s" width="560" height="315" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
 </iframe>
+<h2 id="postlude">Postlude</h2>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="what-will-you-learn">What will <em>you learn</em> ?</h2>
+<p><strong>Core principles of compiler construction</strong></p>
+<ul>
+<li>Syntax Trees</li>
+<li>Type Checking (oops!)</li>
+<li>Intermediate forms</li>
+<li>Optimization</li>
+<li>Closures</li>
+<li>Calling conventions (Stacks)</li>
+<li>Memory management (Heap)</li>
+<li>Garbage collection</li>
+</ul>
+<p><strong>Several new languages</strong></p>
+<ul>
+<li><code>Haskell</code> to write the compiler</li>
+<li><code>C</code> to write the “run-time”</li>
+<li><code>X86</code> compilation target</li>
+</ul>
+<p><strong>How to write a large program</strong></p>
+<ul>
+<li>How to use types for design</li>
+<li>How to add new features / refactor</li>
+<li>How to test &amp; validate</li>
+</ul>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="this-is-just-the-beginning">This is just the beginning …</h2>
+<p>This is a <em>tiny</em> fraction of <strong>what we know about</strong> compilers</p>
+<h3 id="optimizations">Optimizations</h3>
+<ul>
+<li>Many many more optimizations</li>
+<li>See this https://www.lihaoyi.com/post/HowanOptimizingCompilerWorks.html</li>
+</ul>
+<h3 id="type-checking-and-static-analysis">Type checking and Static analysis</h3>
+<ul>
+<li>Fast user-interfaces for error reporting</li>
+<li><a href="https://www.youtube.com/watch?v=wSdV1M7n4gQ">Anders Hejlsberg on Modern Compiler Construction</a></li>
+<li><a href="https://checkerframework.org/">Checker framework</a></li>
+</ul>
+<h3 id="instrumenting-code-for-debugging">Instrumenting code for debugging</h3>
+<ul>
+<li>https://rr-project.org/</li>
+</ul>
+<h3 id="just-in-time-jit-compilation">Just-in-time (JIT) Compilation</h3>
+<ul>
+<li>V8, Spidermonkey,…</li>
+<li><a href="https://v8.dev/docs/torque">Torque</a></li>
+</ul>
+<h3 id="formal-semantics-and-correctness">Formal semantics and Correctness</h3>
+<ul>
+<li>(Compcert, CakeML, …)</li>
+</ul>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="and-many-new-things-are-still-to-be-invented">… and many new things are still to be invented!</h2>
+<h3 id="optimization">Optimization</h3>
+<p>How to generate the <em>fastest possible</em> code</p>
+<ul>
+<li>Image processing with <a href="https://halide-lang.org/">Halide</a></li>
+<li>Finding the best sequence of instructions <a href="https://www.youtube.com/watch?v=Ux0YnVEaI6A">Superoptimization</a></li>
+<li>Optimizing <a href="https://www.tensorflow.org/xla">Tensor Computations</a></li>
+</ul>
+<h3 id="verification">Verification</h3>
+<p>How to get the machine to <em>check</em> your code</p>
+<ul>
+<li>Contracts with <a href="https://dafny-lang.github.io/dafny/">Dafny</a></li>
+<li>Refinement types <a href="https://ucsd-progsys.github.io/liquidhaskell-blog/">LiquidHaskell</a></li>
+<li>Theorem provers <a href="https://softwarefoundations.cis.upenn.edu/">Coq</a>, <a href="https://isabelle.in.tum.de/">Isabelle</a>, <a href="https://leanprover.github.io/">Lean</a></li>
+</ul>
+<h3 id="synthesis">Synthesis</h3>
+<p>How to get the machine to <em>write</em> your code</p>
+<ul>
+<li>Using examples <a href="https://www.youtube.com/watch?v=w-k9WjRJvIY">Flashfill</a></li>
+<li>Using fancy types <a href="https://www.youtube.com/watch?v=HnOix9TFy1A">Synquid</a></li>
+<li>Using live programming <a href="https://www.youtube.com/watch?v=6xmCPznThN8">Snippy</a></li>
+</ul>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
+<h2 id="compilers-touches-pretty-much-all-of-cs">Compilers touches pretty much all of CS …</h2>
+<p><strong>Theory</strong></p>
+<ul>
+<li>Regular expressions, Parsing, Optimizations, Graph algorithms</li>
+</ul>
+<p><strong>HCI</strong></p>
+<ul>
+<li>Interacting with the PL/Compiler</li>
+<li>Type annotations</li>
+<li>Error messages and reporting</li>
+</ul>
+<p><strong>HW/Architecture</strong></p>
+<ul>
+<li>duh.</li>
+</ul>
+<p><strong>Machine Learning</strong></p>
+<ul>
+<li>“Tensorflow”</li>
+<li>Optimizing ML computations</li>
+<li>Differentiable programming</li>
+<li>PL for ML <a href="https://spark.apache.org/">Spark</a></li>
+<li>HW and compilers for ML <a href="https://octoml.ai/">OctoML</a></li>
+</ul>
+<p><strong>Security</strong></p>
+<ul>
+<li>Compiler bugs == Security vulnerabilities</li>
+<li>Buffer overflows, Heap spraying, JIT based attacks …</li>
+<li>“Return-oriented Programming”</li>
+</ul>
+<p><br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br></p>
 <!-- NEW -->
 <!-- OLD (32-bit) 
 [mov1]: https://youtu.be/LddzswC7jEM

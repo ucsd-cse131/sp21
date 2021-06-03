@@ -210,6 +210,192 @@ in
 
 <iframe src="https://www.youtube.com/embed/25L_-VQUQ9s" width="560" height="315" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
+## Postlude
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+
+## What will *you learn* ?
+
+**Core principles of compiler construction**
+
+* Syntax Trees
+* Type Checking (oops!)
+* Intermediate forms
+* Optimization
+* Closures
+* Calling conventions (Stacks) 
+* Memory management (Heap)
+* Garbage collection
+
+**Several new languages**
+
+* `Haskell` to write the compiler
+* `C`       to write the "run-time"
+* `X86`     compilation target
+
+**How to write a large program**
+
+* How to use types for design
+* How to add new features / refactor
+* How to test & validate   
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## This is just the beginning ...
+
+This is a *tiny* fraction of **what we know about** compilers
+
+### Optimizations 
+
+- Many many more optimizations
+- See this https://www.lihaoyi.com/post/HowanOptimizingCompilerWorks.html
+
+### Type checking and Static analysis
+
+- Fast user-interfaces for error reporting
+- [Anders Hejlsberg on Modern Compiler Construction](https://www.youtube.com/watch?v=wSdV1M7n4gQ)
+- [Checker framework](https://checkerframework.org/)
+
+### Instrumenting code for debugging 
+
+- https://rr-project.org/
+
+### Just-in-time (JIT) Compilation 
+
+- V8, Spidermonkey,...
+- [Torque](https://v8.dev/docs/torque)
+
+### Formal semantics and Correctness 
+
+- (Compcert, CakeML, ...)
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## ... and many new things are still to be invented!
+
+### Optimization 
+
+How to generate the *fastest possible* code
+
+- Image processing with [Halide](https://halide-lang.org/)
+- Finding the best sequence of instructions [Superoptimization](https://www.youtube.com/watch?v=Ux0YnVEaI6A)
+- Optimizing [Tensor Computations](https://www.tensorflow.org/xla)
+
+### Verification
+
+How to get the machine to *check* your code 
+
+- Contracts with [Dafny](https://dafny-lang.github.io/dafny/)
+- Refinement types [LiquidHaskell](https://ucsd-progsys.github.io/liquidhaskell-blog/)
+- Theorem provers [Coq](https://softwarefoundations.cis.upenn.edu/), [Isabelle](https://isabelle.in.tum.de/), [Lean](https://leanprover.github.io/)
+
+### Synthesis 
+
+How to get the machine to *write* your code 
+
+- Using examples [Flashfill](https://www.youtube.com/watch?v=w-k9WjRJvIY)
+- Using fancy types [Synquid](https://www.youtube.com/watch?v=HnOix9TFy1A)
+- Using live programming [Snippy](https://www.youtube.com/watch?v=6xmCPznThN8)
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+## Compilers touches pretty much all of CS ...
+
+**Theory**
+
+- Regular expressions, Parsing, Optimizations, Graph algorithms
+
+**HCI**
+
+- Interacting with the PL/Compiler
+- Type annotations
+- Error messages and reporting 
+
+**HW/Architecture**
+
+- duh.
+
+**Machine Learning**
+
+- "Tensorflow" 
+- Optimizing ML computations
+- Differentiable programming
+- PL for ML [Spark](https://spark.apache.org/)
+- HW and compilers for ML [OctoML](https://octoml.ai/)
+
+**Security**
+
+- Compiler bugs == Security vulnerabilities
+- Buffer overflows, Heap spraying, JIT based attacks ...
+- "Return-oriented Programming"
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
 
 <!-- NEW --> 
 
