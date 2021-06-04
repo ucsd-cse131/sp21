@@ -9,10 +9,13 @@ atomic units over the entire quarter. By *atomic* I mean, for example, that
 
 ## Programming Assignments
 
-- [HW #1](https://classroom.github.com/a/u3GDJ7Gf), due Friday April 9  by 23:59pm
-- [HW #2](https://classroom.github.com/a/vhkrvt2B), due Friday April 16 by 23:59pm
-- [HW #3](https://classroom.github.com/a/gyX03w2g), due Friday April 30 by 23:59pm
-- [HW #4](https://classroom.github.com/a/kmjfQjUM), due Friday May   14 by 23:59pm
+- [HW #1](https://classroom.github.com/a/u3GDJ7Gf)
+- [HW #2](https://classroom.github.com/a/vhkrvt2B)
+- [HW #3](https://classroom.github.com/a/gyX03w2g)
+- [HW #4](https://classroom.github.com/a/kmjfQjUM)
+- [HW #5](https://classroom.github.com/a/G-nz5CW1)
+- [HW #6](https://classroom.github.com/a/ns2Y7eQ7)
+- [HW #7](https://classroom.github.com/a/L69tMbDj)
 
 <!--
 - [HW #4][hw4-git], due Mon 11/19 by 23:59pm
